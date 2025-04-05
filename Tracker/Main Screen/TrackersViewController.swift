@@ -8,11 +8,9 @@
 import UIKit
 
 class TrackersViewController: UIViewController {
-    
-    var categories: [TrackerCategory]?
-    var completedTrackers: [TrackerRecord]?
+
     var currentDate: Date?
-    let trackersCollectionService = TrackersCollectionService()
+    let trackersCollectionService = TrackersCollectionService.shared
     
     private lazy var searchField: UITextField = {
         let textField = UITextField()
@@ -47,21 +45,27 @@ class TrackersViewController: UIViewController {
         return label
     }()
     
-    private lazy var trackersCollectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
+    lazy var trackersCollectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        if !trackersCollectionService.trackers.isEmpty {
+        trackersCollectionService.viewController = self
+        if !trackersCollectionService.categories[0].trackers.isEmpty {
             starImage.isHidden = true
             questionLabel.isHidden = true
         }
         trackersCollectionView.delegate = trackersCollectionService
         trackersCollectionView.dataSource = trackersCollectionService
         trackersCollectionView.register(TrackerCell.self, forCellWithReuseIdentifier: "trackerCell")
+        trackersCollectionView.register(
+            UICollectionReusableView.self,
+            forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
+            withReuseIdentifier: "header"
+        )
+
         
         loadViews()
         loadConstraints()
-        
     }
     
     private func loadViews() {

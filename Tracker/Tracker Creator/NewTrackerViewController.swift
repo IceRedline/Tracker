@@ -50,6 +50,7 @@ class NewTrackerViewController: UIViewController {
         let paddingView = UIView(frame: CGRect(x: 0, y: 0, width: 16, height: textField.frame.height))
         textField.leftView = paddingView
         textField.leftViewMode = .always
+        textField.addTarget(self, action: #selector(textfieldChanged(_:)), for: .editingChanged)
         
         return textField
     }()
@@ -73,9 +74,10 @@ class NewTrackerViewController: UIViewController {
         button.setTitle("Создать", for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         button.setTitleColor(.ypWhite, for: .normal)
-        button.backgroundColor = .ypBlack
+        button.backgroundColor = .ypGray
         button.layer.cornerRadius = 16
         button.isEnabled = false
+        button.addTarget(self, action: #selector(createButtonTapped), for: .touchUpInside)
         return button
     }()
     
@@ -132,11 +134,11 @@ class NewTrackerViewController: UIViewController {
         cancelButton.translatesAutoresizingMaskIntoConstraints = false
         createButton.translatesAutoresizingMaskIntoConstraints  = false
         NSLayoutConstraint.activate([
-            cancelButton.widthAnchor.constraint(equalToConstant: 166),
+            cancelButton.widthAnchor.constraint(equalToConstant: 176),
             cancelButton.heightAnchor.constraint(equalToConstant: 60),
             cancelButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
             cancelButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
-            createButton.widthAnchor.constraint(equalToConstant: 166),
+            createButton.widthAnchor.constraint(equalToConstant: 171),
             createButton.heightAnchor.constraint(equalToConstant: 60),
             createButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
             createButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
@@ -206,6 +208,23 @@ class NewTrackerViewController: UIViewController {
         stackView.addArrangedSubview(emojiCollectionView)
         stackView.addArrangedSubview(colorLabel)
         stackView.addArrangedSubview(colorsCollectionView)*/
+    }
+    
+    @objc private func textfieldChanged(_ sender: UITextField) {
+        if let text = sender.text, !text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+            createButton.isEnabled = true
+            createButton.backgroundColor = .ypBlack
+        } else {
+            createButton.isEnabled = false
+            createButton.backgroundColor = .ypGray
+        }
+    }
+    
+    @objc private func createButtonTapped() {
+        let newTracker = Tracker(id: 555, name: trackerNameTextField.text!, color: .colorSelection14, emoji: "🥸", schedule: [])
+        TrackersCollectionService.shared.categories[0].trackers.append(newTracker)
+        TrackersCollectionService.shared.reload()
+        self.view.window?.rootViewController?.dismiss(animated: true, completion: nil)
     }
     
     @objc private func cancelButtonTapped() {

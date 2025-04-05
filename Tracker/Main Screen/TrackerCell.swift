@@ -8,11 +8,17 @@
 import UIKit
 
 class TrackerCell: UICollectionViewCell {
-    private let colorView = UIView()
-    private let nameLabel = UILabel()
-    private let emojiLabel = UILabel()
-    private let dayCountLabel = UILabel()
-    private let completedButton = UIButton()
+    
+    weak var delegate: TrackerCellDelegate?
+    
+    var cellID: UInt?
+    let colorView = UIView()
+    let nameLabel = UILabel()
+    let emojiLabel = UILabel()
+    let dayCountLabel = UILabel()
+    let completedButton = UIButton()
+    
+    var isCompleted: Bool = false
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -30,8 +36,10 @@ class TrackerCell: UICollectionViewCell {
         contentView.addSubview(colorView)
         
         emojiLabel.backgroundColor = .background
-        emojiLabel.font = UIFont.systemFont(ofSize: 16)
-        emojiLabel.layer.cornerRadius = 68
+        emojiLabel.font = UIFont.systemFont(ofSize: 12)
+        emojiLabel.textAlignment = .center
+        emojiLabel.clipsToBounds = true
+        emojiLabel.layer.cornerRadius = 12
         emojiLabel.translatesAutoresizingMaskIntoConstraints = false
         colorView.addSubview(emojiLabel)
         
@@ -80,7 +88,8 @@ class TrackerCell: UICollectionViewCell {
         ])
     }
     
-    func configure(color: UIColor, name: String, emoji: String, count: String) {
+    func configure(id: UInt, color: UIColor, name: String, emoji: String, count: String) {
+        cellID = id
         colorView.backgroundColor = color
         nameLabel.text = name
         emojiLabel.text = emoji
@@ -108,5 +117,18 @@ class TrackerCell: UICollectionViewCell {
             dayCountLabel.text = "\(count) дней"
         default: return
         }
+        
+        completedButton.addTarget(self, action: #selector(trackerCompletedTapped(_:)), for: .touchUpInside)
+    }
+    
+    @objc func trackerCompletedTapped(_ sender: TrackerCell) {
+        if isCompleted {
+            isCompleted = false
+            completedButton.setImage(UIImage(named: "trackerCompletedButton"), for: .normal)
+        } else {
+            isCompleted = true
+            completedButton.setImage(UIImage(named: "trackerDone"), for: .normal)
+        }
+        delegate?.trackerCellDidTapComplete(self, isCompleted: isCompleted)
     }
 }
