@@ -23,7 +23,6 @@ class TabBarController: UITabBarController {
         datePicker.datePickerMode = .date
         datePicker.preferredDatePickerStyle = .compact
         datePicker.locale = Locale(identifier: "ru_RU")
-        datePicker.widthAnchor.constraint(equalToConstant: 120).isActive = true
         
         //datePicker.addTarget(self, action: #selector(dateChanged(_:)), for: .valueChanged)
         let datePickerItem = UIBarButtonItem(customView: datePicker)

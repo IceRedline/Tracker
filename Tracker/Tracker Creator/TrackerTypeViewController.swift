@@ -32,6 +32,7 @@ class TrackerTypeViewController: UIViewController {
         button.setTitle("Нерегулярное событие", for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         button.layer.cornerRadius = 16
+        button.addTarget(self, action: #selector(irregularEventButtonTapped), for: .touchUpInside)
         return button
     }()
     
@@ -72,5 +73,4 @@ class TrackerTypeViewController: UIViewController {
         let vc = NewTrackerViewController(titleName: "Новое нерегулярное событие")
         present(vc, animated: true)
     }
-    
 }

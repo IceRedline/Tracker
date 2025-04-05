@@ -12,6 +12,7 @@ class TrackersViewController: UIViewController {
     var categories: [TrackerCategory]?
     var completedTrackers: [TrackerRecord]?
     var currentDate: Date?
+    let trackersCollectionService = TrackersCollectionService()
     
     private lazy var searchField: UITextField = {
         let textField = UITextField()
@@ -45,16 +46,27 @@ class TrackersViewController: UIViewController {
         label.textAlignment = .center
         return label
     }()
+    
+    private lazy var trackersCollectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        if !trackersCollectionService.trackers.isEmpty {
+            starImage.isHidden = true
+            questionLabel.isHidden = true
+        }
+        trackersCollectionView.delegate = trackersCollectionService
+        trackersCollectionView.dataSource = trackersCollectionService
+        trackersCollectionView.register(TrackerCell.self, forCellWithReuseIdentifier: "trackerCell")
+        
         loadViews()
         loadConstraints()
+        
     }
     
     private func loadViews() {
         view.backgroundColor = .ypWhite
-        [searchField ,starImage, questionLabel].forEach {
+        [searchField ,starImage, questionLabel, trackersCollectionView].forEach {
             $0.translatesAutoresizingMaskIntoConstraints = false
             view.addSubview($0)
         }
@@ -73,8 +85,16 @@ class TrackersViewController: UIViewController {
             questionLabel.widthAnchor.constraint(equalToConstant: 343),
             questionLabel.heightAnchor.constraint(equalToConstant: 18),
             questionLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            questionLabel.topAnchor.constraint(equalTo: starImage.bottomAnchor, constant: 8)
+            questionLabel.topAnchor.constraint(equalTo: starImage.bottomAnchor, constant: 8),
+            trackersCollectionView.topAnchor.constraint(equalTo: searchField.bottomAnchor, constant: 30),
+            trackersCollectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+            trackersCollectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+            trackersCollectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -16)
         ])
     }
 }
+
+#Preview(traits: .defaultLayout, body: {
+    TabBarController()
+})
 

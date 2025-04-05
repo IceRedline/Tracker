@@ -14,10 +14,26 @@ class NewTrackerViewController: UIViewController {
     private let scrollView = UIScrollView()
     private let stackView = UIStackView()
     private let tableView = UITableView()
-    private var emojiCollectionView: UICollectionView!
-    private var emojiCollectionService: EmojiCollectionService!
-    private var colorsCollectionView: UICollectionView!
-    private var colorsCollectionService: ColorsCollectionService!
+    private var tableViewService: ButtonsTableViewService?
+#warning ("Случайно начал верстать коллекции, после этого увидел, что в ТЗ этого нет, не стал удалять, т.к. понадобится в дальнейшем")
+    /*private var emojiCollectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
+    private var colorsCollectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
+    private let emojiCollectionService = EmojiCollectionService()
+    private let colorsCollectionService = ColorsCollectionService()
+    
+    let emojiLabel: UILabel = {
+        let label = UILabel()
+        label.text = "   Emoji"
+        label.font = UIFont.systemFont(ofSize: 19, weight: .bold)
+        return label
+    }()
+    
+    let colorLabel: UILabel = {
+        let label = UILabel()
+        label.text = "   Цвет"
+        label.font = UIFont.systemFont(ofSize: 19, weight: .bold)
+        return label
+    }()*/
     
     let titleLabel: UILabel = {
         let label = UILabel()
@@ -38,28 +54,28 @@ class NewTrackerViewController: UIViewController {
         return textField
     }()
     
-    let emojiLabel: UILabel = {
-        let label = UILabel()
-        label.text = "   Emoji"
-        label.font = UIFont.systemFont(ofSize: 19, weight: .bold)
-        return label
-    }()
-    
-    let colorLabel: UILabel = {
-        let label = UILabel()
-        label.text = "   Цвет"
-        label.font = UIFont.systemFont(ofSize: 19, weight: .bold)
-        return label
-    }()
-    
     let cancelButton: UIButton = {
         let button = UIButton()
-        button.setTitle("Отмена", for: .normal)
+        button.setTitle("Отменить", for: .normal)
+        button.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
+        button.setTitleColor(.ypRed, for: .normal)
         button.backgroundColor = .ypWhite
         button.tintColor = .ypRed
         button.layer.borderColor = UIColor.ypRed.cgColor
         button.layer.borderWidth = 1
         button.layer.cornerRadius = 16
+        button.addTarget(self, action: #selector(cancelButtonTapped), for: .touchUpInside)
+        return button
+    }()
+    
+    let createButton: UIButton = {
+        let button = UIButton()
+        button.setTitle("Создать", for: .normal)
+        button.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
+        button.setTitleColor(.ypWhite, for: .normal)
+        button.backgroundColor = .ypBlack
+        button.layer.cornerRadius = 16
+        button.isEnabled = false
         return button
     }()
     
@@ -79,55 +95,66 @@ class NewTrackerViewController: UIViewController {
         self.modalPresentationStyle = .currentContext
         view.backgroundColor = .ypWhite
         titleLabel.text = titleName
+        tableViewService = ButtonsTableViewService(chosenType: titleName)
+        tableView.delegate = tableViewService
+        tableView.dataSource = tableViewService
+        tableViewService?.viewController = self
         
         setupTitleLabel()
-        setupEmojiCollectionView()
-        setupColorsCollectionView()
+        setupBottomButtons()
         setupScrollView()
         setupStackView()
         setupAndAddElements()
+        
+        /*setupCollectionView(collectionView: &emojiCollectionView, cellID: "emojiCell", collectionService: emojiCollectionService)
+        setupCollectionView(collectionView: &colorsCollectionView, cellID: "colorCell", collectionService: colorsCollectionService)
+        emojiCollectionView.reloadData()
+        colorsCollectionView.reloadData()*/
     }
     
     // MARK: - Methods
     
     private func setupTitleLabel() {
+        titleLabel.textAlignment = .center
         view.addSubview(titleLabel)
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            titleLabel.widthAnchor.constraint(equalToConstant: 133),
+            titleLabel.widthAnchor.constraint(equalToConstant: 241),
             titleLabel.heightAnchor.constraint(equalToConstant: 22),
             titleLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: 30),
             titleLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
         ])
     }
     
-    private func setupEmojiCollectionView() {
-        emojiCollectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
-        emojiCollectionView.translatesAutoresizingMaskIntoConstraints = false
-        emojiCollectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: "emojiCell")
-        emojiCollectionView.isScrollEnabled = false
-        //emojiCollectionView.backgroundColor = .black
-        
-        emojiCollectionService = EmojiCollectionService()
-        emojiCollectionView.dataSource = emojiCollectionService
-        emojiCollectionView.delegate = emojiCollectionService
+    private func setupBottomButtons() {
+        view.addSubview(cancelButton)
+        view.addSubview(createButton)
+        cancelButton.translatesAutoresizingMaskIntoConstraints = false
+        createButton.translatesAutoresizingMaskIntoConstraints  = false
+        NSLayoutConstraint.activate([
+            cancelButton.widthAnchor.constraint(equalToConstant: 166),
+            cancelButton.heightAnchor.constraint(equalToConstant: 60),
+            cancelButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
+            cancelButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            createButton.widthAnchor.constraint(equalToConstant: 166),
+            createButton.heightAnchor.constraint(equalToConstant: 60),
+            createButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
+            createButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
+        ])
     }
     
-    private func setupColorsCollectionView() {
-        colorsCollectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
-        colorsCollectionView.translatesAutoresizingMaskIntoConstraints = false
-        colorsCollectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: "colorCell")
-        colorsCollectionView.isScrollEnabled = false
-        //emojiCollectionView.backgroundColor = .black
-        
-        colorsCollectionService = ColorsCollectionService()
-        colorsCollectionView.dataSource = colorsCollectionService
-        colorsCollectionView.delegate = colorsCollectionService
+    /*
+    private func setupCollectionView(collectionView: inout UICollectionView, cellID: String, collectionService: UICollectionViewDataSource & UICollectionViewDelegate) {
+        collectionView.translatesAutoresizingMaskIntoConstraints = false
+        collectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: cellID)
+        collectionView.isScrollEnabled = false
+        collectionView.dataSource = collectionService
+        collectionView.delegate = collectionService
     }
+    */
     
     private func setupScrollView() {
         scrollView.translatesAutoresizingMaskIntoConstraints = false
-        //scrollView.backgroundColor = .red
         view.addSubview(scrollView)
         NSLayoutConstraint.activate([
             scrollView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 14),
@@ -141,7 +168,6 @@ class NewTrackerViewController: UIViewController {
         stackView.translatesAutoresizingMaskIntoConstraints = false
         stackView.axis = .vertical
         stackView.spacing = 30
-        //stackView.backgroundColor = .blue
         scrollView.addSubview(stackView)
         
         NSLayoutConstraint.activate([
@@ -154,23 +180,35 @@ class NewTrackerViewController: UIViewController {
     }
     
     private func setupAndAddElements() {
-        tableView.backgroundColor = .systemGray6
+        tableView.backgroundColor = .background
         tableView.layer.cornerRadius = 16
         NSLayoutConstraint.activate([
             trackerNameTextField.widthAnchor.constraint(equalToConstant: 343),
             trackerNameTextField.heightAnchor.constraint(equalToConstant: 75),
             tableView.widthAnchor.constraint(equalToConstant: 343),
-            tableView.heightAnchor.constraint(equalToConstant: 150),
-            emojiLabel.widthAnchor.constraint(equalToConstant: 300),
+            /*emojiLabel.widthAnchor.constraint(equalToConstant: 300),
             emojiCollectionView.widthAnchor.constraint(equalToConstant: 374),
             emojiCollectionView.heightAnchor.constraint(equalToConstant: 204),
+            emojiLabel.widthAnchor.constraint(equalToConstant: 300),
             colorsCollectionView.widthAnchor.constraint(equalToConstant: 374),
-            colorsCollectionView.heightAnchor.constraint(equalToConstant: 204),
+            colorsCollectionView.heightAnchor.constraint(equalToConstant: 204),*/
         ])
+        switch titleName {
+        case "Новая привычка":
+            tableView.heightAnchor.constraint(equalToConstant: 150).isActive = true
+        case "Новое нерегулярное событие":
+            tableView.heightAnchor.constraint(equalToConstant: 75).isActive = true
+        default: return
+        }
         stackView.addArrangedSubview(trackerNameTextField)
         stackView.addArrangedSubview(tableView)
-        stackView.addArrangedSubview(emojiLabel)
+        /*stackView.addArrangedSubview(emojiLabel)
         stackView.addArrangedSubview(emojiCollectionView)
-        stackView.addArrangedSubview(colorsCollectionView)
+        stackView.addArrangedSubview(colorLabel)
+        stackView.addArrangedSubview(colorsCollectionView)*/
+    }
+    
+    @objc private func cancelButtonTapped() {
+        self.view.window?.rootViewController?.dismiss(animated: true, completion: nil)
     }
 }
