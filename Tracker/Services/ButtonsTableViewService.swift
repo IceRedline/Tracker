@@ -7,7 +7,7 @@
 
 import UIKit
 
-class ButtonsTableViewService: NSObject, UITableViewDelegate, UITableViewDataSource {
+final class ButtonsTableViewService: NSObject, UITableViewDelegate, UITableViewDataSource {
     
     weak var viewController: NewTrackerViewController?
     
@@ -61,13 +61,8 @@ class ButtonsTableViewService: NSObject, UITableViewDelegate, UITableViewDataSou
         case 0:
             return
         case 1:
-            let vc = ScheduleViewController()
-            viewController?.present(vc, animated: true)
+            viewController?.openScheduleController()
         default: return
         }
-    }
-    
-    func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
-        
     }
 }

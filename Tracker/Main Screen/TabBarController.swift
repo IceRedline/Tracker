@@ -7,8 +7,8 @@
 
 import UIKit
 
-class TabBarController: UITabBarController {
-
+final class TabBarController: UITabBarController {
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.setupTabs()
@@ -24,7 +24,7 @@ class TabBarController: UITabBarController {
         datePicker.preferredDatePickerStyle = .compact
         datePicker.locale = Locale(identifier: "ru_RU")
         
-        //datePicker.addTarget(self, action: #selector(dateChanged(_:)), for: .valueChanged)
+        datePicker.addTarget(self, action: #selector(dateChanged(_:)), for: .valueChanged)
         let datePickerItem = UIBarButtonItem(customView: datePicker)
         
         let trackersViewController = self.createNav(
@@ -56,13 +56,14 @@ class TabBarController: UITabBarController {
         nav.viewControllers.first?.navigationItem.rightBarButtonItem?.tintColor = .ypBlack
         return nav
     }
-
+    
     @objc private func addTrackerButtonTapped() {
         let vc = TrackerTypeViewController()
         present(vc, animated: true)
     }
     
-    @objc private func dateChanged() {
-        //trackers
+    @objc private func dateChanged(_ sender: UIDatePicker) {
+        TrackersCollectionService.shared.currentDate = sender.date
+        TrackersCollectionService.shared.reload()
     }
 }

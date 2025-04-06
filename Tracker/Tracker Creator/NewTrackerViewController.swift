@@ -7,33 +7,15 @@
 
 import UIKit
 
-class NewTrackerViewController: UIViewController {
+final class NewTrackerViewController: UIViewController, ScheduleServiceDelegate {
     
     var titleName: String
+    var schedule: Array<WeekDays> = []
     
     private let scrollView = UIScrollView()
     private let stackView = UIStackView()
     private let tableView = UITableView()
     private var tableViewService: ButtonsTableViewService?
-#warning ("Случайно начал верстать коллекции, после этого увидел, что в ТЗ этого нет, не стал удалять, т.к. понадобится в дальнейшем")
-    /*private var emojiCollectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
-    private var colorsCollectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
-    private let emojiCollectionService = EmojiCollectionService()
-    private let colorsCollectionService = ColorsCollectionService()
-    
-    let emojiLabel: UILabel = {
-        let label = UILabel()
-        label.text = "   Emoji"
-        label.font = UIFont.systemFont(ofSize: 19, weight: .bold)
-        return label
-    }()
-    
-    let colorLabel: UILabel = {
-        let label = UILabel()
-        label.text = "   Цвет"
-        label.font = UIFont.systemFont(ofSize: 19, weight: .bold)
-        return label
-    }()*/
     
     let titleLabel: UILabel = {
         let label = UILabel()
@@ -107,11 +89,6 @@ class NewTrackerViewController: UIViewController {
         setupScrollView()
         setupStackView()
         setupAndAddElements()
-        
-        /*setupCollectionView(collectionView: &emojiCollectionView, cellID: "emojiCell", collectionService: emojiCollectionService)
-        setupCollectionView(collectionView: &colorsCollectionView, cellID: "colorCell", collectionService: colorsCollectionService)
-        emojiCollectionView.reloadData()
-        colorsCollectionView.reloadData()*/
     }
     
     // MARK: - Methods
@@ -144,16 +121,6 @@ class NewTrackerViewController: UIViewController {
             createButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
         ])
     }
-    
-    /*
-    private func setupCollectionView(collectionView: inout UICollectionView, cellID: String, collectionService: UICollectionViewDataSource & UICollectionViewDelegate) {
-        collectionView.translatesAutoresizingMaskIntoConstraints = false
-        collectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: cellID)
-        collectionView.isScrollEnabled = false
-        collectionView.dataSource = collectionService
-        collectionView.delegate = collectionService
-    }
-    */
     
     private func setupScrollView() {
         scrollView.translatesAutoresizingMaskIntoConstraints = false
@@ -188,12 +155,6 @@ class NewTrackerViewController: UIViewController {
             trackerNameTextField.widthAnchor.constraint(equalToConstant: 343),
             trackerNameTextField.heightAnchor.constraint(equalToConstant: 75),
             tableView.widthAnchor.constraint(equalToConstant: 343),
-            /*emojiLabel.widthAnchor.constraint(equalToConstant: 300),
-            emojiCollectionView.widthAnchor.constraint(equalToConstant: 374),
-            emojiCollectionView.heightAnchor.constraint(equalToConstant: 204),
-            emojiLabel.widthAnchor.constraint(equalToConstant: 300),
-            colorsCollectionView.widthAnchor.constraint(equalToConstant: 374),
-            colorsCollectionView.heightAnchor.constraint(equalToConstant: 204),*/
         ])
         switch titleName {
         case "Новая привычка":
@@ -204,10 +165,6 @@ class NewTrackerViewController: UIViewController {
         }
         stackView.addArrangedSubview(trackerNameTextField)
         stackView.addArrangedSubview(tableView)
-        /*stackView.addArrangedSubview(emojiLabel)
-        stackView.addArrangedSubview(emojiCollectionView)
-        stackView.addArrangedSubview(colorLabel)
-        stackView.addArrangedSubview(colorsCollectionView)*/
     }
     
     @objc private func textfieldChanged(_ sender: UITextField) {
@@ -220,10 +177,33 @@ class NewTrackerViewController: UIViewController {
         }
     }
     
+    func didSelectSchedule(days: [WeekDays]) {
+        self.schedule = days
+        print("Получены выбранные дни: \(days)")
+    }
+    
+    func openScheduleController() {
+        trackerNameTextField.resignFirstResponder()
+        let scheduleVC = ScheduleViewController()
+        scheduleVC.delegate = self
+        present(scheduleVC, animated: true)
+    }
+    
     @objc private func createButtonTapped() {
-        let newTracker = Tracker(id: 555, name: trackerNameTextField.text!, color: .colorSelection14, emoji: "🥸", schedule: [])
-        TrackersCollectionService.shared.categories[0].trackers.append(newTracker)
-        TrackersCollectionService.shared.reload()
+        let newTracker = Tracker(
+            id: UInt.random(in: 2...1000),
+            name: trackerNameTextField.text!,
+            color: .colorSelection14,
+            emoji: "🥸",
+            schedule: schedule
+        )
+        
+        if let firstCategory = TrackersCollectionService.shared.categories.first {
+            TrackersCollectionService.shared.addTracker(newTracker, toCategoryWithTitle: firstCategory.title)
+        } else {
+            TrackersCollectionService.shared.addTracker(newTracker, toCategoryWithTitle: "Домашний уют")
+        }
+        
         self.view.window?.rootViewController?.dismiss(animated: true, completion: nil)
     }
     

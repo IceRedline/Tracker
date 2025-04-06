@@ -7,8 +7,8 @@
 
 import UIKit
 
-class TrackersViewController: UIViewController {
-
+final class TrackersViewController: UIViewController {
+    
     var currentDate: Date?
     let trackersCollectionService = TrackersCollectionService.shared
     
@@ -46,13 +46,21 @@ class TrackersViewController: UIViewController {
     }()
     
     lazy var trackersCollectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         trackersCollectionService.viewController = self
-        if !trackersCollectionService.categories[0].trackers.isEmpty {
-            starImage.isHidden = true
-            questionLabel.isHidden = true
+        trackersCollectionService.currentDate = Date()
+        trackersCollectionService.reload()
+        
+        if trackersCollectionService.categories[0].trackers.isEmpty {
+            hideCollection()
+        } else {
+            showCollection()
+        }
+        
+        if trackersCollectionService.categories[0].trackers.isEmpty {
+            trackersCollectionView.isHidden = true
         }
         trackersCollectionView.delegate = trackersCollectionService
         trackersCollectionView.dataSource = trackersCollectionService
@@ -62,10 +70,18 @@ class TrackersViewController: UIViewController {
             forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
             withReuseIdentifier: "header"
         )
-
+        
         
         loadViews()
         loadConstraints()
+    }
+    
+    func hideCollection() {
+        trackersCollectionView.isHidden = true
+    }
+    
+    func showCollection() {
+        trackersCollectionView.isHidden = false
     }
     
     private func loadViews() {
@@ -97,8 +113,4 @@ class TrackersViewController: UIViewController {
         ])
     }
 }
-
-#Preview(traits: .defaultLayout, body: {
-    TabBarController()
-})
 

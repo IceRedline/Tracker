@@ -7,7 +7,7 @@
 
 import UIKit
 
-class TrackerTypeViewController: UIViewController {
+final class TrackerTypeViewController: UIViewController {
     
     private let titleLabel: UILabel = {
         let label = UILabel()

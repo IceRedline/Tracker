@@ -7,7 +7,7 @@
 
 import UIKit
 
-class TrackerCell: UICollectionViewCell {
+final class TrackerCell: UICollectionViewCell {
     
     weak var delegate: TrackerCellDelegate?
     
@@ -18,7 +18,12 @@ class TrackerCell: UICollectionViewCell {
     let dayCountLabel = UILabel()
     let completedButton = UIButton()
     
-    var isCompleted: Bool = false
+    var isCompleted: Bool = false {
+        didSet {
+            let imageName = isCompleted ? "checkmark" : "plus"
+            completedButton.setImage(UIImage(systemName: imageName), for: .normal)
+        }
+    }
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -54,15 +59,18 @@ class TrackerCell: UICollectionViewCell {
         dayCountLabel.translatesAutoresizingMaskIntoConstraints = false
         contentView.addSubview(dayCountLabel)
         
-        completedButton.setImage(UIImage(named: "trackerCompletedButton"), for: .normal)
+        isCompleted ? completedButton.setImage(UIImage(systemName: "checkmark"), for: .normal) : completedButton.setImage(UIImage(systemName: "plus"), for: .normal)
+        completedButton.layer.cornerRadius = 16
+        completedButton.tintColor = .ypWhite
         completedButton.translatesAutoresizingMaskIntoConstraints = false
         contentView.addSubview(completedButton)
     }
     
     private func setupConstraints() {
         NSLayoutConstraint.activate([
-            colorView.widthAnchor.constraint(equalToConstant: 167),
-            colorView.heightAnchor.constraint(equalToConstant: 90),
+            colorView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            colorView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            colorView.heightAnchor.constraint(equalToConstant: 95),
             colorView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
             colorView.topAnchor.constraint(equalTo: contentView.topAnchor),
             
@@ -93,7 +101,9 @@ class TrackerCell: UICollectionViewCell {
         colorView.backgroundColor = color
         nameLabel.text = name
         emojiLabel.text = emoji
-        completedButton.imageView?.tintColor = color
+        completedButton.backgroundColor = color
+        completedButton.alpha = isCompleted ? 0.3 : 1
+        
         switch count.last {
         case "0":
             dayCountLabel.text = "\(count) дней"
@@ -121,13 +131,18 @@ class TrackerCell: UICollectionViewCell {
         completedButton.addTarget(self, action: #selector(trackerCompletedTapped(_:)), for: .touchUpInside)
     }
     
-    @objc func trackerCompletedTapped(_ sender: TrackerCell) {
+    @objc func trackerCompletedTapped(_ sender: UIButton) {
+        if TrackersCollectionService.shared.currentDate ?? Date() > Date() {
+            return
+        }
         if isCompleted {
             isCompleted = false
-            completedButton.setImage(UIImage(named: "trackerCompletedButton"), for: .normal)
+            completedButton.setImage(UIImage(systemName: "plus"), for: .normal)
+            completedButton.alpha = 1
         } else {
             isCompleted = true
-            completedButton.setImage(UIImage(named: "trackerDone"), for: .normal)
+            completedButton.setImage(UIImage(systemName: "checkmark"), for: .normal)
+            completedButton.alpha = 0.3
         }
         delegate?.trackerCellDidTapComplete(self, isCompleted: isCompleted)
     }

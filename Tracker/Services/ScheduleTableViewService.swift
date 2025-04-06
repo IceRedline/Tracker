@@ -7,9 +7,12 @@
 
 import UIKit
 
-class ScheduleTableViewService: NSObject, UITableViewDelegate, UITableViewDataSource {
+final class ScheduleTableViewService: NSObject, UITableViewDelegate, UITableViewDataSource {
+    
+    weak var delegate: ScheduleServiceDelegate?
     
     let dayNames = ["Понедельник", "Вторник", "Среда", "Четверг", "Пятница", "Суббота", "Воскресенье"]
+    var selectedDays: [WeekDays] = []
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int { dayNames.count }
     
@@ -42,6 +45,21 @@ class ScheduleTableViewService: NSObject, UITableViewDelegate, UITableViewDataSo
     }
     
     @objc private func switchChanged(_ sender: UISwitch!) {
-        print("Переключен switch с тэгом \(sender.tag)")
+        let dayIndex = sender.tag
+        guard let weekDay = WeekDays(rawValue: dayIndex) else { return }
+        
+        if sender.isOn {
+            if !selectedDays.contains(weekDay) {
+                selectedDays.append(weekDay)
+            }
+        } else {
+            selectedDays.removeAll { $0 == weekDay }
+        }
+        
+        print("Выбранные дни: \(selectedDays)")
+    }
+    
+    func getSelectedDays() -> [WeekDays] {
+        return selectedDays
     }
 }

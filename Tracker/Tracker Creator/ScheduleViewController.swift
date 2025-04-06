@@ -7,8 +7,10 @@
 
 import UIKit
 
-class ScheduleViewController: UIViewController {
-
+final class ScheduleViewController: UIViewController {
+    
+    weak var delegate: ScheduleServiceDelegate?
+    
     let tableView = UITableView()
     let scheduleTableViewService = ScheduleTableViewService()
     
@@ -63,11 +65,9 @@ class ScheduleViewController: UIViewController {
     }
     
     @objc private func doneButtonTapped() {
+        let selectedDays = scheduleTableViewService.getSelectedDays()
+        print("selectedDays: \(selectedDays)")
+        delegate?.didSelectSchedule(days: selectedDays)
         dismiss(animated: true)
     }
-
 }
-
-#Preview(traits: .defaultLayout, body: {
-    TabBarController()
-})
