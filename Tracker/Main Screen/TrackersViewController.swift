@@ -64,13 +64,12 @@ final class TrackersViewController: UIViewController {
         }
         trackersCollectionView.delegate = trackersCollectionService
         trackersCollectionView.dataSource = trackersCollectionService
-        trackersCollectionView.register(TrackerCell.self, forCellWithReuseIdentifier: "trackerCell")
+        trackersCollectionView.register(TrackerCell.self, forCellWithReuseIdentifier: Constants.trackerCellIdentifier)
         trackersCollectionView.register(
             UICollectionReusableView.self,
             forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
-            withReuseIdentifier: "header"
+            withReuseIdentifier: Constants.headerIdentifier
         )
-        
         
         loadViews()
         loadConstraints()
@@ -95,21 +94,21 @@ final class TrackersViewController: UIViewController {
     private func loadConstraints() {
         NSLayoutConstraint.activate([
             searchField.heightAnchor.constraint(equalToConstant: 36),
-            searchField.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            searchField.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+            searchField.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: Constants.defaultPadding),
+            searchField.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -Constants.defaultPadding),
             searchField.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 7),
             starImage.widthAnchor.constraint(equalToConstant: 80),
             starImage.heightAnchor.constraint(equalToConstant: 80),
             starImage.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             starImage.topAnchor.constraint(equalTo: view.topAnchor, constant: 402),
-            questionLabel.widthAnchor.constraint(equalToConstant: 343),
+            questionLabel.widthAnchor.constraint(equalTo: view.widthAnchor, constant: -(Constants.defaultPadding * 2)),
             questionLabel.heightAnchor.constraint(equalToConstant: 18),
             questionLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             questionLabel.topAnchor.constraint(equalTo: starImage.bottomAnchor, constant: 8),
             trackersCollectionView.topAnchor.constraint(equalTo: searchField.bottomAnchor, constant: 30),
-            trackersCollectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            trackersCollectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
-            trackersCollectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -16)
+            trackersCollectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: Constants.defaultPadding),
+            trackersCollectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -Constants.defaultPadding),
+            trackersCollectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -Constants.defaultPadding)
         ])
     }
 }

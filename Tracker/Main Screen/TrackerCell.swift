@@ -11,7 +11,7 @@ final class TrackerCell: UICollectionViewCell {
     
     weak var delegate: TrackerCellDelegate?
     
-    var cellID: UInt?
+    var cellID: UUID?
     let colorView = UIView()
     let nameLabel = UILabel()
     let emojiLabel = UILabel()
@@ -27,6 +27,7 @@ final class TrackerCell: UICollectionViewCell {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
+        completedButton.addTarget(self, action: #selector(trackerCompletedTapped(_:)), for: .touchUpInside)
         setupViews()
         setupConstraints()
     }
@@ -36,7 +37,7 @@ final class TrackerCell: UICollectionViewCell {
     }
     
     private func setupViews() {
-        colorView.layer.cornerRadius = 16
+        colorView.layer.cornerRadius = Constants.cornerRadius
         colorView.translatesAutoresizingMaskIntoConstraints = false
         contentView.addSubview(colorView)
         
@@ -60,7 +61,7 @@ final class TrackerCell: UICollectionViewCell {
         contentView.addSubview(dayCountLabel)
         
         isCompleted ? completedButton.setImage(UIImage(systemName: "checkmark"), for: .normal) : completedButton.setImage(UIImage(systemName: "plus"), for: .normal)
-        completedButton.layer.cornerRadius = 16
+        completedButton.layer.cornerRadius = Constants.cornerRadius
         completedButton.tintColor = .ypWhite
         completedButton.translatesAutoresizingMaskIntoConstraints = false
         contentView.addSubview(completedButton)
@@ -86,8 +87,8 @@ final class TrackerCell: UICollectionViewCell {
             
             dayCountLabel.widthAnchor.constraint(equalToConstant: 101),
             dayCountLabel.heightAnchor.constraint(equalToConstant: 18),
-            dayCountLabel.topAnchor.constraint(equalTo: colorView.bottomAnchor, constant: 16),
-            dayCountLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
+            dayCountLabel.topAnchor.constraint(equalTo: colorView.bottomAnchor, constant: Constants.defaultPadding),
+            dayCountLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: Constants.defaultPadding),
             
             completedButton.widthAnchor.constraint(equalToConstant: 34),
             completedButton.heightAnchor.constraint(equalToConstant: 34),
@@ -96,7 +97,7 @@ final class TrackerCell: UICollectionViewCell {
         ])
     }
     
-    func configure(id: UInt, color: UIColor, name: String, emoji: String, count: String) {
+    func configure(id: UUID, color: UIColor, name: String, emoji: String, count: String) {
         cellID = id
         colorView.backgroundColor = color
         nameLabel.text = name
@@ -127,8 +128,6 @@ final class TrackerCell: UICollectionViewCell {
             dayCountLabel.text = "\(count) дней"
         default: return
         }
-        
-        completedButton.addTarget(self, action: #selector(trackerCompletedTapped(_:)), for: .touchUpInside)
     }
     
     @objc func trackerCompletedTapped(_ sender: UIButton) {

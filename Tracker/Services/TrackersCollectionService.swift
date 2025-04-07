@@ -15,7 +15,7 @@ final class TrackersCollectionService: NSObject, UICollectionViewDataSource, UIC
     
     var currentDate: Date?
     
-    var categories: [TrackerCategory] = [TrackerCategory(title: "Домашний уют", trackers: [Tracker(id: 1, name: "Поливать растения", color: .colorSelection5, emoji: "❤️", schedule: [WeekDays.monday, WeekDays.tuesday])])]
+    var categories: [TrackerCategory] = [TrackerCategory(title: "Домашний уют", trackers: [Tracker(id: UUID(), name: "Поливать растения", color: .colorSelection5, emoji: "❤️", schedule: [WeekDays.monday, WeekDays.tuesday])])]
     var completedTrackers: [TrackerRecord] = []
     
     private override init() {}
@@ -96,7 +96,7 @@ final class TrackersCollectionService: NSObject, UICollectionViewDataSource, UIC
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "trackerCell", for: indexPath) as! TrackerCell
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: Constants.trackerCellIdentifier, for: indexPath) as! TrackerCell
         cell.prepareForReuse()
         cell.delegate = self
         
@@ -120,15 +120,16 @@ final class TrackersCollectionService: NSObject, UICollectionViewDataSource, UIC
     }
     
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
-        let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "header", for: indexPath)
+        let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: Constants.headerIdentifier, for: indexPath)
+        let currentCategory = filteredCategories()[indexPath.section]
         if kind == UICollectionView.elementKindSectionHeader {
             let label = UILabel()
-            label.text = categories[0].title
+            label.text = currentCategory.title
             label.font = UIFont.boldSystemFont(ofSize: 18)
             label.translatesAutoresizingMaskIntoConstraints = false
             header.addSubview(label)
             NSLayoutConstraint.activate([
-                label.leadingAnchor.constraint(equalTo: header.leadingAnchor, constant: 16),
+                label.leadingAnchor.constraint(equalTo: header.leadingAnchor, constant: Constants.defaultPadding),
                 label.centerYAnchor.constraint(equalTo: header.centerYAnchor)
             ])
         }

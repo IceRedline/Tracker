@@ -33,7 +33,7 @@ final class ScheduleTableViewService: NSObject, UITableViewDelegate, UITableView
         
         NSLayoutConstraint.activate([
             titleLabel.centerYAnchor.constraint(equalTo: cell.centerYAnchor),
-            titleLabel.leadingAnchor.constraint(equalTo: cell.leadingAnchor, constant: 16),
+            titleLabel.leadingAnchor.constraint(equalTo: cell.leadingAnchor, constant: Constants.defaultPadding),
         ])
         return cell
     }

@@ -13,7 +13,8 @@ final class NewTrackerViewController: UIViewController, ScheduleServiceDelegate 
     var schedule: Array<WeekDays> = []
     
     private let scrollView = UIScrollView()
-    private let stackView = UIStackView()
+    private let vStackView = UIStackView()
+    private let hStackView = UIStackView()
     private let tableView = UITableView()
     private var tableViewService: ButtonsTableViewService?
     
@@ -27,7 +28,7 @@ final class NewTrackerViewController: UIViewController, ScheduleServiceDelegate 
         let textField = UITextField()
         textField.placeholder = "Введите название трекера"
         textField.backgroundColor = .background
-        textField.layer.cornerRadius = 16
+        textField.layer.cornerRadius = Constants.cornerRadius
         
         let paddingView = UIView(frame: CGRect(x: 0, y: 0, width: 16, height: textField.frame.height))
         textField.leftView = paddingView
@@ -46,7 +47,7 @@ final class NewTrackerViewController: UIViewController, ScheduleServiceDelegate 
         button.tintColor = .ypRed
         button.layer.borderColor = UIColor.ypRed.cgColor
         button.layer.borderWidth = 1
-        button.layer.cornerRadius = 16
+        button.layer.cornerRadius = Constants.cornerRadius
         button.addTarget(self, action: #selector(cancelButtonTapped), for: .touchUpInside)
         return button
     }()
@@ -57,7 +58,7 @@ final class NewTrackerViewController: UIViewController, ScheduleServiceDelegate 
         button.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         button.setTitleColor(.ypWhite, for: .normal)
         button.backgroundColor = .ypGray
-        button.layer.cornerRadius = 16
+        button.layer.cornerRadius = Constants.cornerRadius
         button.isEnabled = false
         button.addTarget(self, action: #selector(createButtonTapped), for: .touchUpInside)
         return button
@@ -85,9 +86,9 @@ final class NewTrackerViewController: UIViewController, ScheduleServiceDelegate 
         tableViewService?.viewController = self
         
         setupTitleLabel()
-        setupBottomButtons()
         setupScrollView()
-        setupStackView()
+        setupHStackView()
+        setupVStackView()
         setupAndAddElements()
     }
     
@@ -105,23 +106,6 @@ final class NewTrackerViewController: UIViewController, ScheduleServiceDelegate 
         ])
     }
     
-    private func setupBottomButtons() {
-        view.addSubview(cancelButton)
-        view.addSubview(createButton)
-        cancelButton.translatesAutoresizingMaskIntoConstraints = false
-        createButton.translatesAutoresizingMaskIntoConstraints  = false
-        NSLayoutConstraint.activate([
-            cancelButton.widthAnchor.constraint(equalToConstant: 176),
-            cancelButton.heightAnchor.constraint(equalToConstant: 60),
-            cancelButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
-            cancelButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
-            createButton.widthAnchor.constraint(equalToConstant: 171),
-            createButton.heightAnchor.constraint(equalToConstant: 60),
-            createButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
-            createButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
-        ])
-    }
-    
     private func setupScrollView() {
         scrollView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(scrollView)
@@ -133,29 +117,40 @@ final class NewTrackerViewController: UIViewController, ScheduleServiceDelegate 
         ])
     }
     
-    private func setupStackView() {
-        stackView.translatesAutoresizingMaskIntoConstraints = false
-        stackView.axis = .vertical
-        stackView.spacing = 30
-        scrollView.addSubview(stackView)
+    private func setupVStackView() {
+        vStackView.translatesAutoresizingMaskIntoConstraints = false
+        vStackView.axis = .vertical
+        vStackView.spacing = 30
+        scrollView.addSubview(vStackView)
         
         NSLayoutConstraint.activate([
-            stackView.topAnchor.constraint(equalTo: scrollView.topAnchor, constant: 24),
-            stackView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor, constant: -16),
-            stackView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor, constant: 16),
-            stackView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
-            stackView.widthAnchor.constraint(equalTo: scrollView.widthAnchor, constant: -32)
+            vStackView.topAnchor.constraint(equalTo: scrollView.topAnchor, constant: 24),
+            vStackView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor, constant: -Constants.defaultPadding),
+            vStackView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor, constant: Constants.defaultPadding),
+            vStackView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
+            vStackView.widthAnchor.constraint(equalTo: scrollView.widthAnchor, constant: -32)
+        ])
+    }
+    
+    private func setupHStackView() {
+        hStackView.translatesAutoresizingMaskIntoConstraints = false
+        hStackView.axis = .horizontal
+        hStackView.distribution = .fillEqually
+        hStackView.spacing = 8
+        view.addSubview(hStackView)
+        
+        NSLayoutConstraint.activate([
+            hStackView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            hStackView.topAnchor.constraint(equalTo: scrollView.bottomAnchor, constant: Constants.defaultPadding),
+            hStackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
+            hStackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
         ])
     }
     
     private func setupAndAddElements() {
         tableView.backgroundColor = .background
-        tableView.layer.cornerRadius = 16
-        NSLayoutConstraint.activate([
-            trackerNameTextField.widthAnchor.constraint(equalToConstant: 343),
-            trackerNameTextField.heightAnchor.constraint(equalToConstant: 75),
-            tableView.widthAnchor.constraint(equalToConstant: 343),
-        ])
+        tableView.layer.cornerRadius = Constants.cornerRadius
+        
         switch titleName {
         case "Новая привычка":
             tableView.heightAnchor.constraint(equalToConstant: 150).isActive = true
@@ -163,8 +158,17 @@ final class NewTrackerViewController: UIViewController, ScheduleServiceDelegate 
             tableView.heightAnchor.constraint(equalToConstant: 75).isActive = true
         default: return
         }
-        stackView.addArrangedSubview(trackerNameTextField)
-        stackView.addArrangedSubview(tableView)
+        vStackView.addArrangedSubview(trackerNameTextField)
+        vStackView.addArrangedSubview(tableView)
+        
+        hStackView.addArrangedSubview(cancelButton)
+        hStackView.addArrangedSubview(createButton)
+        
+        NSLayoutConstraint.activate([
+            trackerNameTextField.widthAnchor.constraint(equalTo: vStackView.widthAnchor),
+            trackerNameTextField.heightAnchor.constraint(equalToConstant: 75),
+            tableView.widthAnchor.constraint(equalTo: vStackView.widthAnchor),
+        ])
     }
     
     @objc private func textfieldChanged(_ sender: UITextField) {
@@ -190,8 +194,13 @@ final class NewTrackerViewController: UIViewController, ScheduleServiceDelegate 
     }
     
     @objc private func createButtonTapped() {
+        guard let trackerName = trackerNameTextField.text, !trackerName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else {
+            print("Ошибка: Имя трекера не может быть пустым")
+            return
+        }
+        
         let newTracker = Tracker(
-            id: UInt.random(in: 2...1000),
+            id: UUID(),
             name: trackerNameTextField.text!,
             color: .colorSelection14,
             emoji: "🥸",

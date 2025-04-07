@@ -31,7 +31,7 @@ final class ButtonsTableViewService: NSObject, UITableViewDelegate, UITableViewD
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = UITableViewCell(style: .default, reuseIdentifier: "buttonCell")
+        let cell = UITableViewCell(style: .default, reuseIdentifier: Constants.categoryCellIdentifier)
         cell.backgroundColor = .background
         
         let titleLabel = UILabel()
@@ -45,7 +45,7 @@ final class ButtonsTableViewService: NSObject, UITableViewDelegate, UITableViewD
         cell.addSubview(chevronImageView)
         cell.addSubview(titleLabel)
         NSLayoutConstraint.activate([
-            titleLabel.leadingAnchor.constraint(equalTo: cell.leadingAnchor, constant: 16),
+            titleLabel.leadingAnchor.constraint(equalTo: cell.leadingAnchor, constant: Constants.defaultPadding),
             titleLabel.centerYAnchor.constraint(equalTo: cell.centerYAnchor),
             chevronImageView.trailingAnchor.constraint(equalTo: cell.trailingAnchor, constant: -22),
             chevronImageView.centerYAnchor.constraint(equalTo: cell.centerYAnchor)

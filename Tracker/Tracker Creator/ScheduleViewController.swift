@@ -26,7 +26,7 @@ final class ScheduleViewController: UIViewController {
         button.setTitle("Готово", for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         button.backgroundColor = .ypBlack
-        button.layer.cornerRadius = 16
+        button.layer.cornerRadius = Constants.cornerRadius
         button.addTarget(self, action: #selector(doneButtonTapped), for: .touchUpInside)
         return button
     }()
@@ -44,7 +44,7 @@ final class ScheduleViewController: UIViewController {
     
     private func setupViewsAndActivateConstraints() {
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
-        tableView.layer.cornerRadius = 16
+        tableView.layer.cornerRadius = Constants.cornerRadius
         tableView.translatesAutoresizingMaskIntoConstraints = false
         doneButton.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(titleLabel)
@@ -53,14 +53,14 @@ final class ScheduleViewController: UIViewController {
         NSLayoutConstraint.activate([
             titleLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             titleLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: 30),
-            tableView.widthAnchor.constraint(equalToConstant: 343),
+            tableView.widthAnchor.constraint(equalTo: view.widthAnchor, constant: -(Constants.defaultPadding * 2)),
             tableView.heightAnchor.constraint(equalToConstant: 525),
             tableView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             tableView.topAnchor.constraint(equalTo: titleLabel.topAnchor, constant: 50),
-            doneButton.widthAnchor.constraint(equalToConstant: 335),
-            doneButton.heightAnchor.constraint(equalToConstant: 60),
+            doneButton.widthAnchor.constraint(equalTo: view.widthAnchor, constant: -40),
+            doneButton.heightAnchor.constraint(equalToConstant: Constants.buttonHeight),
             doneButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            doneButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -16)
+            doneButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -Constants.defaultPadding)
         ])
     }
     
