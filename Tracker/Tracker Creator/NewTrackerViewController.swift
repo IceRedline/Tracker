@@ -17,6 +17,10 @@ final class NewTrackerViewController: UIViewController, ScheduleServiceDelegate 
     private let hStackView = UIStackView()
     private let tableView = UITableView()
     private var tableViewService: ButtonsTableViewService?
+    private var emojiCollectionView: UICollectionView!
+    private var emojiCollectionService: EmojiCollectionService!
+    private var colorsCollectionView: UICollectionView!
+    private var colorsCollectionService: ColorsCollectionService!
     
     let titleLabel: UILabel = {
         let label = UILabel()
@@ -36,6 +40,20 @@ final class NewTrackerViewController: UIViewController, ScheduleServiceDelegate 
         textField.addTarget(self, action: #selector(textfieldChanged(_:)), for: .editingChanged)
         
         return textField
+    }()
+    
+    let emojiLabel: UILabel = {
+        let label = UILabel()
+        label.text = "   Emoji"
+        label.font = UIFont.systemFont(ofSize: 19, weight: .bold)
+        return label
+    }()
+    
+    let colorLabel: UILabel = {
+        let label = UILabel()
+        label.text = "   Цвет"
+        label.font = UIFont.systemFont(ofSize: 19, weight: .bold)
+        return label
     }()
     
     let cancelButton: UIButton = {
@@ -86,6 +104,8 @@ final class NewTrackerViewController: UIViewController, ScheduleServiceDelegate 
         tableViewService?.viewController = self
         
         setupTitleLabel()
+        setupEmojiCollectionView()
+        setupColorsCollectionView()
         setupScrollView()
         setupHStackView()
         setupVStackView()
@@ -104,6 +124,30 @@ final class NewTrackerViewController: UIViewController, ScheduleServiceDelegate 
             titleLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: 30),
             titleLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
         ])
+    }
+    
+    private func setupEmojiCollectionView() {
+        emojiCollectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
+        emojiCollectionView.translatesAutoresizingMaskIntoConstraints = false
+        emojiCollectionView.register(EmojiCell.self, forCellWithReuseIdentifier: "emojiCell")
+        emojiCollectionView.isScrollEnabled = false
+        emojiCollectionView.allowsMultipleSelection = false
+        
+        emojiCollectionService = EmojiCollectionService()
+        emojiCollectionView.dataSource = emojiCollectionService
+        emojiCollectionView.delegate = emojiCollectionService
+    }
+    
+    private func setupColorsCollectionView() {
+        colorsCollectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
+        colorsCollectionView.translatesAutoresizingMaskIntoConstraints = false
+        colorsCollectionView.register(ColorCell.self, forCellWithReuseIdentifier: "colorCell")
+        colorsCollectionView.isScrollEnabled = false
+        colorsCollectionView.allowsMultipleSelection = false
+        
+        colorsCollectionService = ColorsCollectionService()
+        colorsCollectionView.dataSource = colorsCollectionService
+        colorsCollectionView.delegate = colorsCollectionService
     }
     
     private func setupScrollView() {
@@ -158,8 +202,14 @@ final class NewTrackerViewController: UIViewController, ScheduleServiceDelegate 
             tableView.heightAnchor.constraint(equalToConstant: 75).isActive = true
         default: return
         }
+        
         vStackView.addArrangedSubview(trackerNameTextField)
         vStackView.addArrangedSubview(tableView)
+        
+        vStackView.addArrangedSubview(emojiLabel)
+        vStackView.addArrangedSubview(emojiCollectionView)
+        vStackView.addArrangedSubview(colorLabel)
+        vStackView.addArrangedSubview(colorsCollectionView)
         
         hStackView.addArrangedSubview(cancelButton)
         hStackView.addArrangedSubview(createButton)
@@ -168,6 +218,11 @@ final class NewTrackerViewController: UIViewController, ScheduleServiceDelegate 
             trackerNameTextField.widthAnchor.constraint(equalTo: vStackView.widthAnchor),
             trackerNameTextField.heightAnchor.constraint(equalToConstant: 75),
             tableView.widthAnchor.constraint(equalTo: vStackView.widthAnchor),
+            emojiLabel.widthAnchor.constraint(equalToConstant: 300),
+            emojiCollectionView.widthAnchor.constraint(equalToConstant: 364),
+            emojiCollectionView.heightAnchor.constraint(equalToConstant: 184),
+            colorsCollectionView.widthAnchor.constraint(equalToConstant: 374),
+            colorsCollectionView.heightAnchor.constraint(equalToConstant: 184),
         ])
     }
     
@@ -220,3 +275,7 @@ final class NewTrackerViewController: UIViewController, ScheduleServiceDelegate 
         self.view.window?.rootViewController?.dismiss(animated: true, completion: nil)
     }
 }
+
+#Preview(traits: .defaultLayout, body: {
+    NewTrackerViewController(titleName: "Новая привычка")
+})

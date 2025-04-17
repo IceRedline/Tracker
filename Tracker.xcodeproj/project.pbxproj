@@ -12,6 +12,10 @@
 		992AAE2A2D9F2C40007927AE /* ButtonsTableViewService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 992AAE292D9F2C40007927AE /* ButtonsTableViewService.swift */; };
 		992AAE2C2D9F352F007927AE /* ScheduleViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 992AAE2B2D9F352F007927AE /* ScheduleViewController.swift */; };
 		992AAE312D9FD239007927AE /* ScheduleTableViewService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 992AAE302D9FD239007927AE /* ScheduleTableViewService.swift */; };
+		993FF4CB2DA921C300BAFC86 /* ColorsCollectionService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 993FF4CA2DA921C300BAFC86 /* ColorsCollectionService.swift */; };
+		993FF4CD2DA921DB00BAFC86 /* EmojiCollectionService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 993FF4CC2DA921DB00BAFC86 /* EmojiCollectionService.swift */; };
+		993FF4CF2DA921EC00BAFC86 /* EmojiCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 993FF4CE2DA921EC00BAFC86 /* EmojiCell.swift */; };
+		993FF4D22DA922EF00BAFC86 /* ColorCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 993FF4D12DA922EF00BAFC86 /* ColorCell.swift */; };
 		995700162D98244C002888E0 /* StatisticsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 995700152D98244C002888E0 /* StatisticsViewController.swift */; };
 		995700182D982512002888E0 /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 995700172D982512002888E0 /* TabBarController.swift */; };
 		996185162D9C49000099E1ED /* Tracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 996185152D9C49000099E1ED /* Tracker.swift */; };
@@ -36,6 +40,10 @@
 		992AAE292D9F2C40007927AE /* ButtonsTableViewService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonsTableViewService.swift; sourceTree = "<group>"; };
 		992AAE2B2D9F352F007927AE /* ScheduleViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScheduleViewController.swift; sourceTree = "<group>"; };
 		992AAE302D9FD239007927AE /* ScheduleTableViewService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScheduleTableViewService.swift; sourceTree = "<group>"; };
+		993FF4CA2DA921C300BAFC86 /* ColorsCollectionService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorsCollectionService.swift; sourceTree = "<group>"; };
+		993FF4CC2DA921DB00BAFC86 /* EmojiCollectionService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmojiCollectionService.swift; sourceTree = "<group>"; };
+		993FF4CE2DA921EC00BAFC86 /* EmojiCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmojiCell.swift; sourceTree = "<group>"; };
+		993FF4D12DA922EF00BAFC86 /* ColorCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorCell.swift; sourceTree = "<group>"; };
 		995700152D98244C002888E0 /* StatisticsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticsViewController.swift; sourceTree = "<group>"; };
 		995700172D982512002888E0 /* TabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
 		996185152D9C49000099E1ED /* Tracker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tracker.swift; sourceTree = "<group>"; };
@@ -87,8 +95,20 @@
 				996A32F62DA199DF0002DA05 /* ScheduleServiceDelegate.swift */,
 				992AAE292D9F2C40007927AE /* ButtonsTableViewService.swift */,
 				992AAE302D9FD239007927AE /* ScheduleTableViewService.swift */,
+				993FF4CC2DA921DB00BAFC86 /* EmojiCollectionService.swift */,
+				993FF4CA2DA921C300BAFC86 /* ColorsCollectionService.swift */,
 			);
 			path = Services;
+			sourceTree = "<group>";
+		};
+		993FF4D02DA922D400BAFC86 /* Cells */ = {
+			isa = PBXGroup;
+			children = (
+				996A32E72D9FEF070002DA05 /* TrackerCell.swift */,
+				993FF4CE2DA921EC00BAFC86 /* EmojiCell.swift */,
+				993FF4D12DA922EF00BAFC86 /* ColorCell.swift */,
+			);
+			path = Cells;
 			sourceTree = "<group>";
 		};
 		996185142D9C48CD0099E1ED /* Models */ = {
@@ -106,7 +126,6 @@
 			children = (
 				995700172D982512002888E0 /* TabBarController.swift */,
 				99E5C90B2D97129100E5956A /* TrackersViewController.swift */,
-				996A32E72D9FEF070002DA05 /* TrackerCell.swift */,
 			);
 			path = "Main Screen";
 			sourceTree = "<group>";
@@ -134,6 +153,7 @@
 				99E5C90A2D97129100E5956A /* SceneDelegate.swift */,
 				99E5C9092D97129100E5956A /* LaunchScreen.storyboard */,
 				996185142D9C48CD0099E1ED /* Models */,
+				993FF4D02DA922D400BAFC86 /* Cells */,
 				992AAE2D2D9F3546007927AE /* Services */,
 				996A32EF2DA030460002DA05 /* Main Screen */,
 				992AAE1E2D9EC6A8007927AE /* Tracker Creator */,
@@ -223,11 +243,15 @@
 				99E5C9102D97129100E5956A /* AppDelegate.swift in Sources */,
 				992AAE2A2D9F2C40007927AE /* ButtonsTableViewService.swift in Sources */,
 				99E5C9112D97129100E5956A /* SceneDelegate.swift in Sources */,
+				993FF4CF2DA921EC00BAFC86 /* EmojiCell.swift in Sources */,
+				993FF4CD2DA921DB00BAFC86 /* EmojiCollectionService.swift in Sources */,
 				992AAE2C2D9F352F007927AE /* ScheduleViewController.swift in Sources */,
+				993FF4D22DA922EF00BAFC86 /* ColorCell.swift in Sources */,
 				996A32F12DA030840002DA05 /* TrackersCollectionService.swift in Sources */,
 				99E5C9122D97129100E5956A /* TrackersViewController.swift in Sources */,
 				996A32F52DA198A20002DA05 /* WeekDaysEnum.swift in Sources */,
 				995700182D982512002888E0 /* TabBarController.swift in Sources */,
+				993FF4CB2DA921C300BAFC86 /* ColorsCollectionService.swift in Sources */,
 				996A32E82D9FEF070002DA05 /* TrackerCell.swift in Sources */,
 				992AADFF2D9E887C007927AE /* NewTrackerViewController.swift in Sources */,
 				992AAE312D9FD239007927AE /* ScheduleTableViewService.swift in Sources */,
@@ -267,7 +291,7 @@
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
-				IPHONEOS_DEPLOYMENT_TARGET = 13.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -299,7 +323,7 @@
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
-				IPHONEOS_DEPLOYMENT_TARGET = 13.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
