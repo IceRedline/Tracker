@@ -11,6 +11,8 @@ class ColorsCollectionService: NSObject, UICollectionViewDataSource, UICollectio
     
     let colors: Array<UIColor> = [.colorSelection1, .colorSelection2, .colorSelection3, .colorSelection4, .colorSelection5, .colorSelection6, .colorSelection7, .colorSelection8, .colorSelection9, .colorSelection10, .colorSelection11, .colorSelection12, .colorSelection13, .colorSelection14, .colorSelection15, .colorSelection16, .colorSelection17, .colorSelection18]
     
+    var chosenColor: UIColor? = nil
+    
     // MARK: - UICollectionViewDataSource
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -29,6 +31,7 @@ class ColorsCollectionService: NSObject, UICollectionViewDataSource, UICollectio
     // MARK: - UICollectionViewDelegate
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        chosenColor = colors[indexPath.item]
         guard let cell = collectionView.cellForItem(at: indexPath) as? ColorCell else { return }
         cell.layer.borderColor = cell.colorView.backgroundColor?.withAlphaComponent(0.3).cgColor
         UIView.animate(withDuration: 0.2) {

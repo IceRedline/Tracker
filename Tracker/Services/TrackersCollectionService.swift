@@ -13,31 +13,44 @@ final class TrackersCollectionService: NSObject, UICollectionViewDataSource, UIC
     
     weak var viewController: TrackersViewController?
     
-    var currentDate: Date?
+    private let trackerStore = TrackerStore()
+    private let trackerCategoryStore = TrackerCategoryStore()
+    private let trackerRecordStore = TrackerRecordStore()
     
-    var categories: [TrackerCategory] = [TrackerCategory(title: "Домашний уют", trackers: [Tracker(id: UUID(), name: "Поливать растения", color: .colorSelection5, emoji: "❤️", schedule: [WeekDays.monday, WeekDays.tuesday])])]
-    var completedTrackers: [TrackerRecord] = []
+    var categories: [TrackerCategory] = []
+    private var completedTrackers: [TrackerRecord] = []
+    
+    var currentDate: Date?
     
     private override init() {}
     
     func reload() {
+        loadCategories()
+        loadCompletedTrackers()
         viewController?.trackersCollectionView.reloadData()
     }
     
-    func addTracker(_ tracker: Tracker, toCategoryWithTitle title: String) {
-        var newCategories = categories
-        
-        if let index = newCategories.firstIndex(where: { $0.title == title }) {
-            let existingCategory = newCategories[index]
-            let updatedTrackers = existingCategory.trackers + [tracker]
-            newCategories[index] = TrackerCategory(title: title, trackers: updatedTrackers)
-        } else {
-            let newCategory = TrackerCategory(title: title, trackers: [tracker])
-            newCategories.append(newCategory)
+    private func loadCategories() {
+        categories = trackerCategoryStore.categories
+    }
+    
+    private func loadCompletedTrackers() {
+        do {
+            completedTrackers = try trackerRecordStore.fetchAll()
+        } catch {
+            print("Ошибка при загрузке выполненных трекеров: \(error)")
+            completedTrackers = []
         }
-        
-        categories = newCategories
-        reload()
+    }
+    
+    func addTracker(_ tracker: Tracker, toCategoryWithTitle title: String) {
+        do {
+            let categoryData = try trackerCategoryStore.findOrCreateCategory(with: title)
+            try trackerStore.addNewTracker(tracker, to: categoryData)
+            reload()
+        } catch {
+            print("Ошибка при добавлении трекера: \(error)")
+        }
     }
     
     private func filteredCategories() -> [TrackerCategory] {
@@ -54,34 +67,28 @@ final class TrackersCollectionService: NSObject, UICollectionViewDataSource, UIC
         
         return categories.compactMap { category in
             let filteredTrackers = category.trackers.filter { tracker in
-                
                 if tracker.schedule.isEmpty { return true }
-                
                 return tracker.schedule.contains(currentWeekday)
             }
-            if filteredTrackers.isEmpty {
-                viewController?.hideCollection()
-            } else {
-                viewController?.showCollection()
-            }
-            return filteredTrackers.isEmpty ? nil :
-            TrackerCategory(title: category.title, trackers: filteredTrackers)
+            return filteredTrackers.isEmpty ? nil : TrackerCategory(title: category.title, trackers: filteredTrackers)
         }
     }
     
     func trackerCellDidTapComplete(_ cell: TrackerCell, isCompleted: Bool) {
         guard let indexPath = viewController?.trackersCollectionView.indexPath(for: cell) else { return }
-        
+        let tracker = filteredCategories()[indexPath.section].trackers[indexPath.item]
         let date = currentDate ?? Date()
-        let trackerID = filteredCategories()[indexPath.section].trackers[indexPath.item].id
         
-        if isCompleted {
-            completedTrackers.append(TrackerRecord(id: trackerID, date: Calendar.current.startOfDay(for: date)))
-        } else {
-            completedTrackers.removeAll {
-                $0.id == trackerID && Calendar.current.isDate($0.date, inSameDayAs: date)
+        do {
+            if isCompleted {
+                try trackerRecordStore.addRecord(TrackerRecord(id: tracker.id, date: date))
+            } else {
+                try trackerRecordStore.removeRecord(for: tracker.id, on: date)
             }
+        } catch {
+            print("Ошибка при обновлении статуса выполнения: \(error)")
         }
+        
         reload()
     }
     
@@ -121,10 +128,9 @@ final class TrackersCollectionService: NSObject, UICollectionViewDataSource, UIC
     
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: Constants.headerIdentifier, for: indexPath)
-        let currentCategory = filteredCategories()[indexPath.section]
         if kind == UICollectionView.elementKindSectionHeader {
             let label = UILabel()
-            label.text = currentCategory.title
+            label.text = filteredCategories()[indexPath.section].title
             label.font = UIFont.boldSystemFont(ofSize: 18)
             label.translatesAutoresizingMaskIntoConstraints = false
             header.addSubview(label)
@@ -136,7 +142,7 @@ final class TrackersCollectionService: NSObject, UICollectionViewDataSource, UIC
         return header
     }
     
-    // MARK: - UICollectionDelegateFlowLayout
+    // MARK: - UICollectionViewDelegateFlowLayout
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         CGSize(width: collectionView.frame.width / 2 - 5, height: 148)

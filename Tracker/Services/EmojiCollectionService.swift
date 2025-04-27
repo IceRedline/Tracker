@@ -11,6 +11,8 @@ class EmojiCollectionService: NSObject, UICollectionViewDataSource, UICollection
     
     let emojis: Array<String> = ["🙂", "😻", "🌺", "🐶", "❤️", "😱", "😇", "😡", "🥶", "🤔", "🙌", "🍔", "🥦", "🏓", "🥇", "🎸", "🏝", "😪"]
     
+    var chosenEmoji: String?
+    
     // MARK: - UICollectionViewDataSource
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -26,6 +28,7 @@ class EmojiCollectionService: NSObject, UICollectionViewDataSource, UICollection
     // MARK: - UICollectionViewDelegate
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        chosenEmoji = emojis[indexPath.item]
         guard let cell = collectionView.cellForItem(at: indexPath) else { return }
         cell.contentView.layer.cornerRadius = 16
         UIView.animate(withDuration: 0.2) {

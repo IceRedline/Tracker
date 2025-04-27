@@ -53,13 +53,13 @@ final class TrackersViewController: UIViewController {
         trackersCollectionService.currentDate = Date()
         trackersCollectionService.reload()
         
-        if trackersCollectionService.categories[0].trackers.isEmpty {
+        if trackersCollectionService.categories.isEmpty {
             hideCollection()
         } else {
             showCollection()
         }
         
-        if trackersCollectionService.categories[0].trackers.isEmpty {
+        if trackersCollectionService.categories.isEmpty {
             trackersCollectionView.isHidden = true
         }
         trackersCollectionView.delegate = trackersCollectionService

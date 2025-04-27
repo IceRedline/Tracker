@@ -256,18 +256,24 @@ final class NewTrackerViewController: UIViewController, ScheduleServiceDelegate 
         
         let newTracker = Tracker(
             id: UUID(),
-            name: trackerNameTextField.text!,
-            color: .colorSelection14,
-            emoji: "🥸",
+            name: trackerName,
+            color: colorsCollectionService.chosenColor ?? .colorSelection1,
+            emoji: emojiCollectionService.chosenEmoji ?? "🙂",
             schedule: schedule
         )
         
-        if let firstCategory = TrackersCollectionService.shared.categories.first {
-            TrackersCollectionService.shared.addTracker(newTracker, toCategoryWithTitle: firstCategory.title)
-        } else {
-            TrackersCollectionService.shared.addTracker(newTracker, toCategoryWithTitle: "Домашний уют")
+        do {
+            let categoryTitle = "Домашний уют"
+            let categoryData = try TrackerCategoryStore.shared.findOrCreateCategory(with: categoryTitle)
+            
+            try TrackerStore.shared.addNewTracker(newTracker, to: categoryData)
+            
+            NotificationCenter.default.post(name: NSNotification.Name("TrackersUpdated"), object: nil)
+        } catch {
+            print("Ошибка сохранения: \(error)")
         }
         
+        dismiss(animated: true)
         self.view.window?.rootViewController?.dismiss(animated: true, completion: nil)
     }
     
@@ -275,7 +281,3 @@ final class NewTrackerViewController: UIViewController, ScheduleServiceDelegate 
         self.view.window?.rootViewController?.dismiss(animated: true, completion: nil)
     }
 }
-
-#Preview(traits: .defaultLayout, body: {
-    NewTrackerViewController(titleName: "Новая привычка")
-})
