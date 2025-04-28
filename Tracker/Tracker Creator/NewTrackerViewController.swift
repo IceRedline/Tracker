@@ -268,7 +268,7 @@ final class NewTrackerViewController: UIViewController, ScheduleServiceDelegate 
             
             try TrackerStore.shared.addNewTracker(newTracker, to: categoryData)
             
-            NotificationCenter.default.post(name: NSNotification.Name("TrackersUpdated"), object: nil)
+            TrackersCollectionService.shared.reload()
         } catch {
             print("Ошибка сохранения: \(error)")
         }

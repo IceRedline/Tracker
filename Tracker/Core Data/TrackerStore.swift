@@ -8,13 +8,13 @@
 import UIKit
 import CoreData
 
-class TrackerStore: NSObject {
+final class TrackerStore: NSObject {
     
     static let shared = TrackerStore()
     
     private let uiColorMarshalling = UIColorMarshalling()
     private let context: NSManagedObjectContext
-    private var fetchedResultsController: NSFetchedResultsController<TrackerData>!
+    private var fetchedResultsController: NSFetchedResultsController<TrackerData>?
     
     weak var delegate: TrackerStoreDelegate?
     private var insertedIndexes: IndexSet?
@@ -23,11 +23,11 @@ class TrackerStore: NSObject {
     private var movedIndexes: Set<TrackerStoreUpdate.Move>?
 
     private convenience override init() {
-        let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+        let context = DatabaseStore.shared.persistentContainer.viewContext
         self.init(context: context)
     }
 
-    init(context: NSManagedObjectContext = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext) {
+    init(context: NSManagedObjectContext = DatabaseStore.shared.persistentContainer.viewContext) {
         self.context = context
         super.init()
         
@@ -48,7 +48,7 @@ class TrackerStore: NSObject {
     
     var trackers: [Tracker] {
         guard
-            let objects = self.fetchedResultsController.fetchedObjects,
+            let objects = self.fetchedResultsController?.fetchedObjects,
             let trackers = try? objects.map({ try self.tracker(from: $0) })
         else { return [] }
         return trackers

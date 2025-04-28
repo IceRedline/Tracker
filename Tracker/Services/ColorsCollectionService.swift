@@ -7,11 +7,11 @@
 
 import UIKit
 
-class ColorsCollectionService: NSObject, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UICollectionViewDelegate {
+final class ColorsCollectionService: NSObject, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UICollectionViewDelegate {
     
     let colors: Array<UIColor> = [.colorSelection1, .colorSelection2, .colorSelection3, .colorSelection4, .colorSelection5, .colorSelection6, .colorSelection7, .colorSelection8, .colorSelection9, .colorSelection10, .colorSelection11, .colorSelection12, .colorSelection13, .colorSelection14, .colorSelection15, .colorSelection16, .colorSelection17, .colorSelection18]
     
-    var chosenColor: UIColor? = nil
+    var chosenColor: UIColor?
     
     // MARK: - UICollectionViewDataSource
     
@@ -20,12 +20,14 @@ class ColorsCollectionService: NSObject, UICollectionViewDataSource, UICollectio
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "colorCell", for: indexPath) as? ColorCell
-        cell?.prepareForReuse()
-        cell?.layer.cornerRadius = 8
-        cell?.colorStrokeView.backgroundColor = colors[indexPath.item]
-        cell?.colorView.backgroundColor = colors[indexPath.item]
-        return cell!
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "colorCell", for: indexPath) as? ColorCell else {
+            fatalError("Не удалось привести ячейку к типу ColorCell")
+        }
+        cell.prepareForReuse()
+        cell.layer.cornerRadius = 8
+        cell.colorStrokeView.backgroundColor = colors[indexPath.item]
+        cell.colorView.backgroundColor = colors[indexPath.item]
+        return cell
     }
     
     // MARK: - UICollectionViewDelegate

@@ -11,7 +11,7 @@ import CoreData
 final class TrackerRecordStore {
     private let context: NSManagedObjectContext
     
-    init(context: NSManagedObjectContext = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext) {
+    init(context: NSManagedObjectContext = DatabaseStore.shared.persistentContainer.viewContext) {
         self.context = context
     }
     

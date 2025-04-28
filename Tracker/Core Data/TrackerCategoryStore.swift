@@ -14,10 +14,10 @@ final class TrackerCategoryStore {
     
     private let context: NSManagedObjectContext
     private let trackerStore: TrackerStore
-    private var fetchedResultsController: NSFetchedResultsController<TrackerCategoryData>!
+    private var fetchedResultsController: NSFetchedResultsController<TrackerCategoryData>?
 
     init(
-        context: NSManagedObjectContext = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext,
+        context: NSManagedObjectContext = DatabaseStore.shared.persistentContainer.viewContext,
         trackerStore: TrackerStore = TrackerStore()
     ) {
         self.context = context
@@ -55,5 +55,11 @@ final class TrackerCategoryStore {
         } ?? []
 
         return TrackerCategory(title: title, trackers: trackers)
+    }
+    
+    func fetchCategories() throws -> [TrackerCategory] {
+        let fetchRequest: NSFetchRequest<TrackerCategoryData> = TrackerCategoryData.fetchRequest()
+        let result = try context.fetch(fetchRequest)
+        return try result.map { try category(from: $0) }
     }
 }

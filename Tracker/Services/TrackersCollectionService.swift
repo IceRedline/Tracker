@@ -27,11 +27,25 @@ final class TrackersCollectionService: NSObject, UICollectionViewDataSource, UIC
     func reload() {
         loadCategories()
         loadCompletedTrackers()
+        
+        let filtered = filteredCategories()
+        
+        if filtered.isEmpty {
+            viewController?.hideCollection()
+        } else {
+            viewController?.showCollection()
+        }
+        
         viewController?.trackersCollectionView.reloadData()
     }
     
     private func loadCategories() {
-        categories = trackerCategoryStore.categories
+        do {
+            categories = try trackerCategoryStore.fetchCategories()
+        } catch {
+            print("Ошибка при загрузке категорий: \(error)")
+            categories = []
+        }
     }
     
     private func loadCompletedTrackers() {
@@ -103,7 +117,9 @@ final class TrackersCollectionService: NSObject, UICollectionViewDataSource, UIC
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: Constants.trackerCellIdentifier, for: indexPath) as! TrackerCell
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: Constants.trackerCellIdentifier, for: indexPath) as? TrackerCell else {
+            fatalError("Не удалось привести ячейку к типу TrackerCell")
+        }
         cell.prepareForReuse()
         cell.delegate = self
         

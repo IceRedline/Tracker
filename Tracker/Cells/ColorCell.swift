@@ -7,7 +7,7 @@
 
 import UIKit
 
-class ColorCell: UICollectionViewCell {
+final class ColorCell: UICollectionViewCell {
     
     let colorStrokeView: UIView = {
         let view = UIView()
@@ -28,7 +28,6 @@ class ColorCell: UICollectionViewCell {
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        //contentView.layer.cornerRadius = 16
         contentView.addSubview(colorStrokeView)
         contentView.addSubview(colorView)
         contentView.layer.masksToBounds = true

@@ -20,9 +20,11 @@ class EmojiCollectionService: NSObject, UICollectionViewDataSource, UICollection
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "emojiCell", for: indexPath) as? EmojiCell
-        cell?.emojiLabel.text = emojis[indexPath.item]
-        return cell!
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "emojiCell", for: indexPath) as? EmojiCell else {
+            fatalError("Не удалось привести ячейку к типу EmojiCell")
+        }
+        cell.emojiLabel.text = emojis[indexPath.item]
+        return cell
     }
     
     // MARK: - UICollectionViewDelegate
@@ -58,7 +60,3 @@ class EmojiCollectionService: NSObject, UICollectionViewDataSource, UICollection
     }
     
 }
-
-#Preview(traits: .defaultLayout, body: {
-    NewTrackerViewController(titleName: "Новая привычка")
-})

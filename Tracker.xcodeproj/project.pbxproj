@@ -10,6 +10,7 @@
 		99150A282DBE22A1006C46A8 /* TrackerStoreError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99150A272DBE22A1006C46A8 /* TrackerStoreError.swift */; };
 		99150A2C2DBE22C4006C46A8 /* TrackerStoreUpdate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99150A2B2DBE22C4006C46A8 /* TrackerStoreUpdate.swift */; };
 		99150A2E2DBE22EA006C46A8 /* TrackerStoreDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99150A2D2DBE22EA006C46A8 /* TrackerStoreDelegate.swift */; };
+		99150A302DBF96F1006C46A8 /* DatabaseStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99150A2F2DBF96F1006C46A8 /* DatabaseStore.swift */; };
 		992A7BD22DB26DB300EFBB80 /* TrackerStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 992A7BD12DB26DB300EFBB80 /* TrackerStore.swift */; };
 		992A7BD42DB26DC000EFBB80 /* TrackerCategoryStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 992A7BD32DB26DC000EFBB80 /* TrackerCategoryStore.swift */; };
 		992A7BD62DB26DCE00EFBB80 /* TrackerRecordStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 992A7BD52DB26DCE00EFBB80 /* TrackerRecordStore.swift */; };
@@ -46,6 +47,7 @@
 		99150A272DBE22A1006C46A8 /* TrackerStoreError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerStoreError.swift; sourceTree = "<group>"; };
 		99150A2B2DBE22C4006C46A8 /* TrackerStoreUpdate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerStoreUpdate.swift; sourceTree = "<group>"; };
 		99150A2D2DBE22EA006C46A8 /* TrackerStoreDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerStoreDelegate.swift; sourceTree = "<group>"; };
+		99150A2F2DBF96F1006C46A8 /* DatabaseStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatabaseStore.swift; sourceTree = "<group>"; };
 		992A7BD12DB26DB300EFBB80 /* TrackerStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerStore.swift; sourceTree = "<group>"; };
 		992A7BD32DB26DC000EFBB80 /* TrackerCategoryStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerCategoryStore.swift; sourceTree = "<group>"; };
 		992A7BD52DB26DCE00EFBB80 /* TrackerRecordStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerRecordStore.swift; sourceTree = "<group>"; };
@@ -98,6 +100,7 @@
 				992A7BD32DB26DC000EFBB80 /* TrackerCategoryStore.swift */,
 				992A7BD52DB26DCE00EFBB80 /* TrackerRecordStore.swift */,
 				992C586C2DB0ED8C0087B303 /* Database.xcdatamodeld */,
+				99150A2F2DBF96F1006C46A8 /* DatabaseStore.swift */,
 			);
 			path = "Core Data";
 			sourceTree = "<group>";
@@ -289,6 +292,7 @@
 				992A7BD22DB26DB300EFBB80 /* TrackerStore.swift in Sources */,
 				99150A282DBE22A1006C46A8 /* TrackerStoreError.swift in Sources */,
 				993FF4CB2DA921C300BAFC86 /* ColorsCollectionService.swift in Sources */,
+				99150A302DBF96F1006C46A8 /* DatabaseStore.swift in Sources */,
 				996A32E82D9FEF070002DA05 /* TrackerCell.swift in Sources */,
 				992AADFF2D9E887C007927AE /* NewTrackerViewController.swift in Sources */,
 				992AAE312D9FD239007927AE /* ScheduleTableViewService.swift in Sources */,

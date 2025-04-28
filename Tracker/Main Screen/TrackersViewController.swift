@@ -52,16 +52,6 @@ final class TrackersViewController: UIViewController {
         trackersCollectionService.viewController = self
         trackersCollectionService.currentDate = Date()
         trackersCollectionService.reload()
-        
-        if trackersCollectionService.categories.isEmpty {
-            hideCollection()
-        } else {
-            showCollection()
-        }
-        
-        if trackersCollectionService.categories.isEmpty {
-            trackersCollectionView.isHidden = true
-        }
         trackersCollectionView.delegate = trackersCollectionService
         trackersCollectionView.dataSource = trackersCollectionService
         trackersCollectionView.register(TrackerCell.self, forCellWithReuseIdentifier: Constants.trackerCellIdentifier)
