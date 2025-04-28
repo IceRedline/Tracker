@@ -102,19 +102,20 @@ extension TrackerStore: NSFetchedResultsControllerDelegate {
     }
 
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+        guard let insertedIndexes, let deletedIndexes, let updatedIndexes, let movedIndexes else { return }
         delegate?.store(
             self,
             didUpdate: TrackerStoreUpdate(
-                insertedIndexes: insertedIndexes!,
-                deletedIndexes: deletedIndexes!,
-                updatedIndexes: updatedIndexes!,
-                movedIndexes: movedIndexes!
+                insertedIndexes: insertedIndexes,
+                deletedIndexes: deletedIndexes,
+                updatedIndexes: updatedIndexes,
+                movedIndexes: movedIndexes
             )
         )
-        insertedIndexes = nil
-        deletedIndexes = nil
-        updatedIndexes = nil
-        movedIndexes = nil
+        self.insertedIndexes = nil
+        self.deletedIndexes = nil
+        self.updatedIndexes = nil
+        self.movedIndexes = nil
     }
 
     func controller(

@@ -18,9 +18,9 @@ final class NewTrackerViewController: UIViewController, ScheduleServiceDelegate 
     private let tableView = UITableView()
     private var tableViewService: ButtonsTableViewService?
     private var emojiCollectionView: UICollectionView!
-    private var emojiCollectionService: EmojiCollectionService!
+    private var emojiCollectionService: EmojiCollectionService?
     private var colorsCollectionView: UICollectionView!
-    private var colorsCollectionService: ColorsCollectionService!
+    private var colorsCollectionService: ColorsCollectionService?
     
     let titleLabel: UILabel = {
         let label = UILabel()
@@ -257,8 +257,8 @@ final class NewTrackerViewController: UIViewController, ScheduleServiceDelegate 
         let newTracker = Tracker(
             id: UUID(),
             name: trackerName,
-            color: colorsCollectionService.chosenColor ?? .colorSelection1,
-            emoji: emojiCollectionService.chosenEmoji ?? "🙂",
+            color: colorsCollectionService?.chosenColor ?? .colorSelection1,
+            emoji: emojiCollectionService?.chosenEmoji ?? "🙂",
             schedule: schedule
         )
         
