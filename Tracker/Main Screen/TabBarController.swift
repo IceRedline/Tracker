@@ -12,6 +12,7 @@ final class TabBarController: UITabBarController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.setupTabs()
+        self.modalPresentationStyle = .fullScreen
         
         self.tabBar.tintColor = .ypBlue
         self.tabBar.barTintColor = .ypWhite
