@@ -7,7 +7,7 @@
 
 import UIKit
 
-class CategoryViewModel: NSObject, UITableViewDataSource, UITableViewDelegate {
+final class CategoryViewModel: NSObject, UITableViewDataSource, UITableViewDelegate {
     
     private let categoryStore = TrackerCategoryStore.shared
     private var categories: [TrackerCategory] = []
@@ -15,6 +15,8 @@ class CategoryViewModel: NSObject, UITableViewDataSource, UITableViewDelegate {
     
     var onCategoriesUpdated: (() -> Void)?
     var onCategorySelected: ((String) -> Void)?
+    var onShowEditModal: ((String, @escaping (String) -> Void) -> Void)?
+    var onShowDeleteAlert: ((@escaping () -> Void) -> Void)?
     
     func loadCategories() {
         do {
@@ -31,6 +33,15 @@ class CategoryViewModel: NSObject, UITableViewDataSource, UITableViewDelegate {
             loadCategories()
         } catch {
             print("Ошибка добавления категории: \(error)")
+        }
+    }
+    
+    private func updateCategory(title: String, newTitle: String) {
+        do {
+            try categoryStore.updateCategoryTitle(from: title, to: newTitle)
+            loadCategories()
+        } catch {
+            print("Ошибка редактирования категории: \(error)")
         }
     }
     
@@ -57,25 +68,27 @@ class CategoryViewModel: NSObject, UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int { categories.count }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = UITableViewCell(style: .default, reuseIdentifier: "categoryCell")
-        cell.backgroundColor = .background
+        guard let cell = tableView.dequeueReusableCell(
+            withIdentifier: CategoryTableViewCell.reuseIdentifier,
+            for: indexPath
+        ) as? CategoryTableViewCell else {
+            return UITableViewCell()
+        }
         
-        let titleLabel = UILabel()
-        titleLabel.text = categories[indexPath.row].title
-        titleLabel.font = UIFont.systemFont(ofSize: 17, weight: .regular)
-        titleLabel.translatesAutoresizingMaskIntoConstraints = false
-        cell.addSubview(titleLabel)
+        let category = categories[indexPath.row]
+        cell.configure(
+            with: category.title,
+            isSelected: category.title == selectedCategory
+        )
         
-        NSLayoutConstraint.activate([
-            titleLabel.centerYAnchor.constraint(equalTo: cell.centerYAnchor),
-            titleLabel.leadingAnchor.constraint(equalTo: cell.leadingAnchor, constant: Constants.defaultPadding),
-        ])
-        
-        if categories[indexPath.row].title == selectedCategory {
-            cell.accessoryType = .checkmark
-            cell.tintColor = .ypBlue
+        // Настройка закругления
+        if indexPath.row == categories.count - 1 {
+            cell.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner]
+            cell.layer.cornerRadius = Constants.cornerRadius
+            cell.layer.masksToBounds = true
+            cell.separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: .greatestFiniteMagnitude)
         } else {
-            cell.accessoryType = .none
+            cell.layer.cornerRadius = 0
         }
         
         return cell
@@ -86,28 +99,35 @@ class CategoryViewModel: NSObject, UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat { 75 }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let cell = tableView.cellForRow(at: indexPath)
-        
         selectedCategory = categories[indexPath.row].title
         onCategorySelected?(selectedCategory ?? "Без категории")
     }
     
     func tableView(_ tableView: UITableView, contextMenuConfigurationForRowAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
+        let category = categories[indexPath.row]
         
         return UIContextMenuConfiguration(actionProvider: { actions in
             return UIMenu(children: [
                 UIAction(title: "Редактировать") { [weak self] _ in
-                    //self?.makeBold(indexPath: indexPath)
+                    self?.showEditModal(for: category)
                 },
-                UIAction(title: "Удалить") { [weak self] _ in
-                    self?.deleteCategory(at: indexPath)
+                UIAction(title: "Удалить", attributes: .destructive) { [weak self] _ in
+                    self?.showDeleteConfirmation(for: indexPath)
                 },
             ])
         })
     }
+    
+    private func showEditModal(for category: TrackerCategory) {
+        onShowEditModal?(category.title) { [weak self] newTitle in
+            self?.updateCategory(title: category.title, newTitle: newTitle)
+        }
+    }
+    
+    private func showDeleteConfirmation(for indexPath: IndexPath) {
+        onShowDeleteAlert? { [weak self] in
+            self?.deleteCategory(at: indexPath)
+        }
+    }
+    
 }
-
-
-#Preview(traits: .defaultLayout, body: {
-    NewTrackerViewController(titleName: "Новая привычка")
-})

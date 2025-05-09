@@ -20,14 +20,7 @@ final class ButtonsTableViewService: NSObject, UITableViewDelegate, UITableViewD
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        switch chosenType {
-        case "Новая привычка":
-            return trackerButtonsTexts.count
-        case "Новое нерегулярное событие":
-            return irregularActionButtonTexts.count
-        default: return 0
-        }
-        
+        chosenType == "Новая привычка" ? trackerButtonsTexts.count : irregularActionButtonTexts.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -58,10 +51,8 @@ final class ButtonsTableViewService: NSObject, UITableViewDelegate, UITableViewD
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         switch indexPath.row {
-        case 0:
-            viewController?.openCategoryController()
-        case 1:
-            viewController?.openScheduleController()
+        case 0: viewController?.openCategoryController()
+        case 1: viewController?.openScheduleController()
         default: return
         }
     }

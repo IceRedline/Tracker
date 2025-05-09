@@ -45,6 +45,26 @@ final class TrackerCategoryStore {
         return newCategory
     }
     
+    func updateCategoryTitle(from oldTitle: String, to newTitle: String) throws {
+        let request = TrackerCategoryData.fetchRequest()
+        request.predicate = NSPredicate(format: "title == %@", oldTitle)
+        
+        if let category = try context.fetch(request).first {
+            category.title = newTitle
+            
+            if let trackers = category.trackers?.allObjects as? [TrackerData] {
+                for tracker in trackers {
+                    tracker.category?.title = newTitle
+                }
+            }
+            
+            try context.save()
+            NotificationCenter.default.post(name: .categoryDidChange, object: nil)
+        } else {
+            throw NSError(domain: "TrackerCategoryStore", code: 404, userInfo: [NSLocalizedDescriptionKey: "Категория не найдена"])
+        }
+    }
+    
     func deleteCategory(with title: String) throws {
         let request = TrackerCategoryData.fetchRequest()
         request.predicate = NSPredicate(format: "title == %@", title)

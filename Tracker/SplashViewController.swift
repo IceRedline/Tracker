@@ -33,23 +33,16 @@ class SplashViewController: UIPageViewController {
         super.viewDidAppear(animated)
         
         if UserDefaults.standard.bool(forKey: "notFirstLaunch") == true {
+            guard let window = UIApplication.shared.windows.first else {
+                assertionFailure("Invalid window configuration")
+                return
+            }
             let tabBarVC = TabBarController()
-            present(tabBarVC, animated: true)
+            window.rootViewController = tabBarVC
         } else {
             let onboardingVC = OnboardingViewController()
             onboardingVC.modalPresentationStyle = .fullScreen
             present(onboardingVC, animated: true)
         }
     }
-    
-    private func switchToTabBarController() {
-        guard let window = UIApplication.shared.windows.first else {
-            assertionFailure("Invalid window configuration")
-            return
-        }
-        let tabBarController = UIStoryboard(name: "Main", bundle: .main).instantiateViewController(withIdentifier: "TabBarViewController")
-        window.rootViewController = tabBarController
-        //window.makeKeyAndVisible()
-    }
-
 }

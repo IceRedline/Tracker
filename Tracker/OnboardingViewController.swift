@@ -110,8 +110,13 @@ class OnboardingViewController: UIPageViewController {
     }
     
     @objc func buttonTapped() {
+        dismiss(animated: true)
+        guard let window = UIApplication.shared.windows.first else {
+            assertionFailure("Invalid window configuration")
+            return
+        }
         let tabBarVC = TabBarController()
-        present(tabBarVC, animated: true)
+        window.rootViewController = tabBarVC
         
         UserDefaults.standard.set(true, forKey: "notFirstLaunch")
     }
@@ -148,7 +153,3 @@ extension OnboardingViewController: UIPageViewControllerDelegate {
         }
     }
 }
-
-#Preview(traits: .defaultLayout, body: {
-    OnboardingViewController()
-})

@@ -66,9 +66,49 @@ final class CategoryViewController: UIViewController {
             self?.onCategorySelected?(categoryTitle)
             self?.dismiss(animated: true)
         }
+        
+        viewModel.onShowEditModal = { [weak self] currentTitle, completion in
+            self?.showEditModal(currentTitle: currentTitle, completion: completion)
+        }
+        
+        viewModel.onShowDeleteAlert = { [weak self] confirmAction in
+                    self?.showDeleteConfirmation(confirmAction: confirmAction)
+                }
     }
     
+    private func showEditModal(currentTitle: String, completion: @escaping (String) -> Void) {
+        let editVC = EditCategoryViewController(currentTitle: currentTitle)
+        editVC.onSave = { [weak self] newTitle in
+            self?.dismiss(animated: true) {
+                completion(newTitle)
+            }
+        }
+        editVC.onCancel = { [weak self] in
+            self?.dismiss(animated: true)
+        }
+        
+        let navController = UINavigationController(rootViewController: editVC)
+        present(navController, animated: true)
+    }
+    
+    private func showDeleteConfirmation(confirmAction: @escaping () -> Void) {
+            let alert = UIAlertController(
+                title: nil,
+                message: "Эта категория точно не нужна?",
+                preferredStyle: .actionSheet
+            )
+            
+            alert.addAction(UIAlertAction(title: "Удалить", style: .destructive) { _ in
+                confirmAction()
+            })
+            
+            alert.addAction(UIAlertAction(title: "Отмена", style: .cancel))
+            
+            present(alert, animated: true)
+        }
+    
     private func setupViewsAndActivateConstraints() {
+        tableView.register(CategoryTableViewCell.self, forCellReuseIdentifier: CategoryTableViewCell.reuseIdentifier)
         self.modalPresentationStyle = .currentContext
         view.backgroundColor = .ypWhite
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -108,7 +148,3 @@ final class CategoryViewController: UIViewController {
         present(alert, animated: true)
     }
 }
-
-#Preview(traits: .defaultLayout, body: {
-    NewTrackerViewController(titleName: "Новая привычка")
-})
