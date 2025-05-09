@@ -59,7 +59,7 @@ final class ButtonsTableViewService: NSObject, UITableViewDelegate, UITableViewD
         tableView.deselectRow(at: indexPath, animated: true)
         switch indexPath.row {
         case 0:
-            return
+            viewController?.openCategoryController()
         case 1:
             viewController?.openScheduleController()
         default: return

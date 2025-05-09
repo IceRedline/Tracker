@@ -43,6 +43,8 @@
 		99E5C9122D97129100E5956A /* TrackersViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99E5C90B2D97129100E5956A /* TrackersViewController.swift */; };
 		99EEE8D12DCD2624001B5AE5 /* OnboardingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99EEE8D02DCD2624001B5AE5 /* OnboardingViewController.swift */; };
 		99EEE8F72DCD356A001B5AE5 /* SplashViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99EEE8F62DCD356A001B5AE5 /* SplashViewController.swift */; };
+		99EEE9042DCE373A001B5AE5 /* CategoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99EEE9032DCE373A001B5AE5 /* CategoryViewController.swift */; };
+		99EEE9072DCE390D001B5AE5 /* CategoryViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99EEE9062DCE390D001B5AE5 /* CategoryViewModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -84,6 +86,8 @@
 		99E5C90B2D97129100E5956A /* TrackersViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackersViewController.swift; sourceTree = "<group>"; };
 		99EEE8D02DCD2624001B5AE5 /* OnboardingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingViewController.swift; sourceTree = "<group>"; };
 		99EEE8F62DCD356A001B5AE5 /* SplashViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashViewController.swift; sourceTree = "<group>"; };
+		99EEE9032DCE373A001B5AE5 /* CategoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryViewController.swift; sourceTree = "<group>"; };
+		99EEE9062DCE390D001B5AE5 /* CategoryViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryViewModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -115,6 +119,8 @@
 				992AADFC2D9E7ABA007927AE /* TrackerTypeViewController.swift */,
 				992AADFE2D9E887C007927AE /* NewTrackerViewController.swift */,
 				992AAE2B2D9F352F007927AE /* ScheduleViewController.swift */,
+				99EEE9052DCE378C001B5AE5 /* ViewModel */,
+				99EEE9032DCE373A001B5AE5 /* CategoryViewController.swift */,
 			);
 			path = "Tracker Creator";
 			sourceTree = "<group>";
@@ -203,6 +209,14 @@
 				99E5C9072D97129100E5956A /* Info.plist */,
 			);
 			path = Tracker;
+			sourceTree = "<group>";
+		};
+		99EEE9052DCE378C001B5AE5 /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				99EEE9062DCE390D001B5AE5 /* CategoryViewModel.swift */,
+			);
+			path = ViewModel;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -294,6 +308,7 @@
 				993FF4D22DA922EF00BAFC86 /* ColorCell.swift in Sources */,
 				996A32F12DA030840002DA05 /* TrackersCollectionService.swift in Sources */,
 				99E5C9122D97129100E5956A /* TrackersViewController.swift in Sources */,
+				99EEE9072DCE390D001B5AE5 /* CategoryViewModel.swift in Sources */,
 				996A32F52DA198A20002DA05 /* WeekDaysEnum.swift in Sources */,
 				995700182D982512002888E0 /* TabBarController.swift in Sources */,
 				992A7BD22DB26DB300EFBB80 /* TrackerStore.swift in Sources */,
@@ -308,6 +323,7 @@
 				992A7BD62DB26DCE00EFBB80 /* TrackerRecordStore.swift in Sources */,
 				995700162D98244C002888E0 /* StatisticsViewController.swift in Sources */,
 				996A32F32DA146970002DA05 /* TrackerCellDelegate.swift in Sources */,
+				99EEE9042DCE373A001B5AE5 /* CategoryViewController.swift in Sources */,
 				99150A2E2DBE22EA006C46A8 /* TrackerStoreDelegate.swift in Sources */,
 				992AADFD2D9E7ABA007927AE /* TrackerTypeViewController.swift in Sources */,
 				99EEE8D12DCD2624001B5AE5 /* OnboardingViewController.swift in Sources */,

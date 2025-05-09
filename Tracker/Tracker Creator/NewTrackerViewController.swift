@@ -11,6 +11,7 @@ final class NewTrackerViewController: UIViewController, ScheduleServiceDelegate 
     
     var titleName: String
     var schedule: Array<WeekDays> = []
+    var selectedCategory: String?
     
     private let scrollView = UIScrollView()
     private let vStackView = UIStackView()
@@ -241,12 +242,23 @@ final class NewTrackerViewController: UIViewController, ScheduleServiceDelegate 
         print("Получены выбранные дни: \(days)")
     }
     
+    func openCategoryController() {
+        trackerNameTextField.resignFirstResponder()
+        let categoryVC = CategoryViewController()
+        categoryVC.onCategorySelected = { [weak self] categoryTitle in
+            self?.selectedCategory = categoryTitle
+            print("Выбрана категория: \(categoryTitle)")
+        }
+        present(categoryVC, animated: true)
+    }
+    
     func openScheduleController() {
         trackerNameTextField.resignFirstResponder()
         let scheduleVC = ScheduleViewController()
         scheduleVC.delegate = self
         present(scheduleVC, animated: true)
     }
+    
     
     @objc private func createButtonTapped() {
         guard let trackerName = trackerNameTextField.text, !trackerName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else {
@@ -263,7 +275,7 @@ final class NewTrackerViewController: UIViewController, ScheduleServiceDelegate 
         )
         
         do {
-            let categoryTitle = "Домашний уют"
+            let categoryTitle = selectedCategory ?? "Без категории"
             let categoryData = try TrackerCategoryStore.shared.findOrCreateCategory(with: categoryTitle)
             
             try TrackerStore.shared.addNewTracker(newTracker, to: categoryData)

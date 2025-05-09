@@ -144,6 +144,9 @@ final class TrackersCollectionService: NSObject, UICollectionViewDataSource, UIC
     
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: Constants.headerIdentifier, for: indexPath)
+        
+        header.subviews.forEach { $0.removeFromSuperview() }
+        
         if kind == UICollectionView.elementKindSectionHeader {
             let label = UILabel()
             label.text = filteredCategories()[indexPath.section].title
