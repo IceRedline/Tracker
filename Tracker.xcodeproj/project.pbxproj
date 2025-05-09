@@ -41,6 +41,12 @@
 		99E5C9102D97129100E5956A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99E5C9052D97129100E5956A /* AppDelegate.swift */; };
 		99E5C9112D97129100E5956A /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99E5C90A2D97129100E5956A /* SceneDelegate.swift */; };
 		99E5C9122D97129100E5956A /* TrackersViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99E5C90B2D97129100E5956A /* TrackersViewController.swift */; };
+		99EEE8D12DCD2624001B5AE5 /* OnboardingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99EEE8D02DCD2624001B5AE5 /* OnboardingViewController.swift */; };
+		99EEE8F72DCD356A001B5AE5 /* SplashViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99EEE8F62DCD356A001B5AE5 /* SplashViewController.swift */; };
+		99EEE9042DCE373A001B5AE5 /* CategoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99EEE9032DCE373A001B5AE5 /* CategoryViewController.swift */; };
+		99EEE9072DCE390D001B5AE5 /* CategoryViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99EEE9062DCE390D001B5AE5 /* CategoryViewModel.swift */; };
+		99EEE90F2DCE656F001B5AE5 /* EditCategoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99EEE90E2DCE656F001B5AE5 /* EditCategoryViewController.swift */; };
+		99EEE9112DCE7034001B5AE5 /* CategoryTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99EEE9102DCE7034001B5AE5 /* CategoryTableViewCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -80,6 +86,12 @@
 		99E5C9082D97129100E5956A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		99E5C90A2D97129100E5956A /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		99E5C90B2D97129100E5956A /* TrackersViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackersViewController.swift; sourceTree = "<group>"; };
+		99EEE8D02DCD2624001B5AE5 /* OnboardingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingViewController.swift; sourceTree = "<group>"; };
+		99EEE8F62DCD356A001B5AE5 /* SplashViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashViewController.swift; sourceTree = "<group>"; };
+		99EEE9032DCE373A001B5AE5 /* CategoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryViewController.swift; sourceTree = "<group>"; };
+		99EEE9062DCE390D001B5AE5 /* CategoryViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryViewModel.swift; sourceTree = "<group>"; };
+		99EEE90E2DCE656F001B5AE5 /* EditCategoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditCategoryViewController.swift; sourceTree = "<group>"; };
+		99EEE9102DCE7034001B5AE5 /* CategoryTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryTableViewCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -111,6 +123,9 @@
 				992AADFC2D9E7ABA007927AE /* TrackerTypeViewController.swift */,
 				992AADFE2D9E887C007927AE /* NewTrackerViewController.swift */,
 				992AAE2B2D9F352F007927AE /* ScheduleViewController.swift */,
+				99EEE9052DCE378C001B5AE5 /* ViewModel */,
+				99EEE9032DCE373A001B5AE5 /* CategoryViewController.swift */,
+				99EEE90E2DCE656F001B5AE5 /* EditCategoryViewController.swift */,
 			);
 			path = "Tracker Creator";
 			sourceTree = "<group>";
@@ -141,6 +156,7 @@
 				996A32E72D9FEF070002DA05 /* TrackerCell.swift */,
 				993FF4CE2DA921EC00BAFC86 /* EmojiCell.swift */,
 				993FF4D12DA922EF00BAFC86 /* ColorCell.swift */,
+				99EEE9102DCE7034001B5AE5 /* CategoryTableViewCell.swift */,
 			);
 			path = Cells;
 			sourceTree = "<group>";
@@ -186,6 +202,8 @@
 				99E5C9052D97129100E5956A /* AppDelegate.swift */,
 				99E5C90A2D97129100E5956A /* SceneDelegate.swift */,
 				99E5C9092D97129100E5956A /* LaunchScreen.storyboard */,
+				99EEE8F62DCD356A001B5AE5 /* SplashViewController.swift */,
+				99EEE8D02DCD2624001B5AE5 /* OnboardingViewController.swift */,
 				996185142D9C48CD0099E1ED /* Models */,
 				993FF4D02DA922D400BAFC86 /* Cells */,
 				992AAE2D2D9F3546007927AE /* Services */,
@@ -197,6 +215,14 @@
 				99E5C9072D97129100E5956A /* Info.plist */,
 			);
 			path = Tracker;
+			sourceTree = "<group>";
+		};
+		99EEE9052DCE378C001B5AE5 /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				99EEE9062DCE390D001B5AE5 /* CategoryViewModel.swift */,
+			);
+			path = ViewModel;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -229,7 +255,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 1620;
-				LastUpgradeCheck = 1620;
+				LastUpgradeCheck = 1630;
 				TargetAttributes = {
 					99E5C8EC2D97061700E5956A = {
 						CreatedOnToolsVersion = 16.2;
@@ -273,8 +299,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				996185162D9C49000099E1ED /* Tracker.swift in Sources */,
+				99EEE90F2DCE656F001B5AE5 /* EditCategoryViewController.swift in Sources */,
 				99150A2C2DBE22C4006C46A8 /* TrackerStoreUpdate.swift in Sources */,
 				997BBF422DA4796B00329BC7 /* Constants.swift in Sources */,
+				99EEE8F72DCD356A001B5AE5 /* SplashViewController.swift in Sources */,
 				9961851A2D9C56890099E1ED /* TrackerRecord.swift in Sources */,
 				99E5C9102D97129100E5956A /* AppDelegate.swift in Sources */,
 				992AAE2A2D9F2C40007927AE /* ButtonsTableViewService.swift in Sources */,
@@ -287,6 +315,7 @@
 				993FF4D22DA922EF00BAFC86 /* ColorCell.swift in Sources */,
 				996A32F12DA030840002DA05 /* TrackersCollectionService.swift in Sources */,
 				99E5C9122D97129100E5956A /* TrackersViewController.swift in Sources */,
+				99EEE9072DCE390D001B5AE5 /* CategoryViewModel.swift in Sources */,
 				996A32F52DA198A20002DA05 /* WeekDaysEnum.swift in Sources */,
 				995700182D982512002888E0 /* TabBarController.swift in Sources */,
 				992A7BD22DB26DB300EFBB80 /* TrackerStore.swift in Sources */,
@@ -301,8 +330,11 @@
 				992A7BD62DB26DCE00EFBB80 /* TrackerRecordStore.swift in Sources */,
 				995700162D98244C002888E0 /* StatisticsViewController.swift in Sources */,
 				996A32F32DA146970002DA05 /* TrackerCellDelegate.swift in Sources */,
+				99EEE9042DCE373A001B5AE5 /* CategoryViewController.swift in Sources */,
+				99EEE9112DCE7034001B5AE5 /* CategoryTableViewCell.swift in Sources */,
 				99150A2E2DBE22EA006C46A8 /* TrackerStoreDelegate.swift in Sources */,
 				992AADFD2D9E7ABA007927AE /* TrackerTypeViewController.swift in Sources */,
+				99EEE8D12DCD2624001B5AE5 /* OnboardingViewController.swift in Sources */,
 				996185182D9C494C0099E1ED /* TrackerCategory.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -328,7 +360,6 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = V459R55R59;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Tracker/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -360,7 +391,6 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = V459R55R59;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Tracker/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -420,6 +450,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = V459R55R59;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
@@ -483,6 +514,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = V459R55R59;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;

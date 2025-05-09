@@ -44,6 +44,45 @@ final class TrackerCategoryStore {
         try context.save()
         return newCategory
     }
+    
+    func updateCategoryTitle(from oldTitle: String, to newTitle: String) throws {
+        let request = TrackerCategoryData.fetchRequest()
+        request.predicate = NSPredicate(format: "title == %@", oldTitle)
+        
+        if let category = try context.fetch(request).first {
+            category.title = newTitle
+            
+            if let trackers = category.trackers?.allObjects as? [TrackerData] {
+                for tracker in trackers {
+                    tracker.category?.title = newTitle
+                }
+            }
+            
+            try context.save()
+            NotificationCenter.default.post(name: .categoryDidChange, object: nil)
+        } else {
+            throw NSError(domain: "TrackerCategoryStore", code: 404, userInfo: [NSLocalizedDescriptionKey: "Категория не найдена"])
+        }
+    }
+    
+    func deleteCategory(with title: String) throws {
+        let request = TrackerCategoryData.fetchRequest()
+        request.predicate = NSPredicate(format: "title == %@", title)
+        
+        if let category = try context.fetch(request).first {
+            if let trackers = category.trackers?.allObjects as? [TrackerData] {
+                for tracker in trackers {
+                    context.delete(tracker)
+                }
+            }
+            
+            context.delete(category)
+            
+            try context.save()
+            context.refreshAllObjects()
+        }
+        NotificationCenter.default.post(name: .categoryDidChange, object: nil)
+    }
 
     private func category(from data: TrackerCategoryData) throws -> TrackerCategory {
         guard let title = data.title else {
@@ -62,4 +101,8 @@ final class TrackerCategoryStore {
         let result = try context.fetch(fetchRequest)
         return try result.map { try category(from: $0) }
     }
+}
+
+extension Notification.Name {
+    static let categoryDidChange = Notification.Name("categoryDidChange")
 }
