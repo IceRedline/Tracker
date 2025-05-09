@@ -34,7 +34,7 @@ final class EditCategoryViewController: UIViewController {
         return textField
     }()
     
-    private let returnButton: UIButton = {
+    private lazy var returnButton: UIButton = {
         let button = UIButton()
         button.setTitle("Готово", for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)

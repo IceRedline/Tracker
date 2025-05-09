@@ -12,7 +12,7 @@ final class CategoryViewController: UIViewController {
     let tableView = UITableView()
     var selectedCategory: String
     
-    var viewModel = CategoryViewModel()
+    var viewModel: CategoryViewModel
     var onCategorySelected: ((String) -> Void)?
     
     let titleLabel: UILabel = {
@@ -22,7 +22,7 @@ final class CategoryViewController: UIViewController {
         return label
     }()
     
-    private let addCategoryButton: UIButton = {
+    private lazy var addCategoryButton: UIButton = {
         let button = UIButton()
         button.setTitle("Добавить категорию", for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
@@ -32,7 +32,8 @@ final class CategoryViewController: UIViewController {
         return button
     }()
     
-    init(selectedCategory: String) {
+    init(viewModel: CategoryViewModel, selectedCategory: String) {
+        self.viewModel = viewModel
         self.selectedCategory = selectedCategory
         super.init(nibName: nil, bundle: nil)
     }
@@ -72,8 +73,8 @@ final class CategoryViewController: UIViewController {
         }
         
         viewModel.onShowDeleteAlert = { [weak self] confirmAction in
-                    self?.showDeleteConfirmation(confirmAction: confirmAction)
-                }
+            self?.showDeleteConfirmation(confirmAction: confirmAction)
+        }
     }
     
     private func showEditModal(currentTitle: String, completion: @escaping (String) -> Void) {
@@ -92,24 +93,24 @@ final class CategoryViewController: UIViewController {
     }
     
     private func showDeleteConfirmation(confirmAction: @escaping () -> Void) {
-            let alert = UIAlertController(
-                title: nil,
-                message: "Эта категория точно не нужна?",
-                preferredStyle: .actionSheet
-            )
-            
-            alert.addAction(UIAlertAction(title: "Удалить", style: .destructive) { _ in
-                confirmAction()
-            })
-            
-            alert.addAction(UIAlertAction(title: "Отмена", style: .cancel))
-            
-            present(alert, animated: true)
-        }
+        let alert = UIAlertController(
+            title: nil,
+            message: "Эта категория точно не нужна?",
+            preferredStyle: .actionSheet
+        )
+        
+        alert.addAction(UIAlertAction(title: "Удалить", style: .destructive) { _ in
+            confirmAction()
+        })
+        
+        alert.addAction(UIAlertAction(title: "Отмена", style: .cancel))
+        
+        present(alert, animated: true)
+    }
     
     private func setupViewsAndActivateConstraints() {
         tableView.register(CategoryTableViewCell.self, forCellReuseIdentifier: CategoryTableViewCell.reuseIdentifier)
-        self.modalPresentationStyle = .currentContext
+        modalPresentationStyle = .currentContext
         view.backgroundColor = .ypWhite
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         tableView.layer.cornerRadius = Constants.cornerRadius

@@ -7,7 +7,7 @@
 
 import UIKit
 
-class OnboardingViewController: UIPageViewController {
+final class OnboardingViewController: UIPageViewController {
     
     let pages: [UIViewController] = {
         let firstVC = UIViewController()
@@ -55,7 +55,7 @@ class OnboardingViewController: UIPageViewController {
         return [firstVC, secondVC]
     }()
     
-    let button: UIButton = {
+    lazy var button: UIButton = {
         let button = UIButton()
         button.setTitle("Вот это технологии!", for: .normal)
         button.backgroundColor = .ypBlack
@@ -111,7 +111,7 @@ class OnboardingViewController: UIPageViewController {
     
     @objc func buttonTapped() {
         dismiss(animated: true)
-        guard let window = UIApplication.shared.windows.first else {
+        guard let window = UIApplication.shared.currentUIWindow() else {
             assertionFailure("Invalid window configuration")
             return
         }

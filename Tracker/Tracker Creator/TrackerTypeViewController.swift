@@ -16,7 +16,7 @@ final class TrackerTypeViewController: UIViewController {
         return label
     }()
     
-    private let habitButton: UIButton = {
+    private lazy var habitButton: UIButton = {
         let button = UIButton()
         button.backgroundColor = .ypBlack
         button.setTitle("Привычка", for: .normal)
@@ -26,7 +26,7 @@ final class TrackerTypeViewController: UIViewController {
         return button
     }()
     
-    private let irregularEventButton: UIButton = {
+    private lazy var irregularEventButton: UIButton = {
         let button = UIButton()
         button.backgroundColor = .ypBlack
         button.setTitle("Нерегулярное событие", for: .normal)

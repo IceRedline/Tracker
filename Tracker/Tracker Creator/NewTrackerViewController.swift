@@ -29,7 +29,7 @@ final class NewTrackerViewController: UIViewController, ScheduleServiceDelegate 
         return label
     }()
     
-    let trackerNameTextField: UITextField = {
+    lazy var trackerNameTextField: UITextField = {
         let textField = UITextField()
         textField.placeholder = "Введите название трекера"
         textField.backgroundColor = .background
@@ -57,7 +57,7 @@ final class NewTrackerViewController: UIViewController, ScheduleServiceDelegate 
         return label
     }()
     
-    let cancelButton: UIButton = {
+    lazy var cancelButton: UIButton = {
         let button = UIButton()
         button.setTitle("Отменить", for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
@@ -71,7 +71,7 @@ final class NewTrackerViewController: UIViewController, ScheduleServiceDelegate 
         return button
     }()
     
-    let createButton: UIButton = {
+    lazy var createButton: UIButton = {
         let button = UIButton()
         button.setTitle("Создать", for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
@@ -244,7 +244,7 @@ final class NewTrackerViewController: UIViewController, ScheduleServiceDelegate 
     
     func openCategoryController() {
         trackerNameTextField.resignFirstResponder()
-        let categoryVC = CategoryViewController(selectedCategory: selectedCategory ?? "Без категории")
+        let categoryVC = CategoryViewController(viewModel: CategoryViewModel(), selectedCategory: selectedCategory ?? "Без категории")
         categoryVC.onCategorySelected = { [weak self] categoryTitle in
             self?.selectedCategory = categoryTitle
             print("Выбрана категория: \(categoryTitle)")

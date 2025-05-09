@@ -7,7 +7,7 @@
 
 import UIKit
 
-class SplashViewController: UIPageViewController {
+final class SplashViewController: UIPageViewController {
     
     let ypLogo: UIImageView = {
         let imageView = UIImageView(image: UIImage.ypLogo)
@@ -32,8 +32,8 @@ class SplashViewController: UIPageViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
-        if UserDefaults.standard.bool(forKey: "notFirstLaunch") == true {
-            guard let window = UIApplication.shared.windows.first else {
+        if UserDefaults.standard.bool(forKey: "notFirstLaunch") {
+            guard let window = UIApplication.shared.currentUIWindow() else {
                 assertionFailure("Invalid window configuration")
                 return
             }
