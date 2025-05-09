@@ -244,7 +244,7 @@ final class NewTrackerViewController: UIViewController, ScheduleServiceDelegate 
     
     func openCategoryController() {
         trackerNameTextField.resignFirstResponder()
-        let categoryVC = CategoryViewController()
+        let categoryVC = CategoryViewController(selectedCategory: selectedCategory ?? "Без категории")
         categoryVC.onCategorySelected = { [weak self] categoryTitle in
             self?.selectedCategory = categoryTitle
             print("Выбрана категория: \(categoryTitle)")

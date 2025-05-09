@@ -10,6 +10,7 @@ import UIKit
 final class CategoryViewController: UIViewController {
     
     let tableView = UITableView()
+    var selectedCategory: String
     
     var viewModel = CategoryViewModel()
     var onCategorySelected: ((String) -> Void)?
@@ -31,26 +32,41 @@ final class CategoryViewController: UIViewController {
         return button
     }()
     
+    init(selectedCategory: String) {
+        self.selectedCategory = selectedCategory
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func viewDidLoad() {
-            super.viewDidLoad()
-            
-            viewModel.onCategoriesUpdated = { [weak self] in
-                self?.tableView.reloadData()
-            }
-            
-            viewModel.onCategorySelected = { [weak self] categoryTitle in
-                self?.onCategorySelected?(categoryTitle)
-                self?.dismiss(animated: true)
-            }
-            
-            tableView.delegate = viewModel
-            tableView.dataSource = viewModel
-            tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
-            
-            setupViewsAndActivateConstraints()
-            
-            viewModel.loadCategories()
+        super.viewDidLoad()
+        viewModel.selectedCategory = selectedCategory
+        
+        
+        bindViewModel()
+        
+        tableView.delegate = viewModel
+        tableView.dataSource = viewModel
+        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
+        
+        setupViewsAndActivateConstraints()
+        
+        viewModel.loadCategories()
+    }
+    
+    private func bindViewModel() {
+        viewModel.onCategoriesUpdated = { [weak self] in
+            self?.tableView.reloadData()
         }
+        
+        viewModel.onCategorySelected = { [weak self] categoryTitle in
+            self?.onCategorySelected?(categoryTitle)
+            self?.dismiss(animated: true)
+        }
+    }
     
     private func setupViewsAndActivateConstraints() {
         self.modalPresentationStyle = .currentContext

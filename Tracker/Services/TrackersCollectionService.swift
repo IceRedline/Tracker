@@ -106,6 +106,19 @@ final class TrackersCollectionService: NSObject, UICollectionViewDataSource, UIC
         reload()
     }
     
+    private func setupObservers() {
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(handleCategoryChange),
+            name: .categoryDidChange,
+            object: nil
+        )
+    }
+    
+    @objc private func handleCategoryChange() {
+        reload()
+    }
+    
     // MARK: - UICollectionViewDataSource
     
     func numberOfSections(in collectionView: UICollectionView) -> Int {

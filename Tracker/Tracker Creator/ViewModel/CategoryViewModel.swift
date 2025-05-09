@@ -11,6 +11,7 @@ class CategoryViewModel: NSObject, UITableViewDataSource, UITableViewDelegate {
     
     private let categoryStore = TrackerCategoryStore.shared
     private var categories: [TrackerCategory] = []
+    var selectedCategory: String?
     
     var onCategoriesUpdated: (() -> Void)?
     var onCategorySelected: ((String) -> Void)?
@@ -33,6 +34,24 @@ class CategoryViewModel: NSObject, UITableViewDataSource, UITableViewDelegate {
         }
     }
     
+    private func deleteCategory(at indexPath: IndexPath) {
+        do {
+            let categoryTitle = categories[indexPath.row].title
+            try categoryStore.deleteCategory(with: categoryTitle)
+            
+            categories.remove(at: indexPath.row)
+            
+            if selectedCategory == categoryTitle {
+                selectedCategory = nil
+            }
+            
+            loadCategories()
+            
+        } catch {
+            print("Ошибка удаления категории: \(error)")
+        }
+    }
+    
     // MARK: - UITableViewDataSource
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int { categories.count }
@@ -51,6 +70,14 @@ class CategoryViewModel: NSObject, UITableViewDataSource, UITableViewDelegate {
             titleLabel.centerYAnchor.constraint(equalTo: cell.centerYAnchor),
             titleLabel.leadingAnchor.constraint(equalTo: cell.leadingAnchor, constant: Constants.defaultPadding),
         ])
+        
+        if categories[indexPath.row].title == selectedCategory {
+            cell.accessoryType = .checkmark
+            cell.tintColor = .ypBlue
+        } else {
+            cell.accessoryType = .none
+        }
+        
         return cell
     }
     
@@ -59,10 +86,10 @@ class CategoryViewModel: NSObject, UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat { 75 }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        tableView
+        let cell = tableView.cellForRow(at: indexPath)
         
-        let selectedCategory = categories[indexPath.row].title
-        onCategorySelected?(selectedCategory)
+        selectedCategory = categories[indexPath.row].title
+        onCategorySelected?(selectedCategory ?? "Без категории")
     }
     
     func tableView(_ tableView: UITableView, contextMenuConfigurationForRowAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
@@ -73,7 +100,7 @@ class CategoryViewModel: NSObject, UITableViewDataSource, UITableViewDelegate {
                     //self?.makeBold(indexPath: indexPath)
                 },
                 UIAction(title: "Удалить") { [weak self] _ in
-                    //self?.makeItalic(indexPath: indexPath)
+                    self?.deleteCategory(at: indexPath)
                 },
             ])
         })

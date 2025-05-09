@@ -44,6 +44,25 @@ final class TrackerCategoryStore {
         try context.save()
         return newCategory
     }
+    
+    func deleteCategory(with title: String) throws {
+        let request = TrackerCategoryData.fetchRequest()
+        request.predicate = NSPredicate(format: "title == %@", title)
+        
+        if let category = try context.fetch(request).first {
+            if let trackers = category.trackers?.allObjects as? [TrackerData] {
+                for tracker in trackers {
+                    context.delete(tracker)
+                }
+            }
+            
+            context.delete(category)
+            
+            try context.save()
+            context.refreshAllObjects()
+        }
+        NotificationCenter.default.post(name: .categoryDidChange, object: nil)
+    }
 
     private func category(from data: TrackerCategoryData) throws -> TrackerCategory {
         guard let title = data.title else {
@@ -62,4 +81,8 @@ final class TrackerCategoryStore {
         let result = try context.fetch(fetchRequest)
         return try result.map { try category(from: $0) }
     }
+}
+
+extension Notification.Name {
+    static let categoryDidChange = Notification.Name("categoryDidChange")
 }
