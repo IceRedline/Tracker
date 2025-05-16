@@ -149,7 +149,7 @@ final class TrackersCollectionService: NSObject, UICollectionViewDataSource, UIC
             color: tracker.color,
             name: tracker.name,
             emoji: tracker.emoji,
-            count: String(completedTrackers.filter { $0.id == tracker.id }.count)
+            count: completedTrackers.filter { $0.id == tracker.id }.count
         )
         
         return cell

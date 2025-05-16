@@ -17,14 +17,14 @@ final class CategoryViewController: UIViewController {
     
     let titleLabel: UILabel = {
         let label = UILabel()
-        label.text = "Категория"
+        label.text = NSLocalizedString("category", comment: "")
         label.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         return label
     }()
     
     private lazy var addCategoryButton: UIButton = {
         let button = UIButton()
-        button.setTitle("Добавить категорию", for: .normal)
+        button.setTitle(NSLocalizedString("addCategory", comment: ""), for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         button.backgroundColor = .ypBlack
         button.layer.cornerRadius = Constants.cornerRadius
@@ -95,15 +95,15 @@ final class CategoryViewController: UIViewController {
     private func showDeleteConfirmation(confirmAction: @escaping () -> Void) {
         let alert = UIAlertController(
             title: nil,
-            message: "Эта категория точно не нужна?",
+            message: NSLocalizedString("areYouSure", comment: ""),
             preferredStyle: .actionSheet
         )
         
-        alert.addAction(UIAlertAction(title: "Удалить", style: .destructive) { _ in
+        alert.addAction(UIAlertAction(title: NSLocalizedString("delete", comment: ""), style: .destructive) { _ in
             confirmAction()
         })
         
-        alert.addAction(UIAlertAction(title: "Отмена", style: .cancel))
+        alert.addAction(UIAlertAction(title: NSLocalizedString("cancel", comment: ""), style: .cancel))
         
         present(alert, animated: true)
     }
@@ -134,18 +134,18 @@ final class CategoryViewController: UIViewController {
     }
     
     @objc private func addCategoryButtonTapped() {
-        let alert = UIAlertController(title: "Новая категория", message: nil, preferredStyle: .alert)
+        let alert = UIAlertController(title: NSLocalizedString("newCategory", comment: ""), message: nil, preferredStyle: .alert)
         alert.addTextField { textField in
-            textField.placeholder = "Введите название"
+            textField.placeholder = NSLocalizedString("enterName", comment: "")
         }
         
-        let addAction = UIAlertAction(title: "Добавить", style: .default) { [weak self] _ in
+        let addAction = UIAlertAction(title: NSLocalizedString("add", comment: ""), style: .default) { [weak self] _ in
             guard let title = alert.textFields?.first?.text, !title.isEmpty else { return }
             self?.viewModel.addCategory(title: title)
         }
         
         alert.addAction(addAction)
-        alert.addAction(UIAlertAction(title: "Отмена", style: .cancel))
+        alert.addAction(UIAlertAction(title: NSLocalizedString("cancel", comment: ""), style: .cancel))
         present(alert, animated: true)
     }
 }

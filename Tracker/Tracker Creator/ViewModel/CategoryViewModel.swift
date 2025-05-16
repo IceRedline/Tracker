@@ -100,7 +100,7 @@ final class CategoryViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         selectedCategory = categories[indexPath.row].title
-        onCategorySelected?(selectedCategory ?? "Без категории")
+        onCategorySelected?(selectedCategory ?? NSLocalizedString("noCategory", comment: ""))
     }
     
     func tableView(_ tableView: UITableView, contextMenuConfigurationForRowAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
@@ -108,10 +108,10 @@ final class CategoryViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
         
         return UIContextMenuConfiguration(actionProvider: { actions in
             return UIMenu(children: [
-                UIAction(title: "Редактировать") { [weak self] _ in
+                UIAction(title: NSLocalizedString("edit", comment: "")) { [weak self] _ in
                     self?.showEditModal(for: category)
                 },
-                UIAction(title: "Удалить", attributes: .destructive) { [weak self] _ in
+                UIAction(title: NSLocalizedString("delete", comment: ""), attributes: .destructive) { [weak self] _ in
                     self?.showDeleteConfirmation(for: indexPath)
                 },
             ])

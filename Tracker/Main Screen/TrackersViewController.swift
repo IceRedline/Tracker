@@ -14,7 +14,7 @@ final class TrackersViewController: UIViewController {
     
     private lazy var searchField: UITextField = {
         let textField = UITextField()
-        textField.placeholder = "Поиск"
+        textField.placeholder = NSLocalizedString("search", comment: "")
         textField.backgroundColor = UIColor(cgColor: CGColor(red: 118/255, green: 118/255, blue: 128/255, alpha: 0.12))
         textField.layer.cornerRadius = 10
         
@@ -39,7 +39,7 @@ final class TrackersViewController: UIViewController {
     
     private lazy var questionLabel: UILabel = {
         let label = UILabel()
-        label.text = "Что будем отслеживать?"
+        label.text =  NSLocalizedString("whatToTrack", comment: "")
         label.font = UIFont.systemFont(ofSize: 12, weight: .medium)
         label.textAlignment = .center
         return label

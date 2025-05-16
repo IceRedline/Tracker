@@ -23,20 +23,20 @@ final class TabBarController: UITabBarController {
         let datePicker = UIDatePicker()
         datePicker.datePickerMode = .date
         datePicker.preferredDatePickerStyle = .compact
-        datePicker.locale = Locale(identifier: "ru_RU")
+        datePicker.locale = Locale.current
         
         datePicker.addTarget(self, action: #selector(dateChanged(_:)), for: .valueChanged)
         let datePickerItem = UIBarButtonItem(customView: datePicker)
         
         let trackersViewController = self.createNav(
-            title: "Трекеры",
+            title: NSLocalizedString("trackers", comment: ""),
             image: .trackersTabBar,
             leftButtonItem: UIBarButtonItem(image: .addTracker, style: .plain, target: nil, action: #selector(addTrackerButtonTapped)),
             rightButtonItem: datePickerItem,
             vc: TrackersViewController()
         )
         let statisticsViewController = self.createNav(
-            title: "Статистика",
+            title: NSLocalizedString("statistics", comment: ""),
             image: .statsTabBar,
             leftButtonItem: nil,
             rightButtonItem: nil,

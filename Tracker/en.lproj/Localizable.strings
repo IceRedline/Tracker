@@ -1,0 +1,44 @@
+/* 
+  Localizable.strings
+  Tracker
+
+  Created by Артем Табенский on 16.05.2025.
+  
+*/
+
+"trackWhatYouWant" = "Track only what you want";
+"evenIfItIsNot" = "Even if it is not water or yoga";
+"whatATech" = "What a tech!";
+"trackers" = "Trackers";
+"statistics" = "Statistics";
+"search" = "Search";
+"whatToTrack" = "What are we going to track?";
+"trackerCreation" = "Tracker Creation";
+"habit" = "Habit";
+"irregularActivity" = "Irregular activity";
+"newHabit" = "New habit";
+"newIrregularActivity" = "New irregular activity";
+"enterTrackerName" = "Enter tracker name";
+"emoji" = "Emoji";
+"color" = "Color";
+"cancel" = "Cancel";
+"create" = "Create";
+"category" = "Category";
+"schedule" = "Schedule";
+"done" = "Done";
+"monday" = "Monday";
+"tuesday" = "Tuesday";
+"wednesday" = "Wednesday";
+"thursday" = "Thursday";
+"friday" = "Friday";
+"saturday" = "Saturday";
+"sunday" = "Sunday";
+"addCategory" = "Add category";
+"areYouSure" = "Are you sure?";
+"delete" = "Delete";
+"newCategory" = "New category";
+"enterName" = "Enter name";
+"add" = "Add";
+"noCategory" = "No Category";
+"editCategory" = "Category editing";
+"edit" = "Edit";

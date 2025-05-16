@@ -31,7 +31,7 @@ final class NewTrackerViewController: UIViewController, ScheduleServiceDelegate 
     
     lazy var trackerNameTextField: UITextField = {
         let textField = UITextField()
-        textField.placeholder = "Введите название трекера"
+        textField.placeholder = NSLocalizedString("enterTrackerName", comment: "")
         textField.backgroundColor = .background
         textField.layer.cornerRadius = Constants.cornerRadius
         
@@ -45,21 +45,21 @@ final class NewTrackerViewController: UIViewController, ScheduleServiceDelegate 
     
     let emojiLabel: UILabel = {
         let label = UILabel()
-        label.text = "   Emoji"
+        label.text = NSLocalizedString("emoji", comment: "")
         label.font = UIFont.systemFont(ofSize: 19, weight: .bold)
         return label
     }()
     
     let colorLabel: UILabel = {
         let label = UILabel()
-        label.text = "   Цвет"
+        label.text = NSLocalizedString("color", comment: "")
         label.font = UIFont.systemFont(ofSize: 19, weight: .bold)
         return label
     }()
     
     lazy var cancelButton: UIButton = {
         let button = UIButton()
-        button.setTitle("Отменить", for: .normal)
+        button.setTitle(NSLocalizedString("cancel", comment: ""), for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         button.setTitleColor(.ypRed, for: .normal)
         button.backgroundColor = .ypWhite
@@ -73,7 +73,7 @@ final class NewTrackerViewController: UIViewController, ScheduleServiceDelegate 
     
     lazy var createButton: UIButton = {
         let button = UIButton()
-        button.setTitle("Создать", for: .normal)
+        button.setTitle(NSLocalizedString("create", comment: ""), for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         button.setTitleColor(.ypWhite, for: .normal)
         button.backgroundColor = .ypGray
@@ -197,9 +197,9 @@ final class NewTrackerViewController: UIViewController, ScheduleServiceDelegate 
         tableView.layer.cornerRadius = Constants.cornerRadius
         
         switch titleName {
-        case "Новая привычка":
+        case NSLocalizedString("newHabit", comment: ""):
             tableView.heightAnchor.constraint(equalToConstant: 150).isActive = true
-        case "Новое нерегулярное событие":
+        case NSLocalizedString("newIrregularActivity", comment: ""):
             tableView.heightAnchor.constraint(equalToConstant: 75).isActive = true
         default: return
         }
@@ -220,8 +220,10 @@ final class NewTrackerViewController: UIViewController, ScheduleServiceDelegate 
             trackerNameTextField.heightAnchor.constraint(equalToConstant: 75),
             tableView.widthAnchor.constraint(equalTo: vStackView.widthAnchor),
             emojiLabel.widthAnchor.constraint(equalToConstant: 300),
+            emojiLabel.leadingAnchor.constraint(equalTo: vStackView.leadingAnchor, constant: 10),
             emojiCollectionView.widthAnchor.constraint(equalToConstant: 364),
             emojiCollectionView.heightAnchor.constraint(equalToConstant: 184),
+            colorLabel.leadingAnchor.constraint(equalTo: vStackView.leadingAnchor, constant: 10),
             colorsCollectionView.widthAnchor.constraint(equalToConstant: 374),
             colorsCollectionView.heightAnchor.constraint(equalToConstant: 184),
         ])
@@ -244,7 +246,7 @@ final class NewTrackerViewController: UIViewController, ScheduleServiceDelegate 
     
     func openCategoryController() {
         trackerNameTextField.resignFirstResponder()
-        let categoryVC = CategoryViewController(viewModel: CategoryViewModel(), selectedCategory: selectedCategory ?? "Без категории")
+        let categoryVC = CategoryViewController(viewModel: CategoryViewModel(), selectedCategory: selectedCategory ?? NSLocalizedString("noCategory", comment: ""))
         categoryVC.onCategorySelected = { [weak self] categoryTitle in
             self?.selectedCategory = categoryTitle
             print("Выбрана категория: \(categoryTitle)")
@@ -275,7 +277,7 @@ final class NewTrackerViewController: UIViewController, ScheduleServiceDelegate 
         )
         
         do {
-            let categoryTitle = selectedCategory ?? "Без категории"
+            let categoryTitle = selectedCategory ?? NSLocalizedString("noCategory", comment: "")
             let categoryData = try TrackerCategoryStore.shared.findOrCreateCategory(with: categoryTitle)
             
             try TrackerStore.shared.addNewTracker(newTracker, to: categoryData)

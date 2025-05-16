@@ -22,7 +22,7 @@ final class EditCategoryViewController: UIViewController {
     
     let textField: UITextField = {
         let textField = UITextField()
-        textField.placeholder = "Введите название"
+        textField.placeholder = NSLocalizedString("enterName", comment: "")
         textField.layer.cornerRadius = Constants.cornerRadius
         textField.backgroundColor = .background
         let paddingView = UIView(frame: CGRect(x: 0, y: 0, width: 16, height: textField.frame.height))
@@ -36,7 +36,7 @@ final class EditCategoryViewController: UIViewController {
     
     private lazy var returnButton: UIButton = {
         let button = UIButton()
-        button.setTitle("Готово", for: .normal)
+        button.setTitle(NSLocalizedString("done", comment: ""), for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         button.backgroundColor = .ypBlack
         button.layer.cornerRadius = Constants.cornerRadius

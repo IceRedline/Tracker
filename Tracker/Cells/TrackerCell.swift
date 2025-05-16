@@ -15,7 +15,7 @@ final class TrackerCell: UICollectionViewCell {
     let colorView = UIView()
     let nameLabel = UILabel()
     let emojiLabel = UILabel()
-    let dayCountLabel = UILabel()
+    let daysCountLabel = UILabel()
     let completedButton = UIButton()
     
     var isCompleted: Bool = false {
@@ -55,10 +55,10 @@ final class TrackerCell: UICollectionViewCell {
         nameLabel.translatesAutoresizingMaskIntoConstraints = false
         colorView.addSubview(nameLabel)
         
-        dayCountLabel.font = UIFont.systemFont(ofSize: 12, weight: .medium)
-        dayCountLabel.textAlignment = .left
-        dayCountLabel.translatesAutoresizingMaskIntoConstraints = false
-        contentView.addSubview(dayCountLabel)
+        daysCountLabel.font = UIFont.systemFont(ofSize: 12, weight: .medium)
+        daysCountLabel.textAlignment = .left
+        daysCountLabel.translatesAutoresizingMaskIntoConstraints = false
+        contentView.addSubview(daysCountLabel)
         
         isCompleted ? completedButton.setImage(UIImage(systemName: "checkmark"), for: .normal) : completedButton.setImage(UIImage(systemName: "plus"), for: .normal)
         completedButton.layer.cornerRadius = Constants.cornerRadius
@@ -85,10 +85,10 @@ final class TrackerCell: UICollectionViewCell {
             emojiLabel.leadingAnchor.constraint(equalTo: colorView.leadingAnchor, constant: 12),
             emojiLabel.topAnchor.constraint(equalTo: colorView.topAnchor, constant: 12),
             
-            dayCountLabel.widthAnchor.constraint(equalToConstant: 101),
-            dayCountLabel.heightAnchor.constraint(equalToConstant: 18),
-            dayCountLabel.topAnchor.constraint(equalTo: colorView.bottomAnchor, constant: Constants.defaultPadding),
-            dayCountLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: Constants.defaultPadding),
+            daysCountLabel.widthAnchor.constraint(equalToConstant: 101),
+            daysCountLabel.heightAnchor.constraint(equalToConstant: 18),
+            daysCountLabel.topAnchor.constraint(equalTo: colorView.bottomAnchor, constant: Constants.defaultPadding),
+            daysCountLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: Constants.defaultPadding),
             
             completedButton.widthAnchor.constraint(equalToConstant: 34),
             completedButton.heightAnchor.constraint(equalToConstant: 34),
@@ -97,7 +97,7 @@ final class TrackerCell: UICollectionViewCell {
         ])
     }
     
-    func configure(id: UUID, color: UIColor, name: String, emoji: String, count: String) {
+    func configure(id: UUID, color: UIColor, name: String, emoji: String, count: Int) {
         cellID = id
         colorView.backgroundColor = color
         nameLabel.text = name
@@ -105,29 +105,7 @@ final class TrackerCell: UICollectionViewCell {
         completedButton.backgroundColor = color
         completedButton.alpha = isCompleted ? 0.3 : 1
         
-        switch count.last {
-        case "0":
-            dayCountLabel.text = "\(count) дней"
-        case "1":
-            dayCountLabel.text = "\(count) день"
-        case "2":
-            dayCountLabel.text = "\(count) дня"
-        case "3":
-            dayCountLabel.text = "\(count) дня"
-        case "4":
-            dayCountLabel.text = "\(count) дня"
-        case "5":
-            dayCountLabel.text = "\(count) дней"
-        case "6":
-            dayCountLabel.text = "\(count) дней"
-        case "7":
-            dayCountLabel.text = "\(count) дней"
-        case "8":
-            dayCountLabel.text = "\(count) дней"
-        case "9":
-            dayCountLabel.text = "\(count) дней"
-        default: return
-        }
+        daysCountLabel.text = String.localizedStringWithFormat(NSLocalizedString("numberOfDays", comment: ""), count)
     }
     
     @objc func trackerCompletedTapped(_ sender: UIButton) {

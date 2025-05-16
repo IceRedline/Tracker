@@ -15,14 +15,14 @@ final class OnboardingViewController: UIPageViewController {
         
         let firstImage = UIImageView(image: UIImage.onboardingFirst)
         let firstLabel = UILabel()
-        firstLabel.text = "Отслеживайте только то, что хотите"
+        firstLabel.text = NSLocalizedString("trackWhatYouWant", comment: "")
         firstLabel.font = UIFont.systemFont(ofSize: 32, weight: .bold)
         firstLabel.numberOfLines = 0
         firstLabel.textAlignment = .center
         
         let secondImage = UIImageView(image: UIImage.onboardingSecond)
         let secondLabel = UILabel()
-        secondLabel.text = "Даже если это не литры воды и йога"
+        secondLabel.text = NSLocalizedString("evenIfItIsNot", comment: "")
         secondLabel.font = UIFont.systemFont(ofSize: 32, weight: .bold)
         secondLabel.numberOfLines = 0
         secondLabel.textAlignment = .center
@@ -57,7 +57,7 @@ final class OnboardingViewController: UIPageViewController {
     
     lazy var button: UIButton = {
         let button = UIButton()
-        button.setTitle("Вот это технологии!", for: .normal)
+        button.setTitle(NSLocalizedString("whatATech", comment: ""), for: .normal)
         button.backgroundColor = .ypBlack
         button.tintColor = .ypWhite
         button.layer.cornerRadius = 16
