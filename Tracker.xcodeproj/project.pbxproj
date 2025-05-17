@@ -26,6 +26,8 @@
 		993FF4CD2DA921DB00BAFC86 /* EmojiCollectionService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 993FF4CC2DA921DB00BAFC86 /* EmojiCollectionService.swift */; };
 		993FF4CF2DA921EC00BAFC86 /* EmojiCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 993FF4CE2DA921EC00BAFC86 /* EmojiCell.swift */; };
 		993FF4D22DA922EF00BAFC86 /* ColorCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 993FF4D12DA922EF00BAFC86 /* ColorCell.swift */; };
+		994EE9882DD92F3E00F9BE98 /* EditTrackerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 994EE9872DD92F3E00F9BE98 /* EditTrackerViewController.swift */; };
+		994EE98A2DD9311000F9BE98 /* ButtonsTableViewServiceViewControllerProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 994EE9892DD9311000F9BE98 /* ButtonsTableViewServiceViewControllerProtocol.swift */; };
 		995700162D98244C002888E0 /* StatisticsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 995700152D98244C002888E0 /* StatisticsViewController.swift */; };
 		995700182D982512002888E0 /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 995700172D982512002888E0 /* TabBarController.swift */; };
 		996185162D9C49000099E1ED /* Tracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 996185152D9C49000099E1ED /* Tracker.swift */; };
@@ -73,6 +75,8 @@
 		993FF4CC2DA921DB00BAFC86 /* EmojiCollectionService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmojiCollectionService.swift; sourceTree = "<group>"; };
 		993FF4CE2DA921EC00BAFC86 /* EmojiCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmojiCell.swift; sourceTree = "<group>"; };
 		993FF4D12DA922EF00BAFC86 /* ColorCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorCell.swift; sourceTree = "<group>"; };
+		994EE9872DD92F3E00F9BE98 /* EditTrackerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditTrackerViewController.swift; sourceTree = "<group>"; };
+		994EE9892DD9311000F9BE98 /* ButtonsTableViewServiceViewControllerProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonsTableViewServiceViewControllerProtocol.swift; sourceTree = "<group>"; };
 		995700152D98244C002888E0 /* StatisticsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticsViewController.swift; sourceTree = "<group>"; };
 		995700172D982512002888E0 /* TabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
 		996185152D9C49000099E1ED /* Tracker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tracker.swift; sourceTree = "<group>"; };
@@ -147,6 +151,7 @@
 				996A32F02DA030840002DA05 /* TrackersCollectionService.swift */,
 				996A32F22DA146970002DA05 /* TrackerCellDelegate.swift */,
 				996A32F62DA199DF0002DA05 /* ScheduleServiceDelegate.swift */,
+				994EE9892DD9311000F9BE98 /* ButtonsTableViewServiceViewControllerProtocol.swift */,
 				992AAE292D9F2C40007927AE /* ButtonsTableViewService.swift */,
 				992AAE302D9FD239007927AE /* ScheduleTableViewService.swift */,
 				993FF4CC2DA921DB00BAFC86 /* EmojiCollectionService.swift */,
@@ -181,6 +186,7 @@
 			children = (
 				995700172D982512002888E0 /* TabBarController.swift */,
 				99E5C90B2D97129100E5956A /* TrackersViewController.swift */,
+				994EE9872DD92F3E00F9BE98 /* EditTrackerViewController.swift */,
 			);
 			path = "Main Screen";
 			sourceTree = "<group>";
@@ -313,6 +319,7 @@
 				997BBF422DA4796B00329BC7 /* Constants.swift in Sources */,
 				9961851A2D9C56890099E1ED /* TrackerRecord.swift in Sources */,
 				99E5C9102D97129100E5956A /* AppDelegate.swift in Sources */,
+				994EE98A2DD9311000F9BE98 /* ButtonsTableViewServiceViewControllerProtocol.swift in Sources */,
 				992AAE2A2D9F2C40007927AE /* ButtonsTableViewService.swift in Sources */,
 				99E5C9112D97129100E5956A /* SceneDelegate.swift in Sources */,
 				99A5CBEA2DB59939005BABAA /* UIColorMarshalling.swift in Sources */,
@@ -336,6 +343,7 @@
 				992C586E2DB0ED8C0087B303 /* Database.xcdatamodeld in Sources */,
 				996A32F72DA199DF0002DA05 /* ScheduleServiceDelegate.swift in Sources */,
 				992A7BD62DB26DCE00EFBB80 /* TrackerRecordStore.swift in Sources */,
+				994EE9882DD92F3E00F9BE98 /* EditTrackerViewController.swift in Sources */,
 				995700162D98244C002888E0 /* StatisticsViewController.swift in Sources */,
 				996A32F32DA146970002DA05 /* TrackerCellDelegate.swift in Sources */,
 				99EEE9042DCE373A001B5AE5 /* CategoryViewController.swift in Sources */,

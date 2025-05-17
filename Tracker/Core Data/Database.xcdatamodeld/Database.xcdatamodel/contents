@@ -9,6 +9,7 @@
         <attribute name="emoji" optional="YES" attributeType="String"/>
         <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
         <attribute name="name" optional="YES" attributeType="String"/>
+        <attribute name="originalCategory" optional="YES" attributeType="String"/>
         <attribute name="schedule" optional="YES" attributeType="String"/>
         <relationship name="category" maxCount="1" deletionRule="Nullify" destinationEntity="TrackerCategoryData" inverseName="trackers" inverseEntity="TrackerCategoryData"/>
     </entity>

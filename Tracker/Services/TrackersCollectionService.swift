@@ -1,9 +1,3 @@
-//
-//  TrackersCollectionService.swift
-//  Tracker
-//
-//  Created by Артем Табенский on 04.04.2025.
-//
 
 import UIKit
 
@@ -68,6 +62,18 @@ final class TrackersCollectionService: NSObject, UICollectionViewDataSource, UIC
         }
     }
     
+    func deleteTracker(at indexPath: IndexPath) {
+        do {
+            let trackerID = filteredCategories()[indexPath.section].trackers[indexPath.item].id
+            try trackerStore.deleteTracker(with: trackerID)
+            
+            reload()
+            
+        } catch {
+            print("Ошибка удаления трекера: \(error)")
+        }
+    }
+    
     private func filteredCategories() -> [TrackerCategory] {
         let calendar = Calendar.current
         let weekdayNumber = calendar.component(.weekday, from: currentDate ?? Date())
@@ -116,6 +122,35 @@ final class TrackersCollectionService: NSObject, UICollectionViewDataSource, UIC
     
     @objc private func handleCategoryChange() {
         reload()
+    }
+    
+    private func pinTracker(for indexPath: IndexPath) {
+        #warning("переименовывать категорию")
+        //cell.pinImageView.isHidden = false
+        reload()
+    }
+    
+    private func showEditViewController(for indexPath: IndexPath) {
+        let tracker = filteredCategories()[indexPath.section].trackers[indexPath.item]
+        let trackerID = tracker.id
+        let count = completedTrackers.filter { $0.id == trackerID }.count
+        let stringCount = String.localizedStringWithFormat(NSLocalizedString("numberOfDays", comment: ""), count)
+        let categoryName = filteredCategories()[indexPath.section].title
+        
+        let editVC = EditTrackerViewController(
+            trackerID: trackerID,
+            daysCount: stringCount,
+            trackerTitle: tracker.name,
+            schedule: tracker.schedule,
+            selectedCategory: categoryName,
+            color: tracker.color,
+            emoji: tracker.emoji
+        )
+        viewController?.present(editVC, animated: true)
+    }
+    
+    private func showDeleteConfirmation(for indexPath: IndexPath) {
+        deleteTracker(at: indexPath)
     }
     
     // MARK: - UICollectionViewDataSource
@@ -171,6 +206,26 @@ final class TrackersCollectionService: NSObject, UICollectionViewDataSource, UIC
             ])
         }
         return header
+    }
+    
+    // MARK: - UICollectionViewDelegate
+    
+    func collectionView(_ collectionView: UICollectionView, contextMenuConfigurationForItemsAt indexPaths: [IndexPath], point: CGPoint) -> UIContextMenuConfiguration? {
+        guard let indexPath = indexPaths.first else { return nil }
+        
+        return UIContextMenuConfiguration(actionProvider: { actions in
+            return UIMenu(children: [
+                UIAction(title: NSLocalizedString("pin", comment: "")) { [weak self] _ in
+                    self?.pinTracker(for: indexPath)
+                },
+                UIAction(title: NSLocalizedString("edit", comment: "")) { [weak self] _ in
+                    self?.showEditViewController(for: indexPath)
+                },
+                UIAction(title: NSLocalizedString("delete", comment: ""), attributes: .destructive) { [weak self] _ in
+                    self?.showDeleteConfirmation(for: indexPath)
+                },
+            ])
+        })
     }
     
     // MARK: - UICollectionViewDelegateFlowLayout

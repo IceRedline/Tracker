@@ -61,6 +61,7 @@ final class TrackersViewController: UIViewController {
             forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
             withReuseIdentifier: Constants.headerIdentifier
         )
+        trackersCollectionView.allowsMultipleSelection = false
         
         loadViews()
         loadConstraints()

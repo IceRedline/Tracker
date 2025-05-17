@@ -9,7 +9,7 @@ import UIKit
 
 final class ButtonsTableViewService: NSObject, UITableViewDelegate, UITableViewDataSource {
     
-    weak var viewController: NewTrackerViewController?
+    var viewController: ButtonsTableViewServiceViewControllerProtocol?
     
     let trackerButtonsTexts = [NSLocalizedString("category", comment: ""), NSLocalizedString("schedule", comment: "")]
     let irregularActionButtonTexts = [NSLocalizedString("category", comment: "")]

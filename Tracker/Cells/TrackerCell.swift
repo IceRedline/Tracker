@@ -17,6 +17,7 @@ final class TrackerCell: UICollectionViewCell {
     let emojiLabel = UILabel()
     let daysCountLabel = UILabel()
     let completedButton = UIButton()
+    let pinImageView = UIImageView()
     
     var isCompleted: Bool = false {
         didSet {
@@ -41,7 +42,7 @@ final class TrackerCell: UICollectionViewCell {
         colorView.translatesAutoresizingMaskIntoConstraints = false
         contentView.addSubview(colorView)
         
-        emojiLabel.backgroundColor = .background
+        emojiLabel.backgroundColor = .background.resolvedColor(with: UITraitCollection(userInterfaceStyle: .light))
         emojiLabel.font = UIFont.systemFont(ofSize: 12)
         emojiLabel.textAlignment = .center
         emojiLabel.clipsToBounds = true
@@ -65,6 +66,11 @@ final class TrackerCell: UICollectionViewCell {
         completedButton.tintColor = .ypWhite
         completedButton.translatesAutoresizingMaskIntoConstraints = false
         contentView.addSubview(completedButton)
+        
+        pinImageView.image = .pin
+        pinImageView.isHidden = true
+        pinImageView.translatesAutoresizingMaskIntoConstraints = false
+        contentView.addSubview(pinImageView)
     }
     
     private func setupConstraints() {
@@ -94,6 +100,9 @@ final class TrackerCell: UICollectionViewCell {
             completedButton.heightAnchor.constraint(equalToConstant: 34),
             completedButton.topAnchor.constraint(equalTo: colorView.bottomAnchor, constant: 8),
             completedButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -12),
+            
+            pinImageView.topAnchor.constraint(equalTo: colorView.topAnchor, constant: 18),
+            pinImageView.trailingAnchor.constraint(equalTo: colorView.trailingAnchor, constant: -12),
         ])
     }
     

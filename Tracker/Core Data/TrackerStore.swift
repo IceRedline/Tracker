@@ -21,12 +21,12 @@ final class TrackerStore: NSObject {
     private var deletedIndexes: IndexSet?
     private var updatedIndexes: IndexSet?
     private var movedIndexes: Set<TrackerStoreUpdate.Move>?
-
+    
     private convenience override init() {
         let context = DatabaseStore.shared.persistentContainer.viewContext
         self.init(context: context)
     }
-
+    
     init(context: NSManagedObjectContext = DatabaseStore.shared.persistentContainer.viewContext) {
         self.context = context
         super.init()
@@ -60,13 +60,38 @@ final class TrackerStore: NSObject {
         categoryData.addToTrackers(trackerData)
         try context.save()
     }
-
+    
+    func updateTracker(with id: UUID, newTracker: Tracker) throws {
+        let fetchRequest: NSFetchRequest = TrackerData.fetchRequest()
+        fetchRequest.predicate = NSPredicate(format: "id == %@", id as CVarArg)
+        fetchRequest.fetchLimit = 1
+        
+        guard let trackerData = try context.fetch(fetchRequest).first else {
+            throw TrackerStoreError.decodingErrorInvalidId
+        }
+        
+        updateExistingTracker(trackerData, with: newTracker)
+        try context.save()
+    }
+    
     func updateExistingTracker(_ trackerCorData: TrackerData, with tracker: Tracker) {
         trackerCorData.id = tracker.id
         trackerCorData.name = tracker.name
         trackerCorData.emoji = tracker.emoji
         trackerCorData.colorHex = uiColorMarshalling.hexString(from: tracker.color)
         trackerCorData.schedule = tracker.schedule.map { String($0.rawValue) }.joined(separator: ",")
+    }
+    
+    func deleteTracker(with id: UUID) throws {
+        let fetchRequest: NSFetchRequest = TrackerData.fetchRequest()
+        fetchRequest.predicate = NSPredicate(format: "id == %@", id as CVarArg)
+        fetchRequest.fetchLimit = 1
+        if let trackerToDelete = try context.fetch(fetchRequest).first {
+            context.delete(trackerToDelete)
+            try context.save()
+        } else {
+            throw TrackerStoreError.decodingErrorInvalidId
+        }
     }
     
     func tracker(from trackerCorData: TrackerData) throws -> Tracker {
@@ -85,10 +110,10 @@ final class TrackerStore: NSObject {
         guard let scheduleString = trackerCorData.schedule else {
             throw TrackerStoreError.decodingErrorInvalidSchedule
         }
-
+        
         let rawValues = scheduleString.components(separatedBy: ",")
         let schedule = rawValues.compactMap { Int($0) }.compactMap { WeekDays(rawValue: $0) }
-
+        
         return Tracker(id: id, name: name, color: uiColorMarshalling.color(from: colorHex), emoji: emoji, schedule: schedule)
     }
 }
@@ -100,7 +125,7 @@ extension TrackerStore: NSFetchedResultsControllerDelegate {
         updatedIndexes = IndexSet()
         movedIndexes = Set<TrackerStoreUpdate.Move>()
     }
-
+    
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
         guard let insertedIndexes, let deletedIndexes, let updatedIndexes, let movedIndexes else { return }
         delegate?.store(
@@ -117,7 +142,7 @@ extension TrackerStore: NSFetchedResultsControllerDelegate {
         self.updatedIndexes = nil
         self.movedIndexes = nil
     }
-
+    
     func controller(
         _ controller: NSFetchedResultsController<NSFetchRequestResult>,
         didChange anObject: Any,

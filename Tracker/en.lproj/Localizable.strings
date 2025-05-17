@@ -42,3 +42,6 @@
 "noCategory" = "No Category";
 "editCategory" = "Category editing";
 "edit" = "Edit";
+"pin" = "Pin";
+"pinned" = "Pinned";
+"save" = " Save";
