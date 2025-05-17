@@ -21,6 +21,7 @@ final class TrackerTypeViewController: UIViewController {
         button.backgroundColor = .ypBlack
         button.setTitle(NSLocalizedString("habit", comment: ""), for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
+        button.setTitleColor(.ypWhite, for: .normal)
         button.layer.cornerRadius = Constants.cornerRadius
         button.addTarget(self, action: #selector(habitButtonTapped), for: .touchUpInside)
         return button
@@ -31,6 +32,7 @@ final class TrackerTypeViewController: UIViewController {
         button.backgroundColor = .ypBlack
         button.setTitle(NSLocalizedString("irregularActivity", comment: ""), for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
+        button.setTitleColor(.ypWhite, for: .normal)
         button.layer.cornerRadius = Constants.cornerRadius
         button.addTarget(self, action: #selector(irregularEventButtonTapped), for: .touchUpInside)
         return button

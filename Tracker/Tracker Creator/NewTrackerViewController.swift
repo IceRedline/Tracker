@@ -133,6 +133,7 @@ final class NewTrackerViewController: UIViewController, ScheduleServiceDelegate 
         emojiCollectionView.register(EmojiCell.self, forCellWithReuseIdentifier: "emojiCell")
         emojiCollectionView.isScrollEnabled = false
         emojiCollectionView.allowsMultipleSelection = false
+        emojiCollectionView.backgroundColor = .ypWhite
         
         emojiCollectionService = EmojiCollectionService()
         emojiCollectionView.dataSource = emojiCollectionService

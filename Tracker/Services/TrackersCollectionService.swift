@@ -21,6 +21,7 @@ final class TrackersCollectionService: NSObject, UICollectionViewDataSource, UIC
     private var completedTrackers: [TrackerRecord] = []
     
     var currentDate: Date?
+    var searchText = ""
     
     private override init() {}
     
@@ -68,21 +69,19 @@ final class TrackersCollectionService: NSObject, UICollectionViewDataSource, UIC
     }
     
     private func filteredCategories() -> [TrackerCategory] {
-        guard let currentDate = currentDate else {
-            return categories
-        }
-        
         let calendar = Calendar.current
-        let weekdayNumber = calendar.component(.weekday, from: currentDate)
+        let weekdayNumber = calendar.component(.weekday, from: currentDate ?? Date())
         let adjustedIndex = (weekdayNumber + 5) % 7
         guard let currentWeekday = WeekDays(rawValue: adjustedIndex) else {
             return []
         }
+        let searchLowercased = searchText.lowercased().trimmingCharacters(in: .whitespacesAndNewlines)
         
         return categories.compactMap { category in
             let filteredTrackers = category.trackers.filter { tracker in
-                if tracker.schedule.isEmpty { return true }
-                return tracker.schedule.contains(currentWeekday)
+                let matchesSchedule = tracker.schedule.isEmpty || tracker.schedule.contains(currentWeekday)
+                let matchesSearch = searchLowercased.isEmpty || tracker.name.lowercased().contains(searchLowercased)
+                return matchesSchedule && matchesSearch
             }
             return filteredTrackers.isEmpty ? nil : TrackerCategory(title: category.title, trackers: filteredTrackers)
         }

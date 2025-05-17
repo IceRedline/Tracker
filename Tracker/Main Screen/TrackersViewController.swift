@@ -12,8 +12,8 @@ final class TrackersViewController: UIViewController {
     var currentDate: Date?
     let trackersCollectionService = TrackersCollectionService.shared
     
-    private lazy var searchField: UITextField = {
-        let textField = UITextField()
+    private lazy var searchField: UISearchTextField = {
+        let textField = UISearchTextField()
         textField.placeholder = NSLocalizedString("search", comment: "")
         textField.backgroundColor = UIColor(cgColor: CGColor(red: 118/255, green: 118/255, blue: 128/255, alpha: 0.12))
         textField.layer.cornerRadius = 10
@@ -26,6 +26,7 @@ final class TrackersViewController: UIViewController {
         paddingView.addSubview(imageView)
         textField.leftView = paddingView
         textField.leftViewMode = .always
+        textField.addTarget(self, action: #selector(textDidChange), for: .editingChanged)
         
         return textField
     }()
@@ -75,6 +76,7 @@ final class TrackersViewController: UIViewController {
     
     private func loadViews() {
         view.backgroundColor = .ypWhite
+        trackersCollectionView.backgroundColor = .ypWhite
         [searchField ,starImage, questionLabel, trackersCollectionView].forEach {
             $0.translatesAutoresizingMaskIntoConstraints = false
             view.addSubview($0)
@@ -101,5 +103,15 @@ final class TrackersViewController: UIViewController {
             trackersCollectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -Constants.defaultPadding)
         ])
     }
+    
+    @objc func textDidChange(_ searchField: UISearchTextField) {
+        if let text = searchField.text {
+            trackersCollectionService.searchText = text
+        }
+        trackersCollectionService.reload()
+    }
 }
 
+#Preview(body: {
+    TabBarController()
+})

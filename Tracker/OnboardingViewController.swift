@@ -17,6 +17,7 @@ final class OnboardingViewController: UIPageViewController {
         let firstLabel = UILabel()
         firstLabel.text = NSLocalizedString("trackWhatYouWant", comment: "")
         firstLabel.font = UIFont.systemFont(ofSize: 32, weight: .bold)
+        firstLabel.textColor = .ypBlack.resolvedColor(with: UITraitCollection(userInterfaceStyle: .light))
         firstLabel.numberOfLines = 0
         firstLabel.textAlignment = .center
         
@@ -24,6 +25,7 @@ final class OnboardingViewController: UIPageViewController {
         let secondLabel = UILabel()
         secondLabel.text = NSLocalizedString("evenIfItIsNot", comment: "")
         secondLabel.font = UIFont.systemFont(ofSize: 32, weight: .bold)
+        secondLabel.textColor = .ypBlack.resolvedColor(with: UITraitCollection(userInterfaceStyle: .light))
         secondLabel.numberOfLines = 0
         secondLabel.textAlignment = .center
         
@@ -58,8 +60,8 @@ final class OnboardingViewController: UIPageViewController {
     lazy var button: UIButton = {
         let button = UIButton()
         button.setTitle(NSLocalizedString("whatATech", comment: ""), for: .normal)
-        button.backgroundColor = .ypBlack
-        button.tintColor = .ypWhite
+        button.backgroundColor = .ypBlack.resolvedColor(with: UITraitCollection(userInterfaceStyle: .light))
+        button.tintColor = .ypWhite.resolvedColor(with: UITraitCollection(userInterfaceStyle: .light))
         button.layer.cornerRadius = 16
         button.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         button.translatesAutoresizingMaskIntoConstraints = false
@@ -72,8 +74,8 @@ final class OnboardingViewController: UIPageViewController {
         pageControl.numberOfPages = pages.count
         pageControl.currentPage = 0
         
-        pageControl.currentPageIndicatorTintColor = .ypBlack
-        pageControl.pageIndicatorTintColor = .ypGray
+        pageControl.currentPageIndicatorTintColor = .ypBlack.resolvedColor(with: UITraitCollection(userInterfaceStyle: .light))
+        pageControl.pageIndicatorTintColor = .ypGray.resolvedColor(with: UITraitCollection(userInterfaceStyle: .light))
         
         pageControl.translatesAutoresizingMaskIntoConstraints = false
         return pageControl

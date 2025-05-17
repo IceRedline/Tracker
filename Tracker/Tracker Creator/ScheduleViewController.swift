@@ -26,6 +26,7 @@ final class ScheduleViewController: UIViewController {
         button.setTitle(NSLocalizedString("done", comment: ""), for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         button.backgroundColor = .ypBlack
+        button.setTitleColor(.ypWhite, for: .normal)
         button.layer.cornerRadius = Constants.cornerRadius
         button.addTarget(self, action: #selector(doneButtonTapped), for: .touchUpInside)
         return button

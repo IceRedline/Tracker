@@ -49,7 +49,7 @@ final class TrackerCell: UICollectionViewCell {
         emojiLabel.translatesAutoresizingMaskIntoConstraints = false
         colorView.addSubview(emojiLabel)
         
-        nameLabel.textColor = .ypWhite
+        nameLabel.textColor = .white
         nameLabel.font = UIFont.systemFont(ofSize: 12, weight: .medium)
         nameLabel.numberOfLines = 2
         nameLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -77,7 +77,7 @@ final class TrackerCell: UICollectionViewCell {
             
             nameLabel.widthAnchor.constraint(equalToConstant: 143),
             nameLabel.heightAnchor.constraint(equalToConstant: 34),
-            nameLabel.leadingAnchor.constraint(equalTo: colorView.leadingAnchor, constant: 12),
+            nameLabel.leadingAnchor.constraint(equalTo: colorView.leadingAnchor, constant: 16),
             nameLabel.bottomAnchor.constraint(equalTo: colorView.bottomAnchor, constant: -12),
             
             emojiLabel.widthAnchor.constraint(equalToConstant: 24),
