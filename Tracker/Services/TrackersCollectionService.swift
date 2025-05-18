@@ -205,10 +205,14 @@ final class TrackersCollectionService: NSObject, UICollectionViewDataSource, UIC
             emoji: tracker.emoji
         )
         viewController?.present(editVC, animated: true)
+        
+        AnalyticsService.shared.report(event: "click", screen: "Main", item: "edit")
     }
     
     private func showDeleteConfirmation(for indexPath: IndexPath) {
         deleteTracker(at: indexPath)
+        
+        AnalyticsService.shared.report(event: "click", screen: "Main", item: "delete")
     }
     
     // MARK: - UICollectionViewDataSource

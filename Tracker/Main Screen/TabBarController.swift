@@ -21,6 +21,16 @@ final class TabBarController: UITabBarController {
         NotificationCenter.default.addObserver(self, selector: #selector(applyTodayDate), name: .setTodayDate, object: nil)
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        AnalyticsService.shared.report(event: "open", screen: "Main")
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        AnalyticsService.shared.report(event: "close", screen: "Main")
+    }
+    
     private func setupTabs() {
         let datePicker = UIDatePicker()
         datePicker.tintColor = .ypBlue
@@ -64,6 +74,8 @@ final class TabBarController: UITabBarController {
     @objc private func addTrackerButtonTapped() {
         let vc = TrackerTypeViewController()
         present(vc, animated: true)
+        
+        AnalyticsService.shared.report(event: "click", screen: "Main", item: "add_track")
     }
     
     @objc private func dateChanged(_ sender: UIDatePicker) {

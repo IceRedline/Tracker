@@ -7,12 +7,15 @@
 
 import UIKit
 import CoreData
+import YandexMobileMetrica
+
 
 @main
 final class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         try? TrackerCategoryStore.shared.createPinnedCategoryIfNeeded()
+        //AnalyticsService
         return true
     }
     
@@ -35,7 +38,7 @@ public extension UIApplication {
         let window = connectedScenes.first?
             .windows
             .first { $0.isKeyWindow }
-
+        
         return window
     }
 }

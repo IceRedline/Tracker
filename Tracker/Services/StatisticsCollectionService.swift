@@ -48,7 +48,7 @@ class StatisticsCollectionService: NSObject, UICollectionViewDataSource, UIColle
         }
         cell.prepareForReuse()
         
-        cell.configure(title: "Трекеров завершено", count: completedTrackers.count)
+        cell.configure(title: NSLocalizedString("trackersCompleted", comment: ""), count: completedTrackers.count)
         
         return cell
     }

@@ -48,7 +48,7 @@ final class TrackersViewController: UIViewController {
     
     private lazy var filtersButton: UIButton = {
         let button = UIButton()
-        button.setTitle("Фильтры", for: .normal)
+        button.setTitle(NSLocalizedString("filters", comment: ""), for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 17, weight: .regular)
         button.backgroundColor = .ypBlue
         button.layer.cornerRadius = Constants.cornerRadius
@@ -168,9 +168,7 @@ final class TrackersViewController: UIViewController {
         let filtersVC = FiltersViewController(selectedCategory: trackersCollectionService.currentFilter)
         print(trackersCollectionService.currentFilter)
         present(filtersVC, animated: true)
+        
+        AnalyticsService.shared.report(event: "click", screen: "Main", item: "filter")
     }
 }
-
-#Preview(body: {
-    TabBarController()
-})

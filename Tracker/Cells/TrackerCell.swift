@@ -131,5 +131,7 @@ final class TrackerCell: UICollectionViewCell {
             completedButton.alpha = 0.3
         }
         delegate?.trackerCellDidTapComplete(self, isCompleted: isCompleted)
+        
+        AnalyticsService.shared.report(event: "click", screen: "Main", item: "track")
     }
 }

@@ -75,9 +75,3 @@ final class StatisticsViewController: UIViewController {
         ])
     }
 }
-
-#Preview(traits: .defaultLayout, body: {
-    let tabBar = TabBarController()
-    tabBar.selectedIndex = 1
-    return tabBar
-})
