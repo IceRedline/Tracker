@@ -31,14 +31,18 @@ final class StatisticsViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .ypWhite
-        statisticsCollectionView.backgroundColor = .ypWhite
         statisticsCollectionService.loadCompletedTrackers()
         statisticsCollectionService.viewController = self
+        
+        setupCollectionView()
+        loadConstraints()
+    }
+    
+    private func setupCollectionView() {
+        statisticsCollectionView.backgroundColor = .ypWhite
         statisticsCollectionView.delegate = statisticsCollectionService
         statisticsCollectionView.dataSource = statisticsCollectionService
         statisticsCollectionView.register(StatisticsCell.self, forCellWithReuseIdentifier: Constants.statisticsCellIdentifier)
-        
-        loadConstraints()
     }
     
     override func viewWillAppear(_ animated: Bool) {

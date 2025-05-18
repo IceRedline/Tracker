@@ -54,3 +54,4 @@
 "completedTrackers" = "Завершенные";
 "incompleteTrackers" = "Незавершенные";
 "trackersCompleted" = "Трекеров завершено";
+"nothingFound" = "Ничего не найдено";

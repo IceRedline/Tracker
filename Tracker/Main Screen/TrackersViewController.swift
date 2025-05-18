@@ -63,7 +63,7 @@ final class TrackersViewController: UIViewController {
         let label = UILabel()
         image.translatesAutoresizingMaskIntoConstraints = false
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = "Ничего не найдено"
+        label.text = NSLocalizedString("nothingFound", comment: "")
         label.font = UIFont.systemFont(ofSize: 12, weight: .medium)
         view.addSubview(image)
         view.addSubview(label)
@@ -71,7 +71,7 @@ final class TrackersViewController: UIViewController {
             image.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             image.topAnchor.constraint(equalTo: view.topAnchor),
             label.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            label.topAnchor.constraint(equalTo: image.bottomAnchor),
+            label.topAnchor.constraint(equalTo: image.bottomAnchor, constant: 10),
         ])
         view.isHidden = true
         return view

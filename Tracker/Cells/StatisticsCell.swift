@@ -9,11 +9,11 @@ import UIKit
 
 final class StatisticsCell: UICollectionViewCell {
     
-    let gradient = CAGradientLayer()
-    let shape = CAShapeLayer()
-    let view = UIView()
-    let nameLabel = UILabel()
-    let countLabel = UILabel()
+    private let gradient = CAGradientLayer()
+    private let shape = CAShapeLayer()
+    private let view = UIView()
+    private let nameLabel = UILabel()
+    private let countLabel = UILabel()
     
     override init(frame: CGRect) {
         super.init(frame: frame)

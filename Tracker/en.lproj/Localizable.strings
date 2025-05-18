@@ -53,3 +53,4 @@
 "completedTrackers" = "Completed trackers";
 "incompleteTrackers" = "Incomplete trackers";
 "trackersCompleted" = "Trackers completed";
+"nothingFound" = "Nothing found";

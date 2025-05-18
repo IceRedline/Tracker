@@ -274,7 +274,7 @@ final class NewTrackerViewController: UIViewController, ScheduleServiceDelegate,
             name: trackerName,
             color: colorsCollectionService?.chosenColor ?? .colorSelection1,
             emoji: emojiCollectionService?.chosenEmoji ?? "🙂",
-            schedule: schedule,
+            schedule: schedule
         )
         
         do {
