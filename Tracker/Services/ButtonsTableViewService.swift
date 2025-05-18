@@ -24,7 +24,7 @@ final class ButtonsTableViewService: NSObject, UITableViewDelegate, UITableViewD
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = UITableViewCell(style: .default, reuseIdentifier: Constants.categoryCellIdentifier)
+        let cell = UITableViewCell(style: .default, reuseIdentifier: Constants.categoryAndFilterCellIdentifier)
         cell.backgroundColor = .background
         
         let titleLabel = UILabel()

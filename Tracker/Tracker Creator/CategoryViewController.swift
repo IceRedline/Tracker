@@ -110,7 +110,7 @@ final class CategoryViewController: UIViewController {
     }
     
     private func setupViewsAndActivateConstraints() {
-        categoriesTableView.register(CategoryTableViewCell.self, forCellReuseIdentifier: CategoryTableViewCell.reuseIdentifier)
+        categoriesTableView.register(CategoryAndFilterTableViewCell.self, forCellReuseIdentifier: CategoryAndFilterTableViewCell.reuseIdentifier)
         modalPresentationStyle = .currentContext
         view.backgroundColor = .ypWhite
         categoriesTableView.backgroundColor = .ypWhite

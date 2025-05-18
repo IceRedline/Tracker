@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class CategoryTableViewCell: UITableViewCell {
+final class CategoryAndFilterTableViewCell: UITableViewCell {
     static let reuseIdentifier = "CategoryCell"
     
     private let titleLabel: UILabel = {

@@ -69,19 +69,15 @@ final class CategoryViewModel: NSObject, UITableViewDataSource, UITableViewDeleg
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(
-            withIdentifier: CategoryTableViewCell.reuseIdentifier,
+            withIdentifier: CategoryAndFilterTableViewCell.reuseIdentifier,
             for: indexPath
-        ) as? CategoryTableViewCell else {
+        ) as? CategoryAndFilterTableViewCell else {
             return UITableViewCell()
         }
         
         let category = categories[indexPath.row]
-        cell.configure(
-            with: category.title,
-            isSelected: category.title == selectedCategory
-        )
+        cell.configure(with: category.title, isSelected: category.title == selectedCategory)
         
-        // Настройка закругления
         if indexPath.row == categories.count - 1 {
             cell.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner]
             cell.layer.cornerRadius = Constants.cornerRadius

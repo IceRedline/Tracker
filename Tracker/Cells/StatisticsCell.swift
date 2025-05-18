@@ -67,7 +67,6 @@ final class StatisticsCell: UICollectionViewCell {
         gradient.startPoint = CGPoint(x: 0, y: 0.5)
         gradient.endPoint = CGPoint(x: 1, y: 0.5)
         
-        // Настройка shape
         shape.fillColor = UIColor.black.cgColor
         shape.lineWidth = 0
         shape.strokeColor = UIColor.black.cgColor

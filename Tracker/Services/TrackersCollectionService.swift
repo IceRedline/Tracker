@@ -11,6 +11,8 @@ final class TrackersCollectionService: NSObject, UICollectionViewDataSource, UIC
     private let trackerCategoryStore = TrackerCategoryStore()
     private let trackerRecordStore = TrackerRecordStore()
     
+    var selectedFilter = NSLocalizedString("allTrackers", comment: "")
+    
     var categories: [TrackerCategory] = []
     private var completedTrackers: [TrackerRecord] = []
     

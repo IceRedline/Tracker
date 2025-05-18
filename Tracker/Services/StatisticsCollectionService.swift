@@ -29,7 +29,6 @@ class StatisticsCollectionService: NSObject, UICollectionViewDataSource, UIColle
     }
     
     func loadCompletedTrackers() {
-        print("вызвано обновление массива! \(completedTrackers)")
         do {
             completedTrackers = try trackerRecordStore.fetchAll()
         } catch {

@@ -48,3 +48,8 @@
 "pinned" = "Закрепленные";
 "save" = " Сохранить";
 "nothingToTrack" = "Анализировать пока нечего";
+"filters" = "Фильтры";
+"allTrackers" = "Все трекеры";
+"todayTrackers" = "Трекеры на сегодня";
+"completedTrackers" = "Завершенные";
+"incompleteTrackers" = "Незавершенные";

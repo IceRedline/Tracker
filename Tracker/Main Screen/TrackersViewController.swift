@@ -46,6 +46,16 @@ final class TrackersViewController: UIViewController {
         return label
     }()
     
+    private lazy var filtersButton: UIButton = {
+        let button = UIButton()
+        button.setTitle("Фильтры", for: .normal)
+        button.titleLabel?.font = UIFont.systemFont(ofSize: 17, weight: .regular)
+        button.backgroundColor = .ypBlue
+        button.layer.cornerRadius = Constants.cornerRadius
+        button.addTarget(self, action: #selector(filterButtonTapped), for: .touchUpInside)
+        return button
+    }()
+    
     lazy var trackersCollectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
     
     override func viewDidLoad() {
@@ -78,7 +88,7 @@ final class TrackersViewController: UIViewController {
     private func loadViews() {
         view.backgroundColor = .ypWhite
         trackersCollectionView.backgroundColor = .ypWhite
-        [searchField ,starImage, questionLabel, trackersCollectionView].forEach {
+        [searchField ,starImage, questionLabel, trackersCollectionView, filtersButton].forEach {
             $0.translatesAutoresizingMaskIntoConstraints = false
             view.addSubview($0)
         }
@@ -101,7 +111,11 @@ final class TrackersViewController: UIViewController {
             trackersCollectionView.topAnchor.constraint(equalTo: searchField.bottomAnchor, constant: 30),
             trackersCollectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: Constants.defaultPadding),
             trackersCollectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -Constants.defaultPadding),
-            trackersCollectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -Constants.defaultPadding)
+            trackersCollectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -Constants.defaultPadding),
+            filtersButton.widthAnchor.constraint(equalToConstant: 114),
+            filtersButton.heightAnchor.constraint(equalToConstant: 50),
+            filtersButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            filtersButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -16)
         ])
     }
     
@@ -110,6 +124,11 @@ final class TrackersViewController: UIViewController {
             trackersCollectionService.searchText = text
         }
         trackersCollectionService.reload()
+    }
+    
+    @objc func filterButtonTapped() {
+        let filtersVC = FiltersViewController(selectedCategory: trackersCollectionService.selectedFilter)
+        present(filtersVC, animated: true)
     }
 }
 

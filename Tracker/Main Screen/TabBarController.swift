@@ -21,6 +21,7 @@ final class TabBarController: UITabBarController {
     
     private func setupTabs() {
         let datePicker = UIDatePicker()
+        datePicker.tintColor = .ypBlue
         datePicker.datePickerMode = .date
         datePicker.preferredDatePickerStyle = .compact
         datePicker.locale = Locale.current
