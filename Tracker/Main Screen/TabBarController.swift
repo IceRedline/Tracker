@@ -17,6 +17,8 @@ final class TabBarController: UITabBarController {
         self.tabBar.tintColor = .ypBlue
         self.tabBar.barTintColor = .ypWhite
         self.tabBar.unselectedItemTintColor = .ypGray
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(applyTodayDate), name: .setTodayDate, object: nil)
     }
     
     private func setupTabs() {
@@ -68,5 +70,16 @@ final class TabBarController: UITabBarController {
         TrackersCollectionService.shared.currentDate = sender.date
         TrackersCollectionService.shared.reload()
     }
+    
+    @objc private func applyTodayDate() {
+        if let datePickerItem = (self.viewControllers?.first as? UINavigationController)?
+            .viewControllers.first?.navigationItem.rightBarButtonItem?.customView as? UIDatePicker {
+            datePickerItem.setDate(Date(), animated: true)
+            self.dateChanged(datePickerItem)
+        }
+    }
 }
 
+extension Notification.Name {
+    static let setTodayDate = Notification.Name("setTodayDate")
+}

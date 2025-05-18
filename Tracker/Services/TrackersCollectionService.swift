@@ -11,13 +11,16 @@ final class TrackersCollectionService: NSObject, UICollectionViewDataSource, UIC
     private let trackerCategoryStore = TrackerCategoryStore()
     private let trackerRecordStore = TrackerRecordStore()
     
-    var selectedFilter = NSLocalizedString("allTrackers", comment: "")
-    
     var categories: [TrackerCategory] = []
     private var completedTrackers: [TrackerRecord] = []
     
     var currentDate: Date?
     var searchText = ""
+    var currentFilter: String = NSLocalizedString("allTrackers", comment: "") {
+        didSet {
+            reload()
+        }
+    }
     
     private override init() {}
     
@@ -29,8 +32,15 @@ final class TrackersCollectionService: NSObject, UICollectionViewDataSource, UIC
         
         if filtered.isEmpty {
             viewController?.hideCollection()
+            if currentFilter == NSLocalizedString("allTrackers", comment: "") && searchText.isEmpty {
+                viewController?.hidefilters()
+                viewController?.hideNothingFoundView()
+            } else {
+                viewController?.showNothingFoundView()
+            }
         } else {
-            viewController?.showCollection()
+            viewController?.showCollectionAndFilters()
+            viewController?.hideNothingFoundView()
         }
         
         viewController?.trackersCollectionView.reloadData()
@@ -78,19 +88,37 @@ final class TrackersCollectionService: NSObject, UICollectionViewDataSource, UIC
     
     private func filteredCategories() -> [TrackerCategory] {
         let calendar = Calendar.current
-        let weekdayNumber = calendar.component(.weekday, from: currentDate ?? Date())
+        let selectedDate = currentDate ?? Date()
+        
+        let weekdayNumber = calendar.component(.weekday, from: selectedDate)
         let adjustedIndex = (weekdayNumber + 5) % 7
-        guard let currentWeekday = WeekDays(rawValue: adjustedIndex) else {
-            return []
-        }
+        guard let currentWeekday = WeekDays(rawValue: adjustedIndex) else { return [] }
+        
         let searchLowercased = searchText.lowercased().trimmingCharacters(in: .whitespacesAndNewlines)
         
         return categories.compactMap { category in
             let filteredTrackers = category.trackers.filter { tracker in
                 let matchesSchedule = tracker.schedule.isEmpty || tracker.schedule.contains(currentWeekday)
+                let isCompleted = completedTrackers.contains {
+                    $0.id == tracker.id && calendar.isDate($0.date, inSameDayAs: selectedDate)
+                }
                 let matchesSearch = searchLowercased.isEmpty || tracker.name.lowercased().contains(searchLowercased)
-                return matchesSchedule && matchesSearch
+                
+                switch currentFilter {
+                case NSLocalizedString("todayTrackers", comment: ""):
+                    return matchesSchedule && matchesSearch
+                    
+                case NSLocalizedString("completedTrackers", comment: ""):
+                    return isCompleted && matchesSchedule && matchesSearch
+                    
+                case NSLocalizedString("incompleteTrackers", comment: ""):
+                    return !isCompleted && matchesSchedule && matchesSearch
+                    
+                default:
+                    return matchesSchedule && matchesSearch
+                }
             }
+            
             return filteredTrackers.isEmpty ? nil : TrackerCategory(title: category.title, trackers: filteredTrackers)
         }
     }

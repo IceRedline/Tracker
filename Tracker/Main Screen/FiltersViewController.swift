@@ -67,10 +67,7 @@ extension FiltersViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int { 4 }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(
-            withIdentifier: CategoryAndFilterTableViewCell.reuseIdentifier,
-            for: indexPath
-        ) as? CategoryAndFilterTableViewCell else {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: CategoryAndFilterTableViewCell.reuseIdentifier, for: indexPath) as? CategoryAndFilterTableViewCell else {
             return UITableViewCell()
         }
         
@@ -100,7 +97,13 @@ extension FiltersViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         selectedFilter = filters[indexPath.row]
-        TrackersCollectionService.shared.selectedFilter = selectedFilter
+        print("выбран фильтр: \(selectedFilter)")
+        TrackersCollectionService.shared.currentFilter = selectedFilter
+        
+        if selectedFilter == NSLocalizedString("todayTrackers", comment: "") {
+            NotificationCenter.default.post(name: .setTodayDate, object: nil)
+        }
+        
         dismiss(animated: true)
     }
 }

@@ -56,6 +56,27 @@ final class TrackersViewController: UIViewController {
         return button
     }()
     
+    private lazy var nothingFoundView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .ypWhite
+        let image = UIImageView(image: .thinkingEmoji)
+        let label = UILabel()
+        image.translatesAutoresizingMaskIntoConstraints = false
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.text = "Ничего не найдено"
+        label.font = UIFont.systemFont(ofSize: 12, weight: .medium)
+        view.addSubview(image)
+        view.addSubview(label)
+        NSLayoutConstraint.activate([
+            image.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            image.topAnchor.constraint(equalTo: view.topAnchor),
+            label.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            label.topAnchor.constraint(equalTo: image.bottomAnchor),
+        ])
+        view.isHidden = true
+        return view
+    }()
+    
     lazy var trackersCollectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
     
     override func viewDidLoad() {
@@ -75,20 +96,33 @@ final class TrackersViewController: UIViewController {
         
         loadViews()
         loadConstraints()
+        //hideNothingFoundView()
     }
     
     func hideCollection() {
         trackersCollectionView.isHidden = true
     }
+    func hidefilters() {
+        filtersButton.isHidden = true
+    }
     
-    func showCollection() {
+    func showNothingFoundView() {
+        nothingFoundView.isHidden = false
+    }
+    
+    func hideNothingFoundView() {
+        nothingFoundView.isHidden = true
+    }
+    
+    func showCollectionAndFilters() {
         trackersCollectionView.isHidden = false
+        filtersButton.isHidden = false
     }
     
     private func loadViews() {
         view.backgroundColor = .ypWhite
         trackersCollectionView.backgroundColor = .ypWhite
-        [searchField ,starImage, questionLabel, trackersCollectionView, filtersButton].forEach {
+        [searchField ,starImage, questionLabel, trackersCollectionView, filtersButton, nothingFoundView].forEach {
             $0.translatesAutoresizingMaskIntoConstraints = false
             view.addSubview($0)
         }
@@ -115,7 +149,11 @@ final class TrackersViewController: UIViewController {
             filtersButton.widthAnchor.constraint(equalToConstant: 114),
             filtersButton.heightAnchor.constraint(equalToConstant: 50),
             filtersButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            filtersButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -16)
+            filtersButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -24),
+            nothingFoundView.widthAnchor.constraint(equalToConstant: 340),
+            nothingFoundView.heightAnchor.constraint(equalToConstant: 120),
+            nothingFoundView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            nothingFoundView.topAnchor.constraint(equalTo: view.topAnchor, constant: 400),
         ])
     }
     
@@ -127,7 +165,8 @@ final class TrackersViewController: UIViewController {
     }
     
     @objc func filterButtonTapped() {
-        let filtersVC = FiltersViewController(selectedCategory: trackersCollectionService.selectedFilter)
+        let filtersVC = FiltersViewController(selectedCategory: trackersCollectionService.currentFilter)
+        print(trackersCollectionService.currentFilter)
         present(filtersVC, animated: true)
     }
 }
