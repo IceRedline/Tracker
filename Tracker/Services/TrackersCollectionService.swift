@@ -125,8 +125,36 @@ final class TrackersCollectionService: NSObject, UICollectionViewDataSource, UIC
     }
     
     private func pinTracker(for indexPath: IndexPath) {
-        #warning("переименовывать категорию")
-        //cell.pinImageView.isHidden = false
+        var tracker = filteredCategories()[indexPath.section].trackers[indexPath.item]
+        let isPinned = filteredCategories()[indexPath.section].title == "Закрепленные"
+        let originalCategory = tracker.originalCategory
+        
+        print("Вызван трекер, закрепление: \(isPinned)")
+        
+        switch isPinned {
+        case true:
+            tracker.originalCategory = nil
+            print("Сброшена ориг категория")
+            
+        case false:
+            tracker.originalCategory = filteredCategories()[indexPath.section].title
+            print("назначена ориг категория перед закреплением")
+        }
+        
+        do {
+            let categoryTitle = isPinned ? (originalCategory ?? "Без категории") : "Закрепленные"
+            print("Трекер будет помещен в категорию \(categoryTitle)")
+            let categoryData = try TrackerCategoryStore.shared.findOrCreateCategory(with: categoryTitle)
+            
+            try TrackerStore.shared.addNewTracker(tracker, to: categoryData)
+            
+        } catch {
+            print("Ошибка сохранения: \(error)")
+        }
+        
+        deleteTracker(at: indexPath)
+        
+        TrackersCollectionService.shared.reload()
         reload()
     }
     
@@ -171,6 +199,7 @@ final class TrackersCollectionService: NSObject, UICollectionViewDataSource, UIC
         cell.delegate = self
         
         let tracker = filteredCategories()[indexPath.section].trackers[indexPath.item]
+        let trackerCategory = filteredCategories()[indexPath.section].title
         let current = currentDate ?? Date()
         
         let isCompleted = completedTrackers.contains {
@@ -185,6 +214,9 @@ final class TrackersCollectionService: NSObject, UICollectionViewDataSource, UIC
             emoji: tracker.emoji,
             count: completedTrackers.filter { $0.id == tracker.id }.count
         )
+        
+        
+        cell.pinImageView.isHidden = trackerCategory == "Закрепленные" ? false : true
         
         return cell
     }
@@ -212,10 +244,11 @@ final class TrackersCollectionService: NSObject, UICollectionViewDataSource, UIC
     
     func collectionView(_ collectionView: UICollectionView, contextMenuConfigurationForItemsAt indexPaths: [IndexPath], point: CGPoint) -> UIContextMenuConfiguration? {
         guard let indexPath = indexPaths.first else { return nil }
+        let categoryName = filteredCategories()[indexPath.section].title
         
         return UIContextMenuConfiguration(actionProvider: { actions in
             return UIMenu(children: [
-                UIAction(title: NSLocalizedString("pin", comment: "")) { [weak self] _ in
+                UIAction(title: categoryName == "Закрепленные" ? NSLocalizedString("unpin", comment: "") : NSLocalizedString("pin", comment: "")) { [weak self] _ in
                     self?.pinTracker(for: indexPath)
                 },
                 UIAction(title: NSLocalizedString("edit", comment: "")) { [weak self] _ in

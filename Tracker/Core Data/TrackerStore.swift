@@ -61,25 +61,13 @@ final class TrackerStore: NSObject {
         try context.save()
     }
     
-    func updateTracker(with id: UUID, newTracker: Tracker) throws {
-        let fetchRequest: NSFetchRequest = TrackerData.fetchRequest()
-        fetchRequest.predicate = NSPredicate(format: "id == %@", id as CVarArg)
-        fetchRequest.fetchLimit = 1
-        
-        guard let trackerData = try context.fetch(fetchRequest).first else {
-            throw TrackerStoreError.decodingErrorInvalidId
-        }
-        
-        updateExistingTracker(trackerData, with: newTracker)
-        try context.save()
-    }
-    
     func updateExistingTracker(_ trackerCorData: TrackerData, with tracker: Tracker) {
         trackerCorData.id = tracker.id
         trackerCorData.name = tracker.name
         trackerCorData.emoji = tracker.emoji
         trackerCorData.colorHex = uiColorMarshalling.hexString(from: tracker.color)
         trackerCorData.schedule = tracker.schedule.map { String($0.rawValue) }.joined(separator: ",")
+        trackerCorData.originalCategory = tracker.originalCategory
     }
     
     func deleteTracker(with id: UUID) throws {
@@ -113,8 +101,9 @@ final class TrackerStore: NSObject {
         
         let rawValues = scheduleString.components(separatedBy: ",")
         let schedule = rawValues.compactMap { Int($0) }.compactMap { WeekDays(rawValue: $0) }
+        let originalCategory = trackerCorData.originalCategory
         
-        return Tracker(id: id, name: name, color: uiColorMarshalling.color(from: colorHex), emoji: emoji, schedule: schedule)
+        return Tracker(id: id, name: name, color: uiColorMarshalling.color(from: colorHex), emoji: emoji, schedule: schedule, originalCategory: originalCategory)
     }
 }
 

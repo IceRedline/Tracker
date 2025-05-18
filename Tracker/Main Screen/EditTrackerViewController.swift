@@ -299,11 +299,21 @@ final class EditTrackerViewController: UIViewController, ScheduleServiceDelegate
         )
         
         do {
-            try TrackerStore.shared.updateTracker(with: trackerID, newTracker: updatedTracker)
-            TrackersCollectionService.shared.reload()
+            let categoryData = try TrackerCategoryStore.shared.findOrCreateCategory(with: selectedCategory)
+            
+            try TrackerStore.shared.addNewTracker(updatedTracker, to: categoryData)
+            
         } catch {
-            print("Ошибка обновления: \(error)")
+            print("Ошибка сохранения: \(error)")
         }
+        
+        do {
+            try TrackerStore.shared.deleteTracker(with: trackerID)
+        } catch {
+            print("Ошибка удаления трекера: \(error)")
+        }
+        
+        TrackersCollectionService.shared.reload()
         
         dismiss(animated: true)
     }
