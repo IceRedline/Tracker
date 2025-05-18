@@ -13,5 +13,6 @@ enum Constants {
     static let buttonHeight: CGFloat = 60
     static let categoryCellIdentifier = "buttonCell"
     static let trackerCellIdentifier = "trackerCell"
+    static let statisticsCellIdentifier = "statisticsCell"
     static let headerIdentifier = "header"
 }
