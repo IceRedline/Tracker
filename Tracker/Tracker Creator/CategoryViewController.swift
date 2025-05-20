@@ -9,7 +9,7 @@ import UIKit
 
 final class CategoryViewController: UIViewController {
     
-    let tableView = UITableView()
+    let categoriesTableView = UITableView()
     var selectedCategory: String
     
     var viewModel: CategoryViewModel
@@ -17,16 +17,17 @@ final class CategoryViewController: UIViewController {
     
     let titleLabel: UILabel = {
         let label = UILabel()
-        label.text = "Категория"
+        label.text = NSLocalizedString("category", comment: "")
         label.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         return label
     }()
     
     private lazy var addCategoryButton: UIButton = {
         let button = UIButton()
-        button.setTitle("Добавить категорию", for: .normal)
+        button.setTitle(NSLocalizedString("addCategory", comment: ""), for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         button.backgroundColor = .ypBlack
+        button.setTitleColor(.ypWhite, for: .normal)
         button.layer.cornerRadius = Constants.cornerRadius
         button.addTarget(self, action: #selector(addCategoryButtonTapped), for: .touchUpInside)
         return button
@@ -49,9 +50,9 @@ final class CategoryViewController: UIViewController {
         
         bindViewModel()
         
-        tableView.delegate = viewModel
-        tableView.dataSource = viewModel
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
+        categoriesTableView.delegate = viewModel
+        categoriesTableView.dataSource = viewModel
+        categoriesTableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
         
         setupViewsAndActivateConstraints()
         
@@ -60,7 +61,7 @@ final class CategoryViewController: UIViewController {
     
     private func bindViewModel() {
         viewModel.onCategoriesUpdated = { [weak self] in
-            self?.tableView.reloadData()
+            self?.categoriesTableView.reloadData()
         }
         
         viewModel.onCategorySelected = { [weak self] categoryTitle in
@@ -95,37 +96,38 @@ final class CategoryViewController: UIViewController {
     private func showDeleteConfirmation(confirmAction: @escaping () -> Void) {
         let alert = UIAlertController(
             title: nil,
-            message: "Эта категория точно не нужна?",
+            message: NSLocalizedString("areYouSure", comment: ""),
             preferredStyle: .actionSheet
         )
         
-        alert.addAction(UIAlertAction(title: "Удалить", style: .destructive) { _ in
+        alert.addAction(UIAlertAction(title: NSLocalizedString("delete", comment: ""), style: .destructive) { _ in
             confirmAction()
         })
         
-        alert.addAction(UIAlertAction(title: "Отмена", style: .cancel))
+        alert.addAction(UIAlertAction(title: NSLocalizedString("cancel", comment: ""), style: .cancel))
         
         present(alert, animated: true)
     }
     
     private func setupViewsAndActivateConstraints() {
-        tableView.register(CategoryTableViewCell.self, forCellReuseIdentifier: CategoryTableViewCell.reuseIdentifier)
+        categoriesTableView.register(CategoryAndFilterTableViewCell.self, forCellReuseIdentifier: CategoryAndFilterTableViewCell.reuseIdentifier)
         modalPresentationStyle = .currentContext
         view.backgroundColor = .ypWhite
+        categoriesTableView.backgroundColor = .ypWhite
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
-        tableView.layer.cornerRadius = Constants.cornerRadius
-        tableView.translatesAutoresizingMaskIntoConstraints = false
+        categoriesTableView.layer.cornerRadius = Constants.cornerRadius
+        categoriesTableView.translatesAutoresizingMaskIntoConstraints = false
         addCategoryButton.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(titleLabel)
-        view.addSubview(tableView)
+        view.addSubview(categoriesTableView)
         view.addSubview(addCategoryButton)
         NSLayoutConstraint.activate([
             titleLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             titleLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: 30),
-            tableView.widthAnchor.constraint(equalTo: view.widthAnchor, constant: -(Constants.defaultPadding * 2)),
-            tableView.heightAnchor.constraint(equalToConstant: 525),
-            tableView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            tableView.topAnchor.constraint(equalTo: titleLabel.topAnchor, constant: 50),
+            categoriesTableView.widthAnchor.constraint(equalTo: view.widthAnchor, constant: -(Constants.defaultPadding * 2)),
+            categoriesTableView.heightAnchor.constraint(equalToConstant: 525),
+            categoriesTableView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            categoriesTableView.topAnchor.constraint(equalTo: titleLabel.topAnchor, constant: 50),
             addCategoryButton.widthAnchor.constraint(equalTo: view.widthAnchor, constant: -40),
             addCategoryButton.heightAnchor.constraint(equalToConstant: Constants.buttonHeight),
             addCategoryButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
@@ -134,18 +136,18 @@ final class CategoryViewController: UIViewController {
     }
     
     @objc private func addCategoryButtonTapped() {
-        let alert = UIAlertController(title: "Новая категория", message: nil, preferredStyle: .alert)
+        let alert = UIAlertController(title: NSLocalizedString("newCategory", comment: ""), message: nil, preferredStyle: .alert)
         alert.addTextField { textField in
-            textField.placeholder = "Введите название"
+            textField.placeholder = NSLocalizedString("enterName", comment: "")
         }
         
-        let addAction = UIAlertAction(title: "Добавить", style: .default) { [weak self] _ in
+        let addAction = UIAlertAction(title: NSLocalizedString("add", comment: ""), style: .default) { [weak self] _ in
             guard let title = alert.textFields?.first?.text, !title.isEmpty else { return }
             self?.viewModel.addCategory(title: title)
         }
         
         alert.addAction(addAction)
-        alert.addAction(UIAlertAction(title: "Отмена", style: .cancel))
+        alert.addAction(UIAlertAction(title: NSLocalizedString("cancel", comment: ""), style: .cancel))
         present(alert, animated: true)
     }
 }

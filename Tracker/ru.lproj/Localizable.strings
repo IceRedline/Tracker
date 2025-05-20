@@ -1,0 +1,57 @@
+/* 
+  Localizable.strings
+  Tracker
+
+  Created by Артем Табенский on 16.05.2025.
+  
+*/
+
+"trackWhatYouWant" = "Отслеживайте только то, что хотите";
+"evenIfItIsNot" = "Даже если это не литры воды и йога";
+"whatATech" = "Вот это технологии!";
+"trackers" = "Трекеры";
+"statistics" = "Статистика";
+"search" = "Поиск";
+"whatToTrack" = "Что будем отслеживать?";
+"trackerCreation" = "Создание трекера";
+"habit" = "Привычка";
+"irregularActivity" = "Нерегулярное событие";
+"newHabit" = "Новая привычка";
+"newIrregularActivity" = "Новое нерегулярное событие";
+"enterTrackerName" = "Введите название трекера";
+"emoji" = "Эмодзи";
+"color" = "Цвет";
+"cancel" = "Отменить";
+"create" = "Создать";
+"category" = "Категория";
+"schedule" = "Расписание";
+"done" = "Готово";
+"monday" = "Понедельник";
+"tuesday" = "Вторник";
+"wednesday" = "Среда";
+"thursday" = "Четверг";
+"friday" = "Пятница";
+"saturday" = "Суббота";
+"sunday" = "Воскресенье";
+"addCategory" = "Добавить категорию";
+"areYouSure" = "Эта категория точно не нужна?";
+"delete" = "Удалить";
+"newCategory" = "Новая категория";
+"enterName" = "Введите название";
+"add" = "Добавить";
+"edit" = "Редактировать";
+"noCategory" = "Без категории";
+"editCategory" = "Редактирование категории";
+"edit" = "Редактировать";
+"pin" = "Закрепить";
+"unpin" = "Открепить";
+"pinned" = "Закрепленные";
+"save" = " Сохранить";
+"nothingToTrack" = "Анализировать пока нечего";
+"filters" = "Фильтры";
+"allTrackers" = "Все трекеры";
+"todayTrackers" = "Трекеры на сегодня";
+"completedTrackers" = "Завершенные";
+"incompleteTrackers" = "Незавершенные";
+"trackersCompleted" = "Трекеров завершено";
+"nothingFound" = "Ничего не найдено";

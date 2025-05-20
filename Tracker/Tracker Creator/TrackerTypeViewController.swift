@@ -11,7 +11,7 @@ final class TrackerTypeViewController: UIViewController {
     
     private let titleLabel: UILabel = {
         let label = UILabel()
-        label.text = "Создание трекера"
+        label.text = NSLocalizedString("trackerCreation", comment: "")
         label.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         return label
     }()
@@ -19,8 +19,9 @@ final class TrackerTypeViewController: UIViewController {
     private lazy var habitButton: UIButton = {
         let button = UIButton()
         button.backgroundColor = .ypBlack
-        button.setTitle("Привычка", for: .normal)
+        button.setTitle(NSLocalizedString("habit", comment: ""), for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
+        button.setTitleColor(.ypWhite, for: .normal)
         button.layer.cornerRadius = Constants.cornerRadius
         button.addTarget(self, action: #selector(habitButtonTapped), for: .touchUpInside)
         return button
@@ -29,8 +30,9 @@ final class TrackerTypeViewController: UIViewController {
     private lazy var irregularEventButton: UIButton = {
         let button = UIButton()
         button.backgroundColor = .ypBlack
-        button.setTitle("Нерегулярное событие", for: .normal)
+        button.setTitle(NSLocalizedString("irregularActivity", comment: ""), for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
+        button.setTitleColor(.ypWhite, for: .normal)
         button.layer.cornerRadius = Constants.cornerRadius
         button.addTarget(self, action: #selector(irregularEventButtonTapped), for: .touchUpInside)
         return button
@@ -65,12 +67,12 @@ final class TrackerTypeViewController: UIViewController {
     }
     
     @objc private func habitButtonTapped(sender: UIButton) {
-        let vc = NewTrackerViewController(titleName: "Новая привычка")
+        let vc = NewTrackerViewController(titleName: NSLocalizedString("newHabit", comment: ""))
         present(vc, animated: true)
     }
     
     @objc private func irregularEventButtonTapped(sender: UIButton) {
-        let vc = NewTrackerViewController(titleName: "Новое нерегулярное событие")
+        let vc = NewTrackerViewController(titleName: NSLocalizedString("newIrregularActivity", comment: ""))
         present(vc, animated: true)
     }
 }

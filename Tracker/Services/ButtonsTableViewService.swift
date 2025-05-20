@@ -9,10 +9,10 @@ import UIKit
 
 final class ButtonsTableViewService: NSObject, UITableViewDelegate, UITableViewDataSource {
     
-    weak var viewController: NewTrackerViewController?
+    var viewController: ButtonsTableViewServiceViewControllerProtocol?
     
-    let trackerButtonsTexts = ["Категория", "Расписание"]
-    let irregularActionButtonTexts = ["Категория"]
+    let trackerButtonsTexts = [NSLocalizedString("category", comment: ""), NSLocalizedString("schedule", comment: "")]
+    let irregularActionButtonTexts = [NSLocalizedString("category", comment: "")]
     var chosenType: String
     
     init(chosenType: String) {
@@ -20,11 +20,11 @@ final class ButtonsTableViewService: NSObject, UITableViewDelegate, UITableViewD
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        chosenType == "Новая привычка" ? trackerButtonsTexts.count : irregularActionButtonTexts.count
+        chosenType == NSLocalizedString("newHabit", comment: "") ? trackerButtonsTexts.count : irregularActionButtonTexts.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = UITableViewCell(style: .default, reuseIdentifier: Constants.categoryCellIdentifier)
+        let cell = UITableViewCell(style: .default, reuseIdentifier: Constants.categoryAndFilterCellIdentifier)
         cell.backgroundColor = .background
         
         let titleLabel = UILabel()

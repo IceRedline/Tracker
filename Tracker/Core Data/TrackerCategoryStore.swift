@@ -83,6 +83,18 @@ final class TrackerCategoryStore {
         }
         NotificationCenter.default.post(name: .categoryDidChange, object: nil)
     }
+    
+    func createPinnedCategoryIfNeeded() throws {
+        let categoryTitle = NSLocalizedString("pinned", comment: "Закрепленные")
+        let fetchRequest: NSFetchRequest<TrackerCategoryData> = TrackerCategoryData.fetchRequest()
+        fetchRequest.predicate = NSPredicate(format: "title == %@", categoryTitle)
+        
+        guard try context.count(for: fetchRequest) == 0 else { return }
+        
+        let categoryData = TrackerCategoryData(context: context)
+        categoryData.title = categoryTitle
+        try context.save()
+    }
 
     private func category(from data: TrackerCategoryData) throws -> TrackerCategory {
         guard let title = data.title else {

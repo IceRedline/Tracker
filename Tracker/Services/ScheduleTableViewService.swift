@@ -11,7 +11,15 @@ final class ScheduleTableViewService: NSObject, UITableViewDelegate, UITableView
     
     weak var delegate: ScheduleServiceDelegate?
     
-    let dayNames = ["Понедельник", "Вторник", "Среда", "Четверг", "Пятница", "Суббота", "Воскресенье"]
+    let dayNames = [
+        NSLocalizedString("monday", comment: ""),
+        NSLocalizedString("tuesday", comment: ""),
+        NSLocalizedString("wednesday", comment: ""),
+        NSLocalizedString("thursday", comment: ""),
+        NSLocalizedString("friday", comment: ""),
+        NSLocalizedString("saturday", comment: ""),
+        NSLocalizedString("sunday", comment: "")
+    ]
     var selectedDays: [WeekDays] = []
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int { dayNames.count }

@@ -14,29 +14,48 @@ final class TabBarController: UITabBarController {
         self.setupTabs()
         self.modalPresentationStyle = .fullScreen
         
-        self.tabBar.tintColor = .ypBlue
-        self.tabBar.barTintColor = .ypWhite
-        self.tabBar.unselectedItemTintColor = .ypGray
+        configureTabBarAppearance()
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(applyTodayDate), name: .setTodayDate, object: nil)
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        AnalyticsService.shared.report(event: "open", screen: "Main")
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        AnalyticsService.shared.report(event: "close", screen: "Main")
+    }
+    
+    private func configureTabBarAppearance() {
+        tabBar.tintColor = .ypBlue
+        tabBar.unselectedItemTintColor = .ypGray
+        tabBar.barTintColor = .ypWhite
+    }
+    
+    private func makeDatePickerItem() -> UIBarButtonItem {
+        let datePicker = UIDatePicker()
+        datePicker.tintColor = .ypBlue
+        datePicker.datePickerMode = .date
+        datePicker.preferredDatePickerStyle = .compact
+        datePicker.locale = Locale.current
+        datePicker.addTarget(self, action: #selector(dateChanged(_:)), for: .valueChanged)
+        return UIBarButtonItem(customView: datePicker)
     }
     
     private func setupTabs() {
-        let datePicker = UIDatePicker()
-        datePicker.datePickerMode = .date
-        datePicker.preferredDatePickerStyle = .compact
-        datePicker.locale = Locale(identifier: "ru_RU")
-        
-        datePicker.addTarget(self, action: #selector(dateChanged(_:)), for: .valueChanged)
-        let datePickerItem = UIBarButtonItem(customView: datePicker)
         
         let trackersViewController = self.createNav(
-            title: "Трекеры",
+            title: NSLocalizedString("trackers", comment: ""),
             image: .trackersTabBar,
             leftButtonItem: UIBarButtonItem(image: .addTracker, style: .plain, target: nil, action: #selector(addTrackerButtonTapped)),
-            rightButtonItem: datePickerItem,
+            rightButtonItem: makeDatePickerItem(),
             vc: TrackersViewController()
         )
         let statisticsViewController = self.createNav(
-            title: "Статистика",
+            title: NSLocalizedString("statistics", comment: ""),
             image: .statsTabBar,
             leftButtonItem: nil,
             rightButtonItem: nil,
@@ -61,10 +80,24 @@ final class TabBarController: UITabBarController {
     @objc private func addTrackerButtonTapped() {
         let vc = TrackerTypeViewController()
         present(vc, animated: true)
+        
+        AnalyticsService.shared.report(event: "click", screen: "Main", item: "add_track")
     }
     
     @objc private func dateChanged(_ sender: UIDatePicker) {
         TrackersCollectionService.shared.currentDate = sender.date
         TrackersCollectionService.shared.reload()
     }
+    
+    @objc private func applyTodayDate() {
+        if let datePickerItem = (self.viewControllers?.first as? UINavigationController)?
+            .viewControllers.first?.navigationItem.rightBarButtonItem?.customView as? UIDatePicker {
+            datePickerItem.setDate(Date(), animated: true)
+            self.dateChanged(datePickerItem)
+        }
+    }
+}
+
+extension Notification.Name {
+    static let setTodayDate = Notification.Name("setTodayDate")
 }

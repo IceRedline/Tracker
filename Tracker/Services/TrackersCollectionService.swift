@@ -1,9 +1,3 @@
-//
-//  TrackersCollectionService.swift
-//  Tracker
-//
-//  Created by Артем Табенский on 04.04.2025.
-//
 
 import UIKit
 
@@ -21,6 +15,12 @@ final class TrackersCollectionService: NSObject, UICollectionViewDataSource, UIC
     private var completedTrackers: [TrackerRecord] = []
     
     var currentDate: Date?
+    var searchText = ""
+    var currentFilter: FilterType = FilterType.all {
+        didSet {
+            reload()
+        }
+    }
     
     private override init() {}
     
@@ -32,8 +32,15 @@ final class TrackersCollectionService: NSObject, UICollectionViewDataSource, UIC
         
         if filtered.isEmpty {
             viewController?.hideCollection()
+            if currentFilter == FilterType.all && searchText.isEmpty {
+                viewController?.hidefilters()
+                viewController?.hideNothingFoundView()
+            } else {
+                viewController?.showNothingFoundView()
+            }
         } else {
-            viewController?.showCollection()
+            viewController?.showCollectionAndFilters()
+            viewController?.hideNothingFoundView()
         }
         
         viewController?.trackersCollectionView.reloadData()
@@ -67,23 +74,51 @@ final class TrackersCollectionService: NSObject, UICollectionViewDataSource, UIC
         }
     }
     
+    func deleteTracker(at indexPath: IndexPath) {
+        do {
+            let trackerID = filteredCategories()[indexPath.section].trackers[indexPath.item].id
+            try trackerStore.deleteTracker(with: trackerID)
+            
+            reload()
+            
+        } catch {
+            print("Ошибка удаления трекера: \(error)")
+        }
+    }
+    
     private func filteredCategories() -> [TrackerCategory] {
-        guard let currentDate = currentDate else {
-            return categories
-        }
-        
         let calendar = Calendar.current
-        let weekdayNumber = calendar.component(.weekday, from: currentDate)
+        let selectedDate = currentDate ?? Date()
+        
+        let weekdayNumber = calendar.component(.weekday, from: selectedDate)
         let adjustedIndex = (weekdayNumber + 5) % 7
-        guard let currentWeekday = WeekDays(rawValue: adjustedIndex) else {
-            return []
-        }
+        guard let currentWeekday = WeekDays(rawValue: adjustedIndex) else { return [] }
+        
+        let searchLowercased = searchText.lowercased().trimmingCharacters(in: .whitespacesAndNewlines)
         
         return categories.compactMap { category in
             let filteredTrackers = category.trackers.filter { tracker in
-                if tracker.schedule.isEmpty { return true }
-                return tracker.schedule.contains(currentWeekday)
+                let matchesSchedule = tracker.schedule.isEmpty || tracker.schedule.contains(currentWeekday)
+                let isCompleted = completedTrackers.contains {
+                    $0.id == tracker.id && calendar.isDate($0.date, inSameDayAs: selectedDate)
+                }
+                let matchesSearch = searchLowercased.isEmpty || tracker.name.lowercased().contains(searchLowercased)
+                
+                switch currentFilter {
+                case FilterType.today:
+                    return matchesSchedule && matchesSearch
+                    
+                case FilterType.completed:
+                    return isCompleted && matchesSchedule && matchesSearch
+                    
+                case FilterType.incomplete:
+                    return !isCompleted && matchesSchedule && matchesSearch
+                    
+                default:
+                    return matchesSchedule && matchesSearch
+                }
             }
+            
             return filteredTrackers.isEmpty ? nil : TrackerCategory(title: category.title, trackers: filteredTrackers)
         }
     }
@@ -119,6 +154,67 @@ final class TrackersCollectionService: NSObject, UICollectionViewDataSource, UIC
         reload()
     }
     
+    private func pinTracker(for indexPath: IndexPath) {
+        var tracker = filteredCategories()[indexPath.section].trackers[indexPath.item]
+        let isPinned = filteredCategories()[indexPath.section].title == "Закрепленные"
+        let originalCategory = tracker.originalCategory
+        
+        print("Вызван трекер, закрепление: \(isPinned)")
+        
+        switch isPinned {
+        case true:
+            tracker.originalCategory = nil
+            print("Сброшена ориг категория")
+            
+        case false:
+            tracker.originalCategory = filteredCategories()[indexPath.section].title
+            print("назначена ориг категория перед закреплением")
+        }
+        
+        do {
+            let categoryTitle = isPinned ? (originalCategory ?? "Без категории") : "Закрепленные"
+            print("Трекер будет помещен в категорию \(categoryTitle)")
+            let categoryData = try TrackerCategoryStore.shared.findOrCreateCategory(with: categoryTitle)
+            
+            try TrackerStore.shared.addNewTracker(tracker, to: categoryData)
+            
+        } catch {
+            print("Ошибка сохранения: \(error)")
+        }
+        
+        deleteTracker(at: indexPath)
+        
+        TrackersCollectionService.shared.reload()
+        reload()
+    }
+    
+    private func showEditViewController(for indexPath: IndexPath) {
+        let tracker = filteredCategories()[indexPath.section].trackers[indexPath.item]
+        let trackerID = tracker.id
+        let count = completedTrackers.filter { $0.id == trackerID }.count
+        let stringCount = String.localizedStringWithFormat(NSLocalizedString("numberOfDays", comment: ""), count)
+        let categoryName = filteredCategories()[indexPath.section].title
+        
+        let editVC = EditTrackerViewController(
+            trackerID: trackerID,
+            daysCount: stringCount,
+            trackerTitle: tracker.name,
+            schedule: tracker.schedule,
+            selectedCategory: categoryName,
+            color: tracker.color,
+            emoji: tracker.emoji
+        )
+        viewController?.present(editVC, animated: true)
+        
+        AnalyticsService.shared.report(event: "click", screen: "Main", item: "edit")
+    }
+    
+    private func showDeleteConfirmation(for indexPath: IndexPath) {
+        deleteTracker(at: indexPath)
+        
+        AnalyticsService.shared.report(event: "click", screen: "Main", item: "delete")
+    }
+    
     // MARK: - UICollectionViewDataSource
     
     func numberOfSections(in collectionView: UICollectionView) -> Int {
@@ -137,6 +233,7 @@ final class TrackersCollectionService: NSObject, UICollectionViewDataSource, UIC
         cell.delegate = self
         
         let tracker = filteredCategories()[indexPath.section].trackers[indexPath.item]
+        let trackerCategory = filteredCategories()[indexPath.section].title
         let current = currentDate ?? Date()
         
         let isCompleted = completedTrackers.contains {
@@ -149,8 +246,11 @@ final class TrackersCollectionService: NSObject, UICollectionViewDataSource, UIC
             color: tracker.color,
             name: tracker.name,
             emoji: tracker.emoji,
-            count: String(completedTrackers.filter { $0.id == tracker.id }.count)
+            count: completedTrackers.filter { $0.id == tracker.id }.count
         )
+        
+        
+        cell.pinImageView.isHidden = trackerCategory == "Закрепленные" ? false : true
         
         return cell
     }
@@ -172,6 +272,27 @@ final class TrackersCollectionService: NSObject, UICollectionViewDataSource, UIC
             ])
         }
         return header
+    }
+    
+    // MARK: - UICollectionViewDelegate
+    
+    func collectionView(_ collectionView: UICollectionView, contextMenuConfigurationForItemsAt indexPaths: [IndexPath], point: CGPoint) -> UIContextMenuConfiguration? {
+        guard let indexPath = indexPaths.first else { return nil }
+        let categoryName = filteredCategories()[indexPath.section].title
+        
+        return UIContextMenuConfiguration(actionProvider: { actions in
+            return UIMenu(children: [
+                UIAction(title: categoryName == "Закрепленные" ? NSLocalizedString("unpin", comment: "") : NSLocalizedString("pin", comment: "")) { [weak self] _ in
+                    self?.pinTracker(for: indexPath)
+                },
+                UIAction(title: NSLocalizedString("edit", comment: "")) { [weak self] _ in
+                    self?.showEditViewController(for: indexPath)
+                },
+                UIAction(title: NSLocalizedString("delete", comment: ""), attributes: .destructive) { [weak self] _ in
+                    self?.showDeleteConfirmation(for: indexPath)
+                },
+            ])
+        })
     }
     
     // MARK: - UICollectionViewDelegateFlowLayout
