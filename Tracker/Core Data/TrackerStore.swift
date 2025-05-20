@@ -71,15 +71,16 @@ final class TrackerStore: NSObject {
     }
     
     func deleteTracker(with id: UUID) throws {
-        let fetchRequest: NSFetchRequest = TrackerData.fetchRequest()
-        fetchRequest.predicate = NSPredicate(format: "id == %@", id as CVarArg)
-        fetchRequest.fetchLimit = 1
-        if let trackerToDelete = try context.fetch(fetchRequest).first {
+        let fetchRequest: NSFetchRequest<TrackerData> = TrackerData.fetchRequest()
+            fetchRequest.predicate = NSPredicate(format: "id == %@", id as CVarArg)
+            fetchRequest.fetchLimit = 1
+            
+            guard let trackerToDelete = try context.fetch(fetchRequest).first else {
+                throw TrackerStoreError.decodingErrorInvalidId
+            }
+            
             context.delete(trackerToDelete)
             try context.save()
-        } else {
-            throw TrackerStoreError.decodingErrorInvalidId
-        }
     }
     
     func tracker(from trackerCorData: TrackerData) throws -> Tracker {

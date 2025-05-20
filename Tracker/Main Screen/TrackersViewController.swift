@@ -165,7 +165,7 @@ final class TrackersViewController: UIViewController {
     }
     
     @objc func filterButtonTapped() {
-        let filtersVC = FiltersViewController(selectedCategory: trackersCollectionService.currentFilter)
+        let filtersVC = FiltersViewController(selectedFilter: trackersCollectionService.currentFilter)
         print(trackersCollectionService.currentFilter)
         present(filtersVC, animated: true)
         

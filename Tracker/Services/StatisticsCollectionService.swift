@@ -7,7 +7,7 @@
 
 import UIKit
 
-class StatisticsCollectionService: NSObject, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
+final class StatisticsCollectionService: NSObject, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     
     static let shared = StatisticsCollectionService()
     private let trackerRecordStore = TrackerRecordStore()

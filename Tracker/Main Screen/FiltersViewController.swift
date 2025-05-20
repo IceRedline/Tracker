@@ -9,10 +9,10 @@ import UIKit
 
 final class FiltersViewController: UIViewController {
     
-    let filters = [NSLocalizedString("allTrackers", comment: ""), NSLocalizedString("todayTrackers", comment: ""), NSLocalizedString("completedTrackers", comment: ""), NSLocalizedString("incompleteTrackers", comment: "")]
+    let filters = [FilterType.all, FilterType.today, FilterType.completed, FilterType.incomplete]
     
     let filtersTableView = UITableView()
-    var selectedFilter: String
+    var selectedFilter: FilterType
     
     let titleLabel: UILabel = {
         let label = UILabel()
@@ -21,8 +21,8 @@ final class FiltersViewController: UIViewController {
         return label
     }()
     
-    init(selectedCategory: String) {
-        self.selectedFilter = selectedCategory
+    init(selectedFilter: FilterType) {
+        self.selectedFilter = selectedFilter
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -37,19 +37,28 @@ final class FiltersViewController: UIViewController {
         filtersTableView.dataSource = self
         filtersTableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
         
-        setupViewsAndActivateConstraints()
+        setupView()
+        setupTableView()
+        setupConstraints()
     }
     
-    private func setupViewsAndActivateConstraints() {
-        filtersTableView.register(CategoryAndFilterTableViewCell.self, forCellReuseIdentifier: CategoryAndFilterTableViewCell.reuseIdentifier)
+    private func setupView() {
         modalPresentationStyle = .currentContext
         view.backgroundColor = .ypWhite
-        filtersTableView.backgroundColor = .ypWhite
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
-        filtersTableView.layer.cornerRadius = Constants.cornerRadius
-        filtersTableView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(titleLabel)
         view.addSubview(filtersTableView)
+        
+    }
+    
+    private func setupTableView() {
+        filtersTableView.register(CategoryAndFilterTableViewCell.self, forCellReuseIdentifier: CategoryAndFilterTableViewCell.reuseIdentifier)
+        filtersTableView.backgroundColor = .ypWhite
+        filtersTableView.layer.cornerRadius = Constants.cornerRadius
+        filtersTableView.translatesAutoresizingMaskIntoConstraints = false
+    }
+    
+    private func setupConstraints() {
         NSLayoutConstraint.activate([
             titleLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             titleLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: 30),
@@ -74,7 +83,7 @@ extension FiltersViewController: UITableViewDataSource {
         cell.backgroundColor = .background
         
         let filter = filters[indexPath.row]
-        cell.configure(with: filter, isSelected: filter == selectedFilter)
+        cell.configure(with: filter.localizedName, isSelected: filter.localizedName == selectedFilter.localizedName)
         
         if indexPath.row == filters.count - 1 {
             cell.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner]
@@ -100,7 +109,7 @@ extension FiltersViewController: UITableViewDelegate {
         print("выбран фильтр: \(selectedFilter)")
         TrackersCollectionService.shared.currentFilter = selectedFilter
         
-        if selectedFilter == NSLocalizedString("todayTrackers", comment: "") {
+        if selectedFilter == FilterType.today {
             NotificationCenter.default.post(name: .setTodayDate, object: nil)
         }
         

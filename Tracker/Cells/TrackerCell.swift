@@ -61,7 +61,8 @@ final class TrackerCell: UICollectionViewCell {
         daysCountLabel.translatesAutoresizingMaskIntoConstraints = false
         contentView.addSubview(daysCountLabel)
         
-        isCompleted ? completedButton.setImage(UIImage(systemName: "checkmark"), for: .normal) : completedButton.setImage(UIImage(systemName: "plus"), for: .normal)
+        updateCompletedButtonAppearance()
+        
         completedButton.layer.cornerRadius = Constants.cornerRadius
         completedButton.tintColor = .ypWhite
         completedButton.translatesAutoresizingMaskIntoConstraints = false
@@ -71,6 +72,12 @@ final class TrackerCell: UICollectionViewCell {
         pinImageView.isHidden = true
         pinImageView.translatesAutoresizingMaskIntoConstraints = false
         contentView.addSubview(pinImageView)
+    }
+    
+    private func updateCompletedButtonAppearance() {
+        let imageName = isCompleted ? "checkmark" : "plus"
+        completedButton.setImage(UIImage(systemName: imageName), for: .normal)
+        completedButton.alpha = isCompleted ? 0.3 : 1
     }
     
     private func setupConstraints() {
@@ -122,13 +129,11 @@ final class TrackerCell: UICollectionViewCell {
             return
         }
         if isCompleted {
+            updateCompletedButtonAppearance()
             isCompleted = false
-            completedButton.setImage(UIImage(systemName: "plus"), for: .normal)
-            completedButton.alpha = 1
         } else {
+            updateCompletedButtonAppearance()
             isCompleted = true
-            completedButton.setImage(UIImage(systemName: "checkmark"), for: .normal)
-            completedButton.alpha = 0.3
         }
         delegate?.trackerCellDidTapComplete(self, isCompleted: isCompleted)
         

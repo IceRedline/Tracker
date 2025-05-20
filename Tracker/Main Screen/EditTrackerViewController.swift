@@ -112,14 +112,29 @@ final class EditTrackerViewController: UIViewController, ScheduleServiceDelegate
     
     override func viewDidLoad() {
         super.viewDidLoad()
+    
+        setupView()
+        setupTableViewService()
+        setupLayout()
+        applyInitialValues()
+    }
+    
+    // MARK: - Methods
+    
+    private func setupView() {
         self.modalPresentationStyle = .currentContext
         view.backgroundColor = .ypWhite
         trackerNameTextField.text = trackerTitle
+    }
+    
+    private func setupTableViewService() {
         tableViewService = ButtonsTableViewService(chosenType: NSLocalizedString("newHabit", comment: ""))
         tableView.delegate = tableViewService
         tableView.dataSource = tableViewService
         tableViewService?.viewController = self
-        
+    }
+    
+    private func setupLayout() {
         setupLabels()
         setupEmojiCollectionView()
         setupColorsCollectionView()
@@ -127,12 +142,12 @@ final class EditTrackerViewController: UIViewController, ScheduleServiceDelegate
         setupHStackView()
         setupVStackView()
         setupAndAddElements()
-        
+    }
+    
+    private func applyInitialValues() {
         colorsCollectionService?.chosenColor = color
         emojiCollectionService?.chosenEmoji = emoji
     }
-    
-    // MARK: - Methods
     
     private func setupLabels() {
         titleLabel.text = "Редактирование привычки"
@@ -251,16 +266,6 @@ final class EditTrackerViewController: UIViewController, ScheduleServiceDelegate
         ])
     }
     
-    @objc private func textfieldChanged(_ sender: UITextField) {
-        if let text = sender.text, !text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
-            saveButton.isEnabled = true
-            saveButton.backgroundColor = .ypBlack
-        } else {
-            saveButton.isEnabled = false
-            saveButton.backgroundColor = .ypGray
-        }
-    }
-    
     func didSelectSchedule(days: [WeekDays]) {
         self.schedule = days
         print("Получены выбранные дни: \(days)")
@@ -283,13 +288,22 @@ final class EditTrackerViewController: UIViewController, ScheduleServiceDelegate
         present(scheduleVC, animated: true)
     }
     
+    @objc private func textfieldChanged(_ sender: UITextField) {
+        if let text = sender.text, !text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+            saveButton.isEnabled = true
+            saveButton.backgroundColor = .ypBlack
+        } else {
+            saveButton.isEnabled = false
+            saveButton.backgroundColor = .ypGray
+        }
+    }
     
     @objc private func saveButtonTapped() {
-        guard let trackerName = trackerNameTextField.text, !trackerName.isEmpty else {
-            print("Ошибка: Имя трекера не может быть пустым")
+        guard let trackerName = trackerNameTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines), !trackerName.isEmpty else {
+            print("⚠️ Ошибка: Имя трекера не может быть пустым")
             return
         }
-        
+
         let updatedTracker = Tracker(
             id: trackerID,
             name: trackerName,
@@ -297,26 +311,21 @@ final class EditTrackerViewController: UIViewController, ScheduleServiceDelegate
             emoji: emojiCollectionService?.chosenEmoji ?? "🙂",
             schedule: schedule
         )
-        
-        do {
-            let categoryData = try TrackerCategoryStore.shared.findOrCreateCategory(with: selectedCategory)
-            
-            try TrackerStore.shared.addNewTracker(updatedTracker, to: categoryData)
-            
-        } catch {
-            print("Ошибка сохранения: \(error)")
-        }
-        
+
         do {
             try TrackerStore.shared.deleteTracker(with: trackerID)
+
+            let categoryData = try TrackerCategoryStore.shared.findOrCreateCategory(with: selectedCategory)
+            try TrackerStore.shared.addNewTracker(updatedTracker, to: categoryData)
+
+            TrackersCollectionService.shared.reload()
+            dismiss(animated: true)
+
         } catch {
-            print("Ошибка удаления трекера: \(error)")
+            print("❌ Ошибка при сохранении изменений: \(error)")
         }
-        
-        TrackersCollectionService.shared.reload()
-        
-        dismiss(animated: true)
     }
+
     
     @objc private func cancelButtonTapped() {
         dismiss(animated: true)

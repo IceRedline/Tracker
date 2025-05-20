@@ -14,9 +14,7 @@ final class TabBarController: UITabBarController {
         self.setupTabs()
         self.modalPresentationStyle = .fullScreen
         
-        self.tabBar.tintColor = .ypBlue
-        self.tabBar.barTintColor = .ypWhite
-        self.tabBar.unselectedItemTintColor = .ypGray
+        configureTabBarAppearance()
         
         NotificationCenter.default.addObserver(self, selector: #selector(applyTodayDate), name: .setTodayDate, object: nil)
     }
@@ -31,21 +29,29 @@ final class TabBarController: UITabBarController {
         AnalyticsService.shared.report(event: "close", screen: "Main")
     }
     
-    private func setupTabs() {
+    private func configureTabBarAppearance() {
+        tabBar.tintColor = .ypBlue
+        tabBar.unselectedItemTintColor = .ypGray
+        tabBar.barTintColor = .ypWhite
+    }
+    
+    private func makeDatePickerItem() -> UIBarButtonItem {
         let datePicker = UIDatePicker()
         datePicker.tintColor = .ypBlue
         datePicker.datePickerMode = .date
         datePicker.preferredDatePickerStyle = .compact
         datePicker.locale = Locale.current
-        
         datePicker.addTarget(self, action: #selector(dateChanged(_:)), for: .valueChanged)
-        let datePickerItem = UIBarButtonItem(customView: datePicker)
+        return UIBarButtonItem(customView: datePicker)
+    }
+    
+    private func setupTabs() {
         
         let trackersViewController = self.createNav(
             title: NSLocalizedString("trackers", comment: ""),
             image: .trackersTabBar,
             leftButtonItem: UIBarButtonItem(image: .addTracker, style: .plain, target: nil, action: #selector(addTrackerButtonTapped)),
-            rightButtonItem: datePickerItem,
+            rightButtonItem: makeDatePickerItem(),
             vc: TrackersViewController()
         )
         let statisticsViewController = self.createNav(

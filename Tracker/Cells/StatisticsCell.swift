@@ -11,7 +11,7 @@ final class StatisticsCell: UICollectionViewCell {
     
     private let gradient = CAGradientLayer()
     private let shape = CAShapeLayer()
-    private let view = UIView()
+    private let backgroundColorView = UIView()
     private let nameLabel = UILabel()
     private let countLabel = UILabel()
     
@@ -32,33 +32,47 @@ final class StatisticsCell: UICollectionViewCell {
     
     private func updateGradientFrame() {
         let borderWidth: CGFloat = 1
-        DispatchQueue.main.async {
-            self.gradient.frame = self.contentView.bounds
-
-            let outerPath = UIBezierPath(
-                roundedRect: self.contentView.bounds,
-                cornerRadius: Constants.cornerRadius
-            )
-
-            let innerPath = UIBezierPath(
-                roundedRect: self.contentView.bounds.insetBy(dx: borderWidth, dy: borderWidth),
-                cornerRadius: Constants.cornerRadius - borderWidth
-            )
-
-            outerPath.append(innerPath)
-            outerPath.usesEvenOddFillRule = true
-
-            self.shape.path = outerPath.cgPath
-            self.shape.fillRule = .evenOdd
-        }
+        self.gradient.frame = self.contentView.bounds
+        
+        let outerPath = UIBezierPath(
+            roundedRect: self.contentView.bounds,
+            cornerRadius: Constants.cornerRadius
+        )
+        
+        let innerPath = UIBezierPath(
+            roundedRect: self.contentView.bounds.insetBy(dx: borderWidth, dy: borderWidth),
+            cornerRadius: Constants.cornerRadius - borderWidth
+        )
+        
+        outerPath.append(innerPath)
+        outerPath.usesEvenOddFillRule = true
+        
+        self.shape.path = outerPath.cgPath
+        self.shape.fillRule = .evenOdd
     }
     
     private func setupViews() {
-        view.backgroundColor = .ypWhite
-        view.layer.cornerRadius = Constants.cornerRadius
-        view.translatesAutoresizingMaskIntoConstraints = false
-        contentView.addSubview(view)
+        backgroundColorView.backgroundColor = .ypWhite
+        backgroundColorView.layer.cornerRadius = Constants.cornerRadius
+        backgroundColorView.translatesAutoresizingMaskIntoConstraints = false
+        contentView.addSubview(backgroundColorView)
         
+        setupGradient()
+        
+        nameLabel.textColor = .ypBlack
+        nameLabel.font = UIFont.systemFont(ofSize: 12, weight: .medium)
+        nameLabel.numberOfLines = 2
+        nameLabel.translatesAutoresizingMaskIntoConstraints = false
+        backgroundColorView.addSubview(nameLabel)
+        
+        countLabel.textColor = .ypBlack
+        countLabel.font = UIFont.systemFont(ofSize: 34, weight: .bold)
+        countLabel.textAlignment = .left
+        countLabel.translatesAutoresizingMaskIntoConstraints = false
+        backgroundColorView.addSubview(countLabel)
+    }
+    
+    private func setupGradient() {
         gradient.colors = [
             UIColor.colorSelection1.cgColor,
             UIColor.colorSelection9.cgColor,
@@ -66,43 +80,31 @@ final class StatisticsCell: UICollectionViewCell {
         ]
         gradient.startPoint = CGPoint(x: 0, y: 0.5)
         gradient.endPoint = CGPoint(x: 1, y: 0.5)
-        
+
         shape.fillColor = UIColor.black.cgColor
         shape.lineWidth = 0
         shape.strokeColor = UIColor.black.cgColor
         gradient.mask = shape
-        
-        view.layer.insertSublayer(gradient, at: 0)
-        
-        nameLabel.textColor = .ypBlack
-        nameLabel.font = UIFont.systemFont(ofSize: 12, weight: .medium)
-        nameLabel.numberOfLines = 2
-        nameLabel.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(nameLabel)
-        
-        countLabel.textColor = .ypBlack
-        countLabel.font = UIFont.systemFont(ofSize: 34, weight: .bold)
-        countLabel.textAlignment = .left
-        countLabel.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(countLabel)
+
+        backgroundColorView.layer.insertSublayer(gradient, at: 0)
     }
     
     private func setupConstraints() {
         NSLayoutConstraint.activate([
-            view.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            view.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            view.topAnchor.constraint(equalTo: contentView.topAnchor),
-            view.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
+            backgroundColorView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            backgroundColorView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            backgroundColorView.topAnchor.constraint(equalTo: contentView.topAnchor),
+            backgroundColorView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
             
-            countLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: Constants.defaultPadding),
-            countLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -Constants.defaultPadding),
+            countLabel.leadingAnchor.constraint(equalTo: backgroundColorView.leadingAnchor, constant: Constants.defaultPadding),
+            countLabel.trailingAnchor.constraint(equalTo: backgroundColorView.trailingAnchor, constant: -Constants.defaultPadding),
             countLabel.heightAnchor.constraint(equalToConstant: 41),
-            countLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: Constants.defaultPadding),
+            countLabel.topAnchor.constraint(equalTo: backgroundColorView.topAnchor, constant: Constants.defaultPadding),
             
-            nameLabel.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -12),
+            nameLabel.bottomAnchor.constraint(equalTo: backgroundColorView.bottomAnchor, constant: -12),
             nameLabel.widthAnchor.constraint(equalToConstant: 143),
             nameLabel.heightAnchor.constraint(equalToConstant: 34),
-            nameLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+            nameLabel.leadingAnchor.constraint(equalTo: backgroundColorView.leadingAnchor, constant: 16),
         ])
     }
     

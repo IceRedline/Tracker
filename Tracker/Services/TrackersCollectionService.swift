@@ -16,7 +16,7 @@ final class TrackersCollectionService: NSObject, UICollectionViewDataSource, UIC
     
     var currentDate: Date?
     var searchText = ""
-    var currentFilter: String = NSLocalizedString("allTrackers", comment: "") {
+    var currentFilter: FilterType = FilterType.all {
         didSet {
             reload()
         }
@@ -32,7 +32,7 @@ final class TrackersCollectionService: NSObject, UICollectionViewDataSource, UIC
         
         if filtered.isEmpty {
             viewController?.hideCollection()
-            if currentFilter == NSLocalizedString("allTrackers", comment: "") && searchText.isEmpty {
+            if currentFilter == FilterType.all && searchText.isEmpty {
                 viewController?.hidefilters()
                 viewController?.hideNothingFoundView()
             } else {
@@ -105,13 +105,13 @@ final class TrackersCollectionService: NSObject, UICollectionViewDataSource, UIC
                 let matchesSearch = searchLowercased.isEmpty || tracker.name.lowercased().contains(searchLowercased)
                 
                 switch currentFilter {
-                case NSLocalizedString("todayTrackers", comment: ""):
+                case FilterType.today:
                     return matchesSchedule && matchesSearch
                     
-                case NSLocalizedString("completedTrackers", comment: ""):
+                case FilterType.completed:
                     return isCompleted && matchesSchedule && matchesSearch
                     
-                case NSLocalizedString("incompleteTrackers", comment: ""):
+                case FilterType.incomplete:
                     return !isCompleted && matchesSchedule && matchesSearch
                     
                 default:

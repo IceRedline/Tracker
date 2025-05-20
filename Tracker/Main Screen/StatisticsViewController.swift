@@ -13,8 +13,7 @@ final class StatisticsViewController: UIViewController {
     
     private lazy var emojiImage: UIImageView = {
         let view = UIImageView()
-        let image = UIImage.sadEmoj
-        view.image = image
+        view.image = .sadEmoj
         return view
     }()
     
@@ -35,7 +34,7 @@ final class StatisticsViewController: UIViewController {
         statisticsCollectionService.viewController = self
         
         setupCollectionView()
-        loadConstraints()
+        setupConstraints()
     }
     
     private func setupCollectionView() {
@@ -58,7 +57,7 @@ final class StatisticsViewController: UIViewController {
         statisticsCollectionView.isHidden = false
     }
     
-    private func loadConstraints() {
+    private func setupConstraints() {
         [emojiImage ,nothingToTrackLabel, statisticsCollectionView].forEach {
             $0.translatesAutoresizingMaskIntoConstraints = false
             view.addSubview($0)
